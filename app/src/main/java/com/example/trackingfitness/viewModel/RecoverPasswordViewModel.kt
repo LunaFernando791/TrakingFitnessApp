@@ -9,13 +9,21 @@ import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.ForgotPasswordRequest
 import com.example.trackingfitness.conection.RetrofitInstance
 import com.example.trackingfitness.conection.UserService
+import com.example.trackingfitness.conection.ValidateOTPRequest
 import kotlinx.coroutines.launch
 
 class RecoverPasswordViewModel: ViewModel() {
     private val apiService: UserService = RetrofitInstance.api
 
     var email by mutableStateOf("")
+        private set
     var emailError by mutableStateOf<String?>(null)
+    var otpError by mutableStateOf<String?>(null)
+    var otp by mutableStateOf("")
+
+    fun updateOTP(otp: String) {
+        this.otp = otp
+    }
 
     fun updateEmail(email: String) {
         this.email = email
@@ -42,6 +50,14 @@ class RecoverPasswordViewModel: ViewModel() {
         }
     }
 
+    private fun validateCorrectlyOTP(): String? {
+        return when {
+            otp.isEmpty() -> "Este campo no puede estar vacío"
+            otp.length != 6 -> "El código debe tener 6 dígitos"
+            else -> null
+        }
+    }
+
     fun forgetPassword() {
         viewModelScope.launch {
             val request = ForgotPasswordRequest(email)
@@ -50,9 +66,33 @@ class RecoverPasswordViewModel: ViewModel() {
                 Log.d("Response", response.toString())
                 if (response.isSuccessful) {
                     Log.d("Message", response.body()?.message.toString())
+                    Log.d("Message", request.email)
                 }
                 else{
                     Log.e("Error", response.body().toString())
+                }
+            }catch (e: Exception) {
+                e.localizedMessage?.let { Log.e("Error", it) }
+            }
+        }
+    }
+
+
+
+    fun validateOTP(){
+        viewModelScope.launch {
+            val request = ValidateOTPRequest(email, otp)
+            try {
+                val response = apiService.validateOTP(request)
+                Log.d("Response", response.toString())
+                if (response.isSuccessful) {
+                    Log.d("Message", response.body()?.message.toString())
+                }
+                else{
+                    Log.e("Error", response.body().toString())
+                    Log.e("Error", response.message().toString())
+                    Log.e("Error", request.otp)
+                    Log.e("Error", request.email)
                 }
             }catch (e: Exception) {
                 e.localizedMessage?.let { Log.e("Error", it) }

@@ -57,8 +57,11 @@ fun RegisterOneScreen(navController: NavController, viewModel: RegisterViewModel
                 typeOfOption = "Years"
             )
         },
-        onButtonClick = { navController.navigate(AppScreens.RegisterTwoScreen.route){
-            launchSingleTop = true }
+        onButtonClick = {
+            navController.navigate(AppScreens.RegisterTwoScreen.route
+            ){
+            launchSingleTop = true
+            }
         }
     )
 }

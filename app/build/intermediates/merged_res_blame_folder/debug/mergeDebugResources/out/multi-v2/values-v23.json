@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-62:/values-v23/values-v23.xml",
+            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-64:/values-v23/values-v23.xml",
             "map": [
                 {
                     "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\aaa388aea5472c0fa7aaa7d4c2f2e70d\\transformed\\cardview-1.0.0\\res\\values-v23\\values-v23.xml",

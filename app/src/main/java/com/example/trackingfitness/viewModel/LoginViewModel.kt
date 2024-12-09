@@ -1,10 +1,11 @@
 package com.example.trackingfitness.viewModel
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.LoginRequestUser
 import com.example.trackingfitness.conection.LoginResponseUser
@@ -14,24 +15,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val apiService: UserService = RetrofitInstance.api
 
     var email by mutableStateOf("")
     var password by mutableStateOf("")
-
     // Variables para el email y la contraseña
 
     var emailError by mutableStateOf<String?>(null)
     var passwordError by mutableStateOf<String?>(null)
-
     // Variables para el mensaje de error
 
     var loginSuccess by mutableStateOf(false)
     var loginError by mutableStateOf(false)
     var loginUnverified by mutableStateOf(false)
     var loginMessage by mutableStateOf("")
-
     // Variables para el éxito y el error de inicio de sesión
 
     var accessToken: String? = null
@@ -86,7 +84,7 @@ class LoginViewModel : ViewModel() {
     }
 
     // Actualización de los errores
-
+    val context = getApplication<Application>().applicationContext
     fun loginUser() {
         viewModelScope.launch {
             val request = LoginRequestUser(email, password)
@@ -100,10 +98,22 @@ class LoginViewModel : ViewModel() {
                             loginMessage = body.message
                             loginUnverified = true
                         } else {
-                            Log.d("Login", "Login successful")
+                            val userLogin = UserSessionManager(context)
                             loginSuccess = true
                             accessToken = body.access_token
-                            Log.d("Login", "Access Token: $body")
+                            userLogin.saveUserSession(
+                                accessToken!!,
+                                body.user.personal_name,
+                                body.user.last_name,
+                                body.user.age.toString(),
+                                body.user.height.toString(),
+                                body.user.weight.toString(),
+                                body.user.gender_id.toString(),
+                                body.user.email,
+                                body.user.username,
+                                body.user.experience_level_id.toString()
+                            )
+                            Log.d("Login", "User: ${body.user}")
                         }
                     }
                 } else {

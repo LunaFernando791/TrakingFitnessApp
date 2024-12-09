@@ -42,6 +42,7 @@ import com.example.trackingfitness.customFontFamily
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.viewModel.LoginViewModel
+
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -49,7 +50,7 @@ fun LoginScreen(
 ) {
     Column(
         modifier = Modifier
-            .background(if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(25.dp)
     ) {
@@ -59,7 +60,7 @@ fun LoginScreen(
             modifier = Modifier
                 .padding(20.dp)
                 .align(Alignment.CenterHorizontally),
-            color = if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold,
             fontFamily = customFontFamily
         )
@@ -67,7 +68,6 @@ fun LoginScreen(
         CustomTextFieldLogin(
             value = loginViewModel.email,
             onValueChange = {
-
                 loginViewModel.updateEmail(it)
             },
             label = "Email",
@@ -94,7 +94,7 @@ fun LoginScreen(
             text = AnnotatedString(
                 text = "Forgot password?, click here",
                 spanStyle = SpanStyle(
-                    color = if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline,
                     fontSize = 18.sp
                 )
@@ -110,8 +110,8 @@ fun LoginScreen(
                     loginViewModel.loginUser()
                 }
             }, colors = ButtonDefaults.buttonColors(
-                containerColor = if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
-                contentColor = if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
+                containerColor =MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.primary
             ), modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .width(200.dp)
@@ -148,15 +148,16 @@ fun CustomTextFieldLogin(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label,
-            color = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary) },
+            color = MaterialTheme.colorScheme.primary,
+        ) },
         visualTransformation = visualTransformation,
         textStyle = TextStyle(
-            color = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.primary,
             fontSize = 15.sp
         ),
         colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = if(darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
-            focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
+            focusedLabelColor = Color.LightGray,
             focusedIndicatorColor = if (isError) Color.Red else Color.Blue,
             unfocusedIndicatorColor = if (isError) Color.Red else Color.Gray,
             errorIndicatorColor = Color.Red
@@ -167,7 +168,7 @@ fun CustomTextFieldLogin(
             .clip(RoundedCornerShape(15.dp))
             .border(
                 2.dp,
-                if (isError) Color.Red else if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                if (isError) Color.Red else MaterialTheme.colorScheme.tertiary,
                 RoundedCornerShape(12.dp)
             )
             .height(50.dp),
@@ -177,31 +178,3 @@ fun CustomTextFieldLogin(
 }
 
 
-
-/*val loginState by loginViewModel.loginState.collectAsState()
-    LaunchedEffect(loginState) {
-        when{
-            loginState?.isSuccess == true -> {
-                val userId = loginState?.getOrNull()?.user
-                val user = UserLogin(
-                    id = loginState?.getOrNull()?.user?.id ?: 0,
-                    name = loginState?.getOrNull()?.user?.personal_name ?: "",
-                    lastname = loginState?.getOrNull()?.user?.last_name ?: "",
-                    age = loginState?.getOrNull()?.user?.age ?: 0,
-                    height = loginState?.getOrNull()?.user?.height ?: 0.0,
-                    weight = loginState?.getOrNull()?.user?.weight ?: 0.0,
-                    email = loginState?.getOrNull()?.user?.email ?: "",
-                    username = loginState?.getOrNull()?.user?.username ?: "",
-                    experienceLevel = loginState?.getOrNull()?.user?.experience_level_id ?: 0,
-                )
-                if (userId != null) {
-                    navController.navigate("screenOne/${user}")
-                }
-            }
-            loginState?.isFailure == true -> {
-                val errorMessage = loginState?.exceptionOrNull()?.message
-
-            }
-            else -> Unit
-        }
-    }*/

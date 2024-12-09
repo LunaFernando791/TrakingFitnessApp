@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-62:/values-h720dp-v13/values-h720dp-v13.xml",
+            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-64:/values-h720dp-v13/values-h720dp-v13.xml",
             "map": [
                 {
                     "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\65f9066da7e628656c500a5ab6ccbed5\\transformed\\appcompat-1.6.1\\res\\values-h720dp-v13\\values-h720dp-v13.xml",

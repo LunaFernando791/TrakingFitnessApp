@@ -8,15 +8,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,28 +41,28 @@ import androidx.compose.ui.unit.sp
 import com.example.trackingfitness.customFontFamily
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
 
 
 @Composable
-fun OTPScreen() {
-    BodyContent()
+fun OTPScreen(recoverPasswordViewModel: RecoverPasswordViewModel) {
+    BodyContentTwo(recoverPasswordViewModel)
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun BodyContent(){
+fun BodyContentTwo(viewModel: RecoverPasswordViewModel){
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background)
+            .background(if (darkTheme.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background)
             .padding(25.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "Please enter your code",
-            color = if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
+            color = if (darkTheme.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Bold,
             fontFamily = customFontFamily,
             fontSize = 25.sp,
@@ -71,24 +75,49 @@ fun BodyContent(){
                 .height(200.dp)
                 .border(
                     2.dp,
-                    if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                    if (darkTheme.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
                     RoundedCornerShape(20.dp)
                 ),
             contentAlignment = Alignment.TopCenter
         ){
-            VerificationCodeInput(
-                codeLength = 4,
+            CustomTextField(
+                value = viewModel.otp,
+                onValueChange = { viewModel.updateOTP(it) },
+                label = "Email",
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+                ),
+                isError = viewModel.otpError != null,
+                errorMessage = viewModel.otpError
+            )
+            Spacer(modifier = Modifier.height(50.dp))
+            Button(
+                onClick = {
+                    viewModel.validateOTP()
+                }, colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.primary
+                ), modifier = Modifier
+                    .width(200.dp)
+                    .padding(top = 100.dp)
+            ) {
+                Text("Enviar")
+            }
+
+
+            /*VerificationCodeInput(
+                codeLength = 6,
                 onCodeEntered = { code ->
                     // Handle the entered code here
                 }
-            )
+            )*/
         }
     }
 }
 
 @Composable
 fun VerificationCodeInput(
-    codeLength: Int = 4,
+    codeLength: Int = 6,
     onCodeEntered: (String) -> Unit
 ) {
     val code = remember { mutableStateOf(List(codeLength) { "" }) }

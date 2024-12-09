@@ -57,7 +57,7 @@ fun RegisterForm(
 
     Column(
         modifier = Modifier
-            .background(if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(25.dp)
     ) {
@@ -74,6 +74,8 @@ fun RegisterForm(
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Share us your data...",
+            color = MaterialTheme.colorScheme.primary,
+            fontSize = 20.sp,
             modifier = Modifier
                 .padding(20.dp)
                 .align(Alignment.CenterHorizontally)
@@ -101,8 +103,8 @@ fun RegisterForm(
                     }
                 }
             }, colors = ButtonDefaults.buttonColors(
-                containerColor = if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
-                contentColor = if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.primary
             ), modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .width(200.dp)
@@ -162,17 +164,20 @@ fun CustomTextField(
     TextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label, color = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary) },
+        label = { Text(
+            label,
+            color = MaterialTheme.colorScheme.primary
+        ) },
         visualTransformation = visualTransformation,
         colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = if(darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
-            focusedLabelColor = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
-            focusedIndicatorColor = if (isError) Color.Red else MaterialTheme.colorScheme.onPrimary,
-            unfocusedIndicatorColor = if (isError) Color.Red else Color.Gray,
+            unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
+            focusedLabelColor = Color.LightGray,
+            focusedIndicatorColor = if (isError) Color.Red else MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = if (isError) Color.Red else MaterialTheme.colorScheme.tertiary,
             errorIndicatorColor = Color.Red
         ),
         textStyle = TextStyle(
-            color = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.primary,
             fontSize = 15.sp
         ),
         modifier = modifier
@@ -180,7 +185,7 @@ fun CustomTextField(
             .clip(RoundedCornerShape(15.dp))
             .border(
                 2.dp,
-                if (isError) Color.Red else if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                if (isError) Color.Red else MaterialTheme.colorScheme.tertiary,
                 RoundedCornerShape(15.dp)
             )
             .height(50.dp),
@@ -213,17 +218,22 @@ fun CustomTextFieldMenu(
                 value = selectedText.value,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text(text = label, color = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary) },
+                label = {
+                    Text(
+                        text = label,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                        },
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value)
                 },
                 textStyle = TextStyle(
-                    color = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 15.sp
                 ),
                 colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = if(darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
-                    focusedLabelColor = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
+                    focusedLabelColor = Color.LightGray,
                     focusedIndicatorColor = if (isError) Color.Red else Color.Blue,
                     unfocusedIndicatorColor = if (isError) Color.Red else Color.Gray,
                     errorIndicatorColor = Color.Red
@@ -234,7 +244,7 @@ fun CustomTextFieldMenu(
                     .clip(RoundedCornerShape(15.dp))
                     .border(
                         2.dp,
-                        if (isError) Color.Red else if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.tertiary,
                         RoundedCornerShape(15.dp)
                     )
                     .height(50.dp),
@@ -244,18 +254,21 @@ fun CustomTextFieldMenu(
                 onDismissRequest = { expanded.value = false },
                 modifier = Modifier
                     .width(200.dp)
-                    .border(2.dp, if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(5.dp))
+                    .border(
+                        2.dp,
+                        MaterialTheme.colorScheme.tertiary,
+                        RoundedCornerShape(5.dp))
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 options.forEach {
                     DropdownMenuItem(text = { Text(text = "$it $typeOfOption"
-                        , color = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary) }
+                        , color = MaterialTheme.colorScheme.primary) }
                         , onClick = {
                         selectedText.value = "$it $typeOfOption"
                         onValueChange(it)
                         expanded.value = false
                     }, modifier = Modifier
-                        .background(if(darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background)
+                        .background(MaterialTheme.colorScheme.background)
                         .align(Alignment.CenterHorizontally)
                         .height(60.dp)
                     )

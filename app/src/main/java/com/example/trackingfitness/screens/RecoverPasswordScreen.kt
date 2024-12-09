@@ -35,12 +35,12 @@ import com.example.trackingfitness.activity.ErrorMessages
 import com.example.trackingfitness.customFontFamily
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
+import com.example.trackingfitness.viewModel.LoginViewModel
 import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
 
 @Composable
-fun RecoverPasswordScreen(navController: NavController){
-    val viewModel = RecoverPasswordViewModel()
-    ContainerContent(viewModel, navController)
+fun RecoverPasswordScreen(navController: NavController, recoverPasswordViewModel: RecoverPasswordViewModel){
+    ContainerContent(recoverPasswordViewModel, navController,)
 }
 
 
@@ -49,13 +49,13 @@ fun ContainerContent(viewModel: RecoverPasswordViewModel, navController: NavCont
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .background(if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background)
             .padding(25.dp)
     ){
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "Recover password",
-            color = if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold,
             fontFamily = customFontFamily,
             fontSize = 25.sp,
@@ -63,7 +63,7 @@ fun ContainerContent(viewModel: RecoverPasswordViewModel, navController: NavCont
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "Add your email and we will send you a code to reset your password",
-            color = if (darkTheme) androidx.compose.ui.graphics.Color.White else androidx.compose.ui.graphics.Color.Black,
+            color = if (darkTheme.value) androidx.compose.ui.graphics.Color.White else androidx.compose.ui.graphics.Color.Black,
         )
         Spacer(modifier = Modifier.height(20.dp))
         CustomTextField(
@@ -84,8 +84,8 @@ fun ContainerContent(viewModel: RecoverPasswordViewModel, navController: NavCont
                     navController.navigate(AppScreens.OTPScreen.route)
                 }
             }, colors = ButtonDefaults.buttonColors(
-                containerColor = if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
-                contentColor = if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.primary
             ), modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .width(200.dp)
@@ -110,14 +110,14 @@ fun CustomTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label,
-            color = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary) },
+            color = MaterialTheme.colorScheme.primary) },
         visualTransformation = visualTransformation,
         textStyle = TextStyle(
-            color = if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.primary,
             fontSize = 15.sp
         ),
         colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = if(darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
             focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
             focusedIndicatorColor = if (isError) Color.Red else Color.Blue,
             unfocusedIndicatorColor = if (isError) Color.Red else Color.Gray,
@@ -128,7 +128,7 @@ fun CustomTextField(
             .clip(RoundedCornerShape(15.dp))
             .border(
                 2.dp,
-                if (isError) Color.Red else if(darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                if (isError) Color.Red else if(darkTheme.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
                 RoundedCornerShape(12.dp)
             )
             .height(50.dp),

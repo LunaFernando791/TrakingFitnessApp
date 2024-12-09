@@ -1,106 +1,118 @@
 [
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\drawable_me.jpg.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\drawable\\me.jpg"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_me.jpg.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/me.jpg"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-xhdpi\\ic_launcher_round.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_fondodark.png.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/fondodark.png"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\xml_data_extraction_rules.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\xml\\data_extraction_rules.xml"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-mdpi/ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\xml_backup_rules.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\xml\\backup_rules.xml"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-xhdpi/ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-hdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-hdpi\\ic_launcher.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/font_custom_font.xml.flat",
+        "source": "com.example.trackingfitness.app-main-68:/font/custom_font.xml"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-mdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-mdpi\\ic_launcher.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-hdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_ftlogo.png.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/ftlogo.png"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\xml_network_security_config.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\xml\\network_security_config.xml"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_mancuerna.jpeg.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/mancuerna.jpeg"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-anydpi_ic_launcher.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-anydpi\\ic_launcher.xml"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-anydpi/ic_launcher_round.xml"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-xxhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-xxhdpi\\ic_launcher.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-xxxhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-mdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-mdpi\\ic_launcher_round.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-hdpi/ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-anydpi_ic_launcher_round.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-anydpi\\ic_launcher_round.xml"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_fondoblanco2.png.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/fondoblanco2.png"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\drawable_home.png.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\drawable\\home.png"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-xhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\drawable_fondodark.png.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\drawable\\fondodark.png"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/ic_launcher_foreground.xml"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\drawable_mancuerna.jpeg.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\drawable\\mancuerna.jpeg"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_testimage.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/testimage.webp"
     },
     {
-        "merged": "com.example.trackingfitness.app-debug-64:/drawable_ftlogo.png.flat",
-        "source": "com.example.trackingfitness.app-main-66:/drawable/ftlogo.png"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-xxxhdpi/ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\font_my_custom_font.ttf.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\font\\my_custom_font.ttf"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_home.png.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/home.png"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-hdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-hdpi\\ic_launcher_round.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-xxhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-xhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-xhdpi\\ic_launcher.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/xml_backup_rules.xml.flat",
+        "source": "com.example.trackingfitness.app-main-68:/xml/backup_rules.xml"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\drawable_fondoblanco2.png.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\drawable\\fondoblanco2.png"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_profileconfigicon.png.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/profileconfigicon.png"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/ic_launcher_background.xml"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\mipmap-xxxhdpi\\ic_launcher.webp"
+        "merged": "com.example.trackingfitness.app-debug-66:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.trackingfitness.app-main-68:/xml/data_extraction_rules.xml"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\font_custom_font.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\font\\custom_font.xml"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-xxhdpi/ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\drawable_ic_launcher_foreground.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\drawable\\ic_launcher_foreground.xml"
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_playicon.png.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/playicon.png"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\drawable_ic_launcher_background.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\drawable\\ic_launcher_background.xml"
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-mdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-debug-64:\\drawable_calorias.png.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.7\\com.example.trackingfitness.app-main-66:\\drawable\\calorias.png"
+        "merged": "com.example.trackingfitness.app-debug-66:/xml_network_security_config.xml.flat",
+        "source": "com.example.trackingfitness.app-main-68:/xml/network_security_config.xml"
+    },
+    {
+        "merged": "com.example.trackingfitness.app-debug-66:/font_my_custom_font.ttf.flat",
+        "source": "com.example.trackingfitness.app-main-68:/font/my_custom_font.ttf"
+    },
+    {
+        "merged": "com.example.trackingfitness.app-debug-66:/mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "com.example.trackingfitness.app-main-68:/mipmap-anydpi/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.trackingfitness.app-debug-66:/drawable_calorias.png.flat",
+        "source": "com.example.trackingfitness.app-main-68:/drawable/calorias.png"
     }
 ]

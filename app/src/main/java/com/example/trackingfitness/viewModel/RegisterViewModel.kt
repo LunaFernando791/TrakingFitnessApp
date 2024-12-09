@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.util.UnstableApi
 import com.example.trackingfitness.conection.RetrofitInstance
-import com.example.trackingfitness.conection.UserItem
+import com.example.trackingfitness.conection.User
 import com.example.trackingfitness.conection.UserService
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.ui.theme.BlueGreen
@@ -55,7 +55,7 @@ class RegisterViewModel : ViewModel() {
 
     var progress by mutableFloatStateOf(0.0f)
         private set
-    private val _progressColor = mutableStateOf(if(darkTheme) Color.White else BlueGreen)
+    private val _progressColor = mutableStateOf(if (darkTheme.value) BlueGreen else Color.Gray)
     val progressColor: State<Color> get() = _progressColor
     private val _trackColor = mutableStateOf(Color.Gray)
     val trackColor: State<Color> get() = _trackColor
@@ -276,11 +276,10 @@ class RegisterViewModel : ViewModel() {
         }
     }
 
-
     @OptIn(UnstableApi::class)
     private fun formRegister() {
         viewModelScope.launch {
-            val userData = UserItem( // CAST DE LOS DATOS A SU CORRECTO TIPO DE DATO PARA SU ENVÍO
+            val userData = User( // CAST DE LOS DATOS A SU CORRECTO TIPO DE DATO PARA SU ENVÍO
                 personal_name = name,
                 last_name = lastname,
                 age = age.toInt(),
@@ -305,10 +304,7 @@ class RegisterViewModel : ViewModel() {
                     errorRegister = true
                     val errorBody = response.errorBody()?.string()
                     val errorResponse = errorBody?.let { JSONObject(it) }
-                    val errors = errorResponse?.getJSONObject("errors")
-                    // Ejemplo de cómo podrías extraer errores específicos
-                    emailErrors = errors?.optJSONArray("email")?.join(", ") ?: "No email errors"
-                    val passwordErrors = errors?.optJSONArray("password")?.join(", ") ?: "No password errors"
+                    Log.e("Registration", "Error: $errorResponse")
                 }
             } catch (e: Exception) {
                 registrationError = "Network error: ${e.localizedMessage}"

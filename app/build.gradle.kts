@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("androidx.compose.material:material:1.7.5")
     implementation(libs.androidx.media3.common)
     implementation(libs.material)
     testImplementation(libs.junit)

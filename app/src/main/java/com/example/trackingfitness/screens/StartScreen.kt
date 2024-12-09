@@ -29,18 +29,19 @@ import com.example.trackingfitness.R
 import com.example.trackingfitness.customFontFamily
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
+import com.example.trackingfitness.viewModel.LoginViewModel
 
 
 @Composable//VISTA DE INICIO PARA INICIAR SESIÓN O REGISTRARTE
-fun StartScreen(navController: NavHostController) {
-    BodyContent(navController = navController)
+fun StartScreen(navController: NavHostController, loginViewModel: LoginViewModel) {
+    BodyContent(navController = navController, loginViewModel = loginViewModel)
 }
 
 @Composable
-fun BodyContent(navController: NavHostController){
+fun BodyContent(navController: NavHostController, loginViewModel: LoginViewModel){
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(if (darkTheme) R.drawable.fondodark else R.drawable.fondoblanco2),
+            painter = painterResource(if (darkTheme.value) R.drawable.fondodark else R.drawable.fondoblanco2),
             contentDescription = "Fondo",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
@@ -66,10 +67,10 @@ fun BodyContent(navController: NavHostController){
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
                     .fillMaxSize()
-                    .background(if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background)
+                    .background(MaterialTheme.colorScheme.background)
                     .border(
                         2.dp,
-                        if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.tertiary,
                         RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp)
                     )
             ) {
@@ -81,7 +82,7 @@ fun BodyContent(navController: NavHostController){
                         text = "TRACKING FITNESS",
                         fontSize = 25.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally),
-                        color = if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         fontFamily = customFontFamily,
                     )
@@ -91,14 +92,13 @@ fun BodyContent(navController: NavHostController){
                             .align(Alignment.CenterHorizontally)
                             .padding(vertical = 15.dp, horizontal = 10.dp)
                             .clip(RoundedCornerShape(20.dp))
-                            .background(if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary)
+                            .background(MaterialTheme.colorScheme.secondary)
                             .clickable { navController.navigate(AppScreens.RegisterOneScreen.route) },
-
                         ) {
                         Text(
                             text = "REGISTRARSE",
                             fontSize = 20.sp,
-                            color = if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
                                 .padding(20.dp)
@@ -109,7 +109,7 @@ fun BodyContent(navController: NavHostController){
                         text = "O",
                         fontSize = 25.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally),
-                        color = if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         fontFamily = customFontFamily,
                     )
@@ -119,18 +119,25 @@ fun BodyContent(navController: NavHostController){
                             .align(Alignment.CenterHorizontally)
                             .padding(vertical = 15.dp, horizontal = 10.dp)
                             .clip(RoundedCornerShape(20.dp))
-                            .background(if (darkTheme) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary)
+                            .background(MaterialTheme.colorScheme.secondary)
                             .clickable { navController.navigate("loginScreen") }
                     ) {
                         Text(
                             text = "INICIAR SESIÓN",
                             fontSize = 20.sp,
-                            color = if (darkTheme) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
                                 .padding(20.dp)
                         )
                     }
+                    Spacer(modifier = Modifier.height(15.dp))
+                    ToggleSwitch(
+                        isChecked = darkTheme.value,
+                        onCheckedChange = { isChecked ->
+                            darkTheme.value = isChecked
+                        }
+                    )
                 }
             }
         }

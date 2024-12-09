@@ -1,6 +1,7 @@
 package com.example.trackingfitness.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,8 +15,11 @@ import com.example.trackingfitness.screens.RegisterThreeScreen
 import com.example.trackingfitness.screens.RegisterTwoScreen
 import com.example.trackingfitness.screens.RegisterOneScreen
 import com.example.trackingfitness.screens.StartScreen
+import com.example.trackingfitness.screens.ExerciseScreen
 import com.example.trackingfitness.viewModel.LoginViewModel
+import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
 import com.example.trackingfitness.viewModel.RegisterViewModel
+import com.example.trackingfitness.viewModel.UserSessionManager
 
 
 @Composable
@@ -23,10 +27,13 @@ fun AppNavigation(){
     val navController = rememberNavController()
     val registerViewModel: RegisterViewModel = viewModel()
     val loginViewModel: LoginViewModel = viewModel()
-    NavHost(navController = navController, startDestination = AppScreens.StartScreen.route ) {
+    val recoverPasswordViewModel: RecoverPasswordViewModel = viewModel()
+    val userSessionManager = UserSessionManager(LocalContext.current.applicationContext)
+    NavHost(navController = navController, startDestination = if (userSessionManager.isUserLoggedIn()) AppScreens.PrincipalScreen.route
+    else AppScreens.StartScreen.route ) {
         composable(AppScreens.StartScreen.route)
         {
-            StartScreen(navController)
+            StartScreen(navController, loginViewModel)
         }
         composable(AppScreens.RegisterOneScreen.route) {
             RegisterOneScreen(
@@ -56,13 +63,21 @@ fun AppNavigation(){
             LoginScreen(navController = navController, loginViewModel = loginViewModel)
         }
         composable(AppScreens.RecoverPasswordScreen.route) {
-            RecoverPasswordScreen(navController = navController)
+            RecoverPasswordScreen(
+                navController = navController,
+                recoverPasswordViewModel = recoverPasswordViewModel)
         }
         composable(AppScreens.OTPScreen.route) {
-            OTPScreen()
+            OTPScreen(
+                recoverPasswordViewModel = recoverPasswordViewModel
+            )
         }
         composable(AppScreens.PrincipalScreen.route) {
-            PrincipalScreen(navController = navController)
+            PrincipalScreen(navController = navController,
+                userSession = userSessionManager)
+        }
+        composable(AppScreens.ExerciseScreen.route) {
+            ExerciseScreen(navController = navController)
         }
     }
 }

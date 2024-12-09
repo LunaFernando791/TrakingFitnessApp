@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-62:/values-ldltr-v21/values-ldltr-v21.xml",
+            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-64:/values-ldltr-v21/values-ldltr-v21.xml",
             "map": [
                 {
                     "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\65f9066da7e628656c500a5ab6ccbed5\\transformed\\appcompat-1.6.1\\res\\values-ldltr-v21\\values-ldltr-v21.xml",

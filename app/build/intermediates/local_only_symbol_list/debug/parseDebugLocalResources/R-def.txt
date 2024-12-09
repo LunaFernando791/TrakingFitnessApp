@@ -16,6 +16,9 @@ drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable mancuerna
 drawable me
+drawable playicon
+drawable profileconfigicon
+drawable testimage
 font custom_font
 font my_custom_font
 mipmap ic_launcher

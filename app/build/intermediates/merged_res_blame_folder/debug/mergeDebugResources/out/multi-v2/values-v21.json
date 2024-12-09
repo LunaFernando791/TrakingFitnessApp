@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-62:/values-v21/values-v21.xml",
+            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-64:/values-v21/values-v21.xml",
             "map": [
                 {
                     "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\85f7d3d9c5cdaa8220115ec61801ea14\\transformed\\material-1.12.0\\res\\values-v21\\values-v21.xml",
@@ -42,7 +42,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\715a160c9df8d8e85baef521602e7d38\\transformed\\core-1.13.0\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\097ccc2fff06e9e97d10af1d5c05491a\\transformed\\core-1.13.1\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",

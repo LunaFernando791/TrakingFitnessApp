@@ -13,15 +13,15 @@
 11-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:4:22-64
 12
 13    <permission
-13-->[androidx.core:core:1.13.0] C:\Users\garci\.gradle\caches\transforms-4\715a160c9df8d8e85baef521602e7d38\transformed\core-1.13.0\AndroidManifest.xml:22:5-24:47
+13-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
 14        android:name="com.example.trackingfitness.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-14-->[androidx.core:core:1.13.0] C:\Users\garci\.gradle\caches\transforms-4\715a160c9df8d8e85baef521602e7d38\transformed\core-1.13.0\AndroidManifest.xml:23:9-81
+14-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
 15        android:protectionLevel="signature" />
-15-->[androidx.core:core:1.13.0] C:\Users\garci\.gradle\caches\transforms-4\715a160c9df8d8e85baef521602e7d38\transformed\core-1.13.0\AndroidManifest.xml:24:9-44
+15-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
 16
 17    <uses-permission android:name="com.example.trackingfitness.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-17-->[androidx.core:core:1.13.0] C:\Users\garci\.gradle\caches\transforms-4\715a160c9df8d8e85baef521602e7d38\transformed\core-1.13.0\AndroidManifest.xml:26:5-97
-17-->[androidx.core:core:1.13.0] C:\Users\garci\.gradle\caches\transforms-4\715a160c9df8d8e85baef521602e7d38\transformed\core-1.13.0\AndroidManifest.xml:26:22-94
+17-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+17-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
 18    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 18-->[androidx.media3:media3-common:1.4.0] C:\Users\garci\.gradle\caches\transforms-4\b2a02ba166a65373f7fd126498562120\transformed\media3-common-1.4.0\AndroidManifest.xml:22:5-79
 18-->[androidx.media3:media3-common:1.4.0] C:\Users\garci\.gradle\caches\transforms-4\b2a02ba166a65373f7fd126498562120\transformed\media3-common-1.4.0\AndroidManifest.xml:22:22-76
@@ -31,7 +31,7 @@
 21        android:allowBackup="true"
 21-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:6:9-35
 22        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-22-->[androidx.core:core:1.13.0] C:\Users\garci\.gradle\caches\transforms-4\715a160c9df8d8e85baef521602e7d38\transformed\core-1.13.0\AndroidManifest.xml:28:18-86
+22-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 23        android:dataExtractionRules="@xml/data_extraction_rules"
 23-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:7:9-65
 24        android:debuggable="true"
@@ -73,11 +73,11 @@
 43            </intent-filter>
 44        </activity>
 45        <activity
-45-->[androidx.compose.ui:ui-tooling-android:1.6.6] C:\Users\garci\.gradle\caches\transforms-4\cd11adadba2a109c0f912578e17dbe74\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
+45-->[androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a07fc0c5fb37cab69ba36bb3b6458c6b\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
 46            android:name="androidx.compose.ui.tooling.PreviewActivity"
-46-->[androidx.compose.ui:ui-tooling-android:1.6.6] C:\Users\garci\.gradle\caches\transforms-4\cd11adadba2a109c0f912578e17dbe74\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
+46-->[androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a07fc0c5fb37cab69ba36bb3b6458c6b\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
 47            android:exported="true" />
-47-->[androidx.compose.ui:ui-tooling-android:1.6.6] C:\Users\garci\.gradle\caches\transforms-4\cd11adadba2a109c0f912578e17dbe74\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
+47-->[androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a07fc0c5fb37cab69ba36bb3b6458c6b\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
 48
 49        <provider
 49-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\2182c7e86715a682b06434a16d0f081c\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
@@ -108,11 +108,11 @@
 62        </provider>
 63
 64        <activity
-64-->[androidx.compose.ui:ui-test-manifest:1.6.6] C:\Users\garci\.gradle\caches\transforms-4\808dcbec705de52503b6c4a9259e159e\transformed\ui-test-manifest-1.6.6\AndroidManifest.xml:23:9-25:39
+64-->[androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a7f204f5c6dc55d25c53d7af619986e9\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:23:9-25:39
 65            android:name="androidx.activity.ComponentActivity"
-65-->[androidx.compose.ui:ui-test-manifest:1.6.6] C:\Users\garci\.gradle\caches\transforms-4\808dcbec705de52503b6c4a9259e159e\transformed\ui-test-manifest-1.6.6\AndroidManifest.xml:24:13-63
+65-->[androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a7f204f5c6dc55d25c53d7af619986e9\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:24:13-63
 66            android:exported="true" />
-66-->[androidx.compose.ui:ui-test-manifest:1.6.6] C:\Users\garci\.gradle\caches\transforms-4\808dcbec705de52503b6c4a9259e159e\transformed\ui-test-manifest-1.6.6\AndroidManifest.xml:25:13-36
+66-->[androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a7f204f5c6dc55d25c53d7af619986e9\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:25:13-36
 67
 68        <receiver
 68-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20

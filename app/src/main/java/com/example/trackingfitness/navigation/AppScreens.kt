@@ -10,6 +10,7 @@ sealed class AppScreens(val route: String) {
     object RecoverPasswordScreen : AppScreens("recoverPassword")
     object PrincipalScreen : AppScreens("principalScreen")
     object OTPScreen : AppScreens("otpScreen")
+    object ExerciseScreen : AppScreens("exerciseScreen")
 
     // RUTAS DE LA APLICACIÓN.
 }
