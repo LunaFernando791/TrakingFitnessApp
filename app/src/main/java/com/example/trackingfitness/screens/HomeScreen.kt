@@ -1,6 +1,4 @@
 package com.example.trackingfitness.screens
-
-import android.widget.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,8 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -46,7 +42,6 @@ import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.ui.theme.BlueGreen
 import com.example.trackingfitness.viewModel.UserSessionManager
 
-
 @Composable
 fun PrincipalScreen(
     navController: NavController,
@@ -63,14 +58,8 @@ fun PrincipalScreen(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun PrincipalScreenPreview() {
-    //PrincipalScreen()
-}
-
-@Composable
-fun BodyContent( // BODY OF THE SCREEN
+fun BodyContent(
     navController: NavController,
     userSessionManager: UserSessionManager
 ){
@@ -128,22 +117,11 @@ fun BodyContent( // BODY OF THE SCREEN
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             MyCalendar()
-            Button(
-                modifier = Modifier
-                    .padding(10.dp),
-                onClick = {
-                    userSessionManager.logoutUser()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary,      // Color de fondo del botón
-                    contentColor = MaterialTheme.colorScheme.primary          // Color del texto o icono dentro del botón
-                )) {
-                Text(text = "Volver")
-            }
         }
     }
 }
 
+// Calendario de los días donde se realizó la rutina
 @Composable
 fun MyCalendar() {
     Box( // CALENDAR TO SHOW THE DAY TO DAY PROGRESS
@@ -174,11 +152,12 @@ fun MyCalendar() {
     }
 }
 
+// Menú de opciones
 @Composable
 fun TopMenu(
     navController: NavController
 ) {
-    Box( // BUTTON TO START THE EXERCISES
+    Box( // Botón para iniciar la rutina
         modifier = Modifier
             .padding(
                 vertical = 25.dp,
@@ -234,7 +213,7 @@ fun TopMenu(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
             ){
-        Row( // BUTTON TO SHOW THE WEEKLY SCORES
+        Row( // Botón para ver el ranking
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 25.dp, horizontal = 10.dp)
@@ -263,7 +242,7 @@ fun TopMenu(
                 color = MaterialTheme.colorScheme.primary,
                 )
         }
-        Row( // BUTTON TO SHOW THE PROFILE
+        Row( // Botón para ver el perfil
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 15.dp, horizontal = 10.dp)
@@ -274,9 +253,10 @@ fun TopMenu(
                     shape = RoundedCornerShape(16.dp)
                 )
                 .height(130.dp)
-                .background(MaterialTheme.colorScheme.secondary),
+                .background(MaterialTheme.colorScheme.secondary)
+                .clickable { navController.navigate("profileScreen") },
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(imageVector = Icons.Default.AccountCircle,
                 tint = MaterialTheme.colorScheme.primary,
@@ -288,12 +268,14 @@ fun TopMenu(
                 text = "Mi Perfil",
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = 25.sp,
-                modifier = Modifier.padding(start = 5.dp))
+                modifier = Modifier
+                    .padding(start = 5.dp)
+            )
         }
     }
 }
 
-// BUTTON TO CHANGE THE THEME
+// Botón para cambiar el tema
 @Composable
 fun ToggleSwitch(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Switch(
@@ -302,8 +284,8 @@ fun ToggleSwitch(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
             onCheckedChange(isChecked)
         },
         colors = SwitchDefaults.colors(
-            checkedThumbColor = BlueGreen, // Color del switch cuando está activado
-            uncheckedThumbColor = Color.Gray // Color del switch cuando está desactivado
+            checkedThumbColor = BlueGreen,
+            uncheckedThumbColor = Color.Gray
         )
     )
 }

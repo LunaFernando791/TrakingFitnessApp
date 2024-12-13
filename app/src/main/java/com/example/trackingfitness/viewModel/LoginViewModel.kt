@@ -53,7 +53,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             email.isEmpty() -> "Este campo no puede estar vacío"
             !android.util.Patterns.EMAIL_ADDRESS.matcher(email)
                 .matches() -> "El formato de correo electrónico no es válido"
-
             else -> null
         }
     }

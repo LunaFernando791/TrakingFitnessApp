@@ -1,16 +1,16 @@
 package com.example.trackingfitness.navigation
-
+// RUTAS DE LA APLICACIÓN.
 sealed class AppScreens(val route: String) {
-    object StartScreen : AppScreens("startScreen")
-    object RegisterOneScreen : AppScreens("registerOneScreen")
-    object RegisterTwoScreen : AppScreens("registerTwoScreen")
-    object RegisterThreeScreen : AppScreens("registerThreeScreen")
-    object RegisterFourScreen : AppScreens("registerFourScreen")
-    object LoginScreen : AppScreens("loginScreen")
-    object RecoverPasswordScreen : AppScreens("recoverPassword")
-    object PrincipalScreen : AppScreens("principalScreen")
-    object OTPScreen : AppScreens("otpScreen")
-    object ExerciseScreen : AppScreens("exerciseScreen")
-
-    // RUTAS DE LA APLICACIÓN.
+    data object StartScreen : AppScreens("startScreen")
+    data object RegisterOneScreen : AppScreens("registerOneScreen")
+    data object RegisterTwoScreen : AppScreens("registerTwoScreen")
+    data object RegisterThreeScreen : AppScreens("registerThreeScreen")
+    data object RegisterFourScreen : AppScreens("registerFourScreen")
+    data object LoginScreen : AppScreens("loginScreen")
+    data object RecoverPasswordScreen : AppScreens("recoverPassword")
+    data object PrincipalScreen : AppScreens("homeScreen")
+    data object OTPScreen : AppScreens("otpScreen")
+    data object ExerciseScreen : AppScreens("exerciseScreen")
+    data object ChangePassScreen : AppScreens("changePassScreen")
+    data object ProfileScreen : AppScreens("profileScreen")
 }

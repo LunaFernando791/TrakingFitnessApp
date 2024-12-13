@@ -63,7 +63,7 @@ fun ContainerContent(viewModel: RecoverPasswordViewModel, navController: NavCont
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "Add your email and we will send you a code to reset your password",
-            color = if (darkTheme.value) androidx.compose.ui.graphics.Color.White else androidx.compose.ui.graphics.Color.Black,
+            color = if (darkTheme.value) Color.White else Color.Black,
         )
         Spacer(modifier = Modifier.height(20.dp))
         CustomTextField(
@@ -84,7 +84,7 @@ fun ContainerContent(viewModel: RecoverPasswordViewModel, navController: NavCont
                     navController.navigate(AppScreens.OTPScreen.route)
                 }
             }, colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.background,
+                containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.primary
             ), modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -128,7 +128,7 @@ fun CustomTextField(
             .clip(RoundedCornerShape(15.dp))
             .border(
                 2.dp,
-                if (isError) Color.Red else if(darkTheme.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onPrimary,
+                if (isError) Color.Red else MaterialTheme.colorScheme.tertiary,
                 RoundedCornerShape(12.dp)
             )
             .height(50.dp),

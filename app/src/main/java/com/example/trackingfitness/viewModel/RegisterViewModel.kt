@@ -3,7 +3,6 @@ package com.example.trackingfitness.viewModel
 import android.util.Log
 import android.util.Patterns
 import androidx.annotation.OptIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -22,9 +21,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class RegisterViewModel : ViewModel() {
-
     private val apiService: UserService = RetrofitInstance.api //INSTANCIA PARA INTERACTUAR CON LA API
-
     var name by mutableStateOf("")
     var lastname by mutableStateOf("")
     var age by mutableStateOf("")
@@ -174,35 +171,35 @@ class RegisterViewModel : ViewModel() {
             else -> null
         }
     }
-    fun validateEmail(): String?{
+    private fun validateEmail(): String?{
         return when{
             email.isEmpty() -> "Este campo no puede estar vacío"
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> "El formato de correo electrónico no es válido"
             else-> null
         }
     }
-    fun validatePassword(): String?{
+    private fun validatePassword(): String?{
         return when{
             password.isEmpty() -> "Este campo no puede estar vacío"
             password.length < 8 -> "La contraseña debe contener al menos 8 caracteres"
             else-> null
         }
     }
-    fun validateConfirmPassword(): String? {
+    private fun validateConfirmPassword(): String? {
         return when {
             confirmPassword.isEmpty() -> "Este campo no puede estar vacío"
             confirmPassword != password -> "Las contraseñas no coinciden"
             else -> null
         }
     }
-    fun validateUsername(): String? {
+    private fun validateUsername(): String? {
         return when{
             username.isEmpty() -> "Este campo no puede estar vacío"
             username.length < 8 -> "La contraseña debe contener al menos 8 caracteres"
             else-> null
         }
     }
-    fun validateExperienceLevel(): String? {
+    private fun validateExperienceLevel(): String? {
         return when {
             experienceLevel.isEmpty() -> "Este campo no puede estar vacío"
             else -> null
@@ -214,15 +211,14 @@ class RegisterViewModel : ViewModel() {
     private fun updateNameError(error: String?) { nameError = error }
     private fun updateLastNameError(error: String?) { lastnameError = error }
     private fun updateAgeError(error: String?) { ageError = error }
-    fun updateHeightError(error: String?) { heightError = error }
-    fun updateWeightError(error: String?) { weightError = error }
-    fun updateGenderError(error: String?) { genderError = error }
-    fun updateEmailError(error: String?) { emailError = error }
-    fun updatePasswordError(error: String?) { passwordError = error }
-    fun updateConfirmPasswordError(error: String?) { confirmPasswordError = error }
-    fun updateUsernameError(error: String?) { usernameError = error }
-    fun updateExperienceLevelError(error: String?) { experienceLevelError = error }
-
+    private fun updateHeightError(error: String?) { heightError = error }
+    private fun updateWeightError(error: String?) { weightError = error }
+    private fun updateGenderError(error: String?) { genderError = error }
+    private fun updateEmailError(error: String?) { emailError = error }
+    private fun updatePasswordError(error: String?) { passwordError = error }
+    private fun updateConfirmPasswordError(error: String?) { confirmPasswordError = error }
+    private fun updateUsernameError(error: String?) { usernameError = error }
+    private fun updateExperienceLevelError(error: String?) { experienceLevelError = error }
     // ACTUALIZACIÓN DEL ESTADO DE CADA UNO DE LOS ERRORES DE LOS CAMPOS.
 
     fun updateProgressRegister() : Boolean{
@@ -298,7 +294,6 @@ class RegisterViewModel : ViewModel() {
                     registrationSuccess = true
                     clearFields()
                     progress = 0F
-
                     // Muestra un mensaje de éxito con un registro exitoso
                 } else {
                     errorRegister = true

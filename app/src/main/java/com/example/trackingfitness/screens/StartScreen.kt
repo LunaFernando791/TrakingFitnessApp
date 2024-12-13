@@ -29,16 +29,15 @@ import com.example.trackingfitness.R
 import com.example.trackingfitness.customFontFamily
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
-import com.example.trackingfitness.viewModel.LoginViewModel
 
 
 @Composable//VISTA DE INICIO PARA INICIAR SESIÓN O REGISTRARTE
-fun StartScreen(navController: NavHostController, loginViewModel: LoginViewModel) {
-    BodyContent(navController = navController, loginViewModel = loginViewModel)
+fun StartScreen(navController: NavHostController) {
+    BodyContent(navController = navController)
 }
 
 @Composable
-fun BodyContent(navController: NavHostController, loginViewModel: LoginViewModel){
+fun BodyContent(navController: NavHostController){
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(if (darkTheme.value) R.drawable.fondodark else R.drawable.fondoblanco2),
