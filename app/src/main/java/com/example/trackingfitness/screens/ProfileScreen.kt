@@ -37,7 +37,6 @@ import com.example.trackingfitness.R
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.viewModel.UserSessionManager
 
-// PANTALLA SIN TERMINAR
 @Composable
 fun ProfileScreen(
     navController: NavController,
@@ -119,48 +118,32 @@ fun BodyContentProfile(
                 .background(MaterialTheme.colorScheme.background)
 
         ){
-            Row (
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                Text(text = "Nombre: ")
-                Text(text = "Apellido: ")
-            }
-            Row(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "Edad: ")
-                Text(text = "Altura: ")
-                Text(text = "Peso: ")
-            }
-            Row(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "Genero: ")
-                Text(text = "Experiencia: ")
-            }
             Spacer(modifier = Modifier.height(30.dp))
-            Row(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                Text(text = "Correo electronico: ")
-                Text(text = "Contraseña: ")
-            }
+            DynamicInfoRow(
+                items = listOf(
+                    "Nombre" to userSessionManager.getUserSession().name,
+                    "Apellido" to userSessionManager.getUserSession().lastname,
+                )
+            )
+            DynamicInfoRow(
+                items = listOf(
+                    "Genero" to userSessionManager.getUserSession().gender,
+                    "Experiencia" to userSessionManager.getUserSession().experienceLevel,
+                )
+            )
+            DynamicInfoRow(
+                items = listOf(
+                    "Altura" to userSessionManager.getUserSession().height,
+                    "Peso" to userSessionManager.getUserSession().weight,
+                    "Edad" to userSessionManager.getUserSession().age
+                )
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            DynamicInfoRow(
+                items = listOf(
+                    "Correo" to userSessionManager.getUserSession().email
+                )
+            )
             Row(
                 modifier = Modifier
                     .padding(20.dp)
@@ -205,6 +188,35 @@ fun BodyContentProfile(
                     contentColor = MaterialTheme.colorScheme.primary
                 )) {
                 Text(text = "Cerrar sesión")
+            }
+        }
+    }
+}
+
+
+@Composable
+fun DynamicInfoRow(
+    items: List<Pair<String, String>>,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 50.dp, vertical = 15.dp)
+            .background(MaterialTheme.colorScheme.background),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        items.forEach { (label, value) ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = label, fontSize = 20.sp)
+                Text(
+                    text = value,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    )
             }
         }
     }

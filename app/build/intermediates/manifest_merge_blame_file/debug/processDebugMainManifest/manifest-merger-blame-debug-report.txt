@@ -8,149 +8,167 @@
 8        android:minSdkVersion="31"
 9        android:targetSdkVersion="34" />
 10
-11    <uses-permission android:name="android.permission.INTERNET" />
-11-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:4:5-67
-11-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:4:22-64
-12
-13    <permission
-13-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
-14        android:name="com.example.trackingfitness.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-14-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
-15        android:protectionLevel="signature" />
-15-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+11    <uses-feature
+11-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:5:5-7:36
+12        android:name="android.hardware.camera"
+12-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:6:9-47
+13        android:required="false" />
+13-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:7:9-33
+14
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:8:5-67
+15-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:8:22-64
 16
-17    <uses-permission android:name="com.example.trackingfitness.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-17-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
-17-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
-18    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-18-->[androidx.media3:media3-common:1.4.0] C:\Users\garci\.gradle\caches\transforms-4\b2a02ba166a65373f7fd126498562120\transformed\media3-common-1.4.0\AndroidManifest.xml:22:5-79
-18-->[androidx.media3:media3-common:1.4.0] C:\Users\garci\.gradle\caches\transforms-4\b2a02ba166a65373f7fd126498562120\transformed\media3-common-1.4.0\AndroidManifest.xml:22:22-76
+17    <!-- Permisos necesarios -->
+18    <uses-permission android:name="android.permission.CAMERA" />
+18-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:11:5-65
+18-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:11:22-62
 19
-20    <application
-20-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:5:5-27:19
-21        android:allowBackup="true"
-21-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:6:9-35
-22        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-22-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\097ccc2fff06e9e97d10af1d5c05491a\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
-23        android:dataExtractionRules="@xml/data_extraction_rules"
-23-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:7:9-65
-24        android:debuggable="true"
-25        android:extractNativeLibs="false"
-26        android:fullBackupContent="@xml/backup_rules"
-26-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:8:9-54
-27        android:icon="@mipmap/ic_launcher"
-27-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:9:9-43
-28        android:label="@string/app_name"
-28-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:10:9-41
-29        android:networkSecurityConfig="@xml/network_security_config"
-29-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:14:9-69
-30        android:roundIcon="@mipmap/ic_launcher_round"
-30-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:11:9-54
-31        android:supportsRtl="true"
-31-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:12:9-35
-32        android:testOnly="true"
-33        android:theme="@style/Theme.TrackingFitness" >
-33-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:13:9-53
-34        <activity
-34-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:15:9-26:20
-35            android:name="com.example.trackingfitness.MainActivity"
-35-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:16:13-41
-36            android:exported="true"
-36-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:17:13-36
-37            android:label="@string/app_name"
-37-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:18:13-45
-38            android:theme="@style/Theme.TrackingFitness" >
-38-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:19:13-57
-39            <intent-filter>
-39-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:21:13-25:29
-40                <action android:name="android.intent.action.MAIN" />
-40-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:22:17-69
-40-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:22:25-66
-41
-42                <category android:name="android.intent.category.LAUNCHER" />
-42-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:24:17-77
-42-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:24:27-74
-43            </intent-filter>
-44        </activity>
-45        <activity
-45-->[androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a07fc0c5fb37cab69ba36bb3b6458c6b\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
-46            android:name="androidx.compose.ui.tooling.PreviewActivity"
-46-->[androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a07fc0c5fb37cab69ba36bb3b6458c6b\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
-47            android:exported="true" />
-47-->[androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a07fc0c5fb37cab69ba36bb3b6458c6b\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
-48
-49        <provider
-49-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\2182c7e86715a682b06434a16d0f081c\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-50            android:name="androidx.startup.InitializationProvider"
-50-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\2182c7e86715a682b06434a16d0f081c\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
-51            android:authorities="com.example.trackingfitness.androidx-startup"
-51-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\2182c7e86715a682b06434a16d0f081c\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
-52            android:exported="false" >
-52-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\2182c7e86715a682b06434a16d0f081c\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
-53            <meta-data
-53-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\2182c7e86715a682b06434a16d0f081c\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-54                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-54-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\2182c7e86715a682b06434a16d0f081c\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
-55                android:value="androidx.startup" />
-55-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\2182c7e86715a682b06434a16d0f081c\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
-56            <meta-data
-56-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\garci\.gradle\caches\transforms-4\1fa893975d71ffc182f0a4ad7afdbc13\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:29:13-31:52
-57                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-57-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\garci\.gradle\caches\transforms-4\1fa893975d71ffc182f0a4ad7afdbc13\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:30:17-78
-58                android:value="androidx.startup" />
-58-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\garci\.gradle\caches\transforms-4\1fa893975d71ffc182f0a4ad7afdbc13\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:31:17-49
-59            <meta-data
-59-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
-60                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-60-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
-61                android:value="androidx.startup" />
-61-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
-62        </provider>
-63
-64        <activity
-64-->[androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a7f204f5c6dc55d25c53d7af619986e9\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:23:9-25:39
-65            android:name="androidx.activity.ComponentActivity"
-65-->[androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a7f204f5c6dc55d25c53d7af619986e9\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:24:13-63
-66            android:exported="true" />
-66-->[androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\a7f204f5c6dc55d25c53d7af619986e9\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:25:13-36
-67
-68        <receiver
-68-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
-69            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-69-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
-70            android:directBootAware="false"
-70-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
-71            android:enabled="true"
-71-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
-72            android:exported="true"
-72-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
-73            android:permission="android.permission.DUMP" >
-73-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
-74            <intent-filter>
-74-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
-75                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-75-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
-75-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
-76            </intent-filter>
-77            <intent-filter>
-77-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
-78                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-78-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
-78-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
-79            </intent-filter>
-80            <intent-filter>
-80-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
-81                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-81-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
-81-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
-82            </intent-filter>
-83            <intent-filter>
-83-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
-84                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-84-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
-84-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\84cf4b0fed2dfe987e7b05187d6f82b2\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
-85            </intent-filter>
-86        </receiver>
-87    </application>
-88
-89</manifest>
+20    <permission
+20-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\9d825df9371ff45d7f0892ca4fa54c1e\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+21        android:name="com.example.trackingfitness.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+21-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\9d825df9371ff45d7f0892ca4fa54c1e\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+22        android:protectionLevel="signature" />
+22-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\9d825df9371ff45d7f0892ca4fa54c1e\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+23
+24    <uses-permission android:name="com.example.trackingfitness.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+24-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\9d825df9371ff45d7f0892ca4fa54c1e\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+24-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\9d825df9371ff45d7f0892ca4fa54c1e\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+25    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Agregar meta-data para CameraX -->
+25-->[androidx.media3:media3-common:1.4.0] C:\Users\garci\.gradle\caches\transforms-4\9d4d1b7f1d43f2d6eebd502bf98f9d4f\transformed\media3-common-1.4.0\AndroidManifest.xml:22:5-79
+25-->[androidx.media3:media3-common:1.4.0] C:\Users\garci\.gradle\caches\transforms-4\9d4d1b7f1d43f2d6eebd502bf98f9d4f\transformed\media3-common-1.4.0\AndroidManifest.xml:22:22-76
+26    <application
+26-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:15:5-38:19
+27        android:allowBackup="true"
+27-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:16:9-35
+28        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+28-->[androidx.core:core:1.13.1] C:\Users\garci\.gradle\caches\transforms-4\9d825df9371ff45d7f0892ca4fa54c1e\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+29        android:dataExtractionRules="@xml/data_extraction_rules"
+29-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:17:9-65
+30        android:debuggable="true"
+31        android:extractNativeLibs="false"
+32        android:fullBackupContent="@xml/backup_rules"
+32-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:18:9-54
+33        android:icon="@mipmap/ic_launcher"
+33-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:19:9-43
+34        android:label="@string/app_name"
+34-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:20:9-41
+35        android:networkSecurityConfig="@xml/network_security_config"
+35-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:24:9-69
+36        android:roundIcon="@mipmap/ic_launcher_round"
+36-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:21:9-54
+37        android:supportsRtl="true"
+37-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:22:9-35
+38        android:testOnly="true"
+39        android:theme="@style/Theme.TrackingFitness" >
+39-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:23:9-53
+40        <meta-data
+40-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:25:9-115
+41            android:name="androidx.camera.cameraX"
+41-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:25:20-58
+42            android:value="androidx.camera.camera2.Camera2Config" />
+42-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:25:59-112
+43
+44        <activity
+44-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:26:9-37:20
+45            android:name="com.example.trackingfitness.MainActivity"
+45-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:27:13-41
+46            android:exported="true"
+46-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:28:13-36
+47            android:label="@string/app_name"
+47-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:29:13-45
+48            android:theme="@style/Theme.TrackingFitness" >
+48-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:30:13-57
+49            <intent-filter>
+49-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:32:13-36:29
+50                <action android:name="android.intent.action.MAIN" />
+50-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:33:17-69
+50-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:33:25-66
+51
+52                <category android:name="android.intent.category.LAUNCHER" />
+52-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:35:17-77
+52-->C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:35:27-74
+53            </intent-filter>
+54        </activity>
+55        <activity
+55-->[androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\cef34ee2cf39862b40e00f363721acfa\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
+56            android:name="androidx.compose.ui.tooling.PreviewActivity"
+56-->[androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\cef34ee2cf39862b40e00f363721acfa\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
+57            android:exported="true" />
+57-->[androidx.compose.ui:ui-tooling-android:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\cef34ee2cf39862b40e00f363721acfa\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
+58
+59        <provider
+59-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\950ad278ae54e15345a43a84c40ede39\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+60            android:name="androidx.startup.InitializationProvider"
+60-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\950ad278ae54e15345a43a84c40ede39\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+61            android:authorities="com.example.trackingfitness.androidx-startup"
+61-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\950ad278ae54e15345a43a84c40ede39\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+62            android:exported="false" >
+62-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\950ad278ae54e15345a43a84c40ede39\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+63            <meta-data
+63-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\950ad278ae54e15345a43a84c40ede39\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+64                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+64-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\950ad278ae54e15345a43a84c40ede39\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+65                android:value="androidx.startup" />
+65-->[androidx.emoji2:emoji2:1.3.0] C:\Users\garci\.gradle\caches\transforms-4\950ad278ae54e15345a43a84c40ede39\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+66            <meta-data
+66-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\garci\.gradle\caches\transforms-4\4f0f1590614496c9656c712428f7b13d\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:29:13-31:52
+67                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+67-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\garci\.gradle\caches\transforms-4\4f0f1590614496c9656c712428f7b13d\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:30:17-78
+68                android:value="androidx.startup" />
+68-->[androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\garci\.gradle\caches\transforms-4\4f0f1590614496c9656c712428f7b13d\transformed\lifecycle-process-2.8.3\AndroidManifest.xml:31:17-49
+69            <meta-data
+69-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+70                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+70-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+71                android:value="androidx.startup" />
+71-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+72        </provider>
+73
+74        <activity
+74-->[androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\8fc2a308ee658c584fb9471fb8207f82\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:23:9-25:39
+75            android:name="androidx.activity.ComponentActivity"
+75-->[androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\8fc2a308ee658c584fb9471fb8207f82\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:24:13-63
+76            android:exported="true" />
+76-->[androidx.compose.ui:ui-test-manifest:1.7.5] C:\Users\garci\.gradle\caches\transforms-4\8fc2a308ee658c584fb9471fb8207f82\transformed\ui-test-manifest-1.7.5\AndroidManifest.xml:25:13-36
+77
+78        <receiver
+78-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+79            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+79-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+80            android:directBootAware="false"
+80-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+81            android:enabled="true"
+81-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+82            android:exported="true"
+82-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+83            android:permission="android.permission.DUMP" >
+83-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+84            <intent-filter>
+84-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+85                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+85-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+85-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+86            </intent-filter>
+87            <intent-filter>
+87-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+88                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+88-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+88-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+89            </intent-filter>
+90            <intent-filter>
+90-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+91                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+91-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+91-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+92            </intent-filter>
+93            <intent-filter>
+93-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+94                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+94-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+94-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\garci\.gradle\caches\transforms-4\303e83980aa4c0e2bc01c83da99cecc9\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+95            </intent-filter>
+96        </receiver>
+97    </application>
+98
+99</manifest>

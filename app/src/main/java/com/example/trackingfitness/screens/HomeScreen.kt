@@ -198,7 +198,7 @@ fun TopMenu(
                 .background(Color.Gray)
                 .fillMaxSize()
                 .clickable {
-                    navController.navigate("exerciseScreen")
+                    navController.navigate("exerciseListScreen")
                 }) {
                 val img = painterResource(R.drawable.playicon)
                 Image(

@@ -16,7 +16,9 @@ data class User(
     val email: String,
     val password: String,
     val username: String,
-    val experience_level_id: Int
+    val experience_level_id: Int,
+    val routine_type_id: Int,
+    val injuries: List<Int>
 )
 data class RegisterResponse(
     val success: Boolean,

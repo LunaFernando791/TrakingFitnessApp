@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-64:/values-v22/values-v22.xml",
+            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-65:/values-v22/values-v22.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\65f9066da7e628656c500a5ab6ccbed5\\transformed\\appcompat-1.6.1\\res\\values-v22\\values-v22.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\0ec193e5a2bee9ec6eac6135ad88f536\\transformed\\appcompat-1.6.1\\res\\values-v22\\values-v22.xml",
                     "from": {
                         "startLines": "2,3,4,9",
                         "startColumns": "4,4,4,4",

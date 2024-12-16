@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,8 @@ import org.json.JSONObject
 
 class RegisterViewModel : ViewModel() {
     private val apiService: UserService = RetrofitInstance.api //INSTANCIA PARA INTERACTUAR CON LA API
+
+    // VARIABLES NECESARIAS PARA EL REGISTRO DEL USUARIO
     var name by mutableStateOf("")
     var lastname by mutableStateOf("")
     var age by mutableStateOf("")
@@ -33,7 +36,19 @@ class RegisterViewModel : ViewModel() {
     var confirmPassword by mutableStateOf("")
     var username by mutableStateOf("")
     var experienceLevel by mutableStateOf("")
-    // INFORMACIÓN DEL USUARIO A MANERA DE STRING
+    var routineType by mutableStateOf("")
+    var injuriesList by mutableStateOf(listOf<Int>())
+        private set
+
+
+    // VARIABLES PARA EL PROGRESO DE LA BARRA
+    var progress by mutableFloatStateOf(0.0f)
+        private set
+    private val _progressColor = mutableStateOf(if (darkTheme.value) BlueGreen else Color.Gray)
+    val progressColor: State<Color> get() = _progressColor
+    private val _trackColor = mutableStateOf(Color.Gray)
+    val trackColor: State<Color> get() = _trackColor
+
 
     var nameError by mutableStateOf<String?>(null)
     var lastnameError by mutableStateOf<String?>(null)
@@ -46,25 +61,12 @@ class RegisterViewModel : ViewModel() {
     private var confirmPasswordError by mutableStateOf<String?>(null)
     var usernameError by mutableStateOf<String?>(null)
     var experienceLevelError by mutableStateOf<String?>(null)
-    //VARIABLES PARA EL MANEJO DE LOS ERRORES DE LOS CAMPOS
-
-
-
-    var progress by mutableFloatStateOf(0.0f)
-        private set
-    private val _progressColor = mutableStateOf(if (darkTheme.value) BlueGreen else Color.Gray)
-    val progressColor: State<Color> get() = _progressColor
-    private val _trackColor = mutableStateOf(Color.Gray)
-    val trackColor: State<Color> get() = _trackColor
-    // VARIABLES PARA EL PROGRESO DE LA BARRA
-
+    var routineTypeError by mutableStateOf<String?>(null)
     var registrationSuccess by mutableStateOf(false)
     private var registrationError by mutableStateOf("")
-    // VARIABLES PARA MANEJAR EL ÉXITO O ERROR DEL REGISTRO
-
     var errorRegister by mutableStateOf(false)
     var emailErrors by mutableStateOf("")
-    //VARIABLE DE ESTADO PARA MOSTRAR ERRORES.
+    //VARIABLES PARA EL MANEJO DE LOS ERRORES DE LOS CAMPOS
 
     fun incrementProgress(stepIncrement: Float) {
         if (progress + stepIncrement <= 1.0f) {
@@ -122,6 +124,22 @@ class RegisterViewModel : ViewModel() {
             "Avanzado" -> "3"
             else -> ""
         }
+    }
+    fun updateRoutineType(routineType: String) {
+        this.routineType = when (routineType) {
+            "Improve cardiovascular health" -> "1"
+            "Strengthen muscles" -> "2"
+            "Improve flexibility" -> "3"
+            "Reduce stress" -> "4"
+            "Weight control" -> "5"
+            "Increase energy" -> "6"
+            "Prevent diseases" -> "7"
+            "Improve posture" -> "8"
+            else -> ""
+        }
+    }
+    fun updateInjuries(injuries: SnapshotStateList<Int>) {
+        this.injuriesList = injuries
     }
 
     //FUNCIONES PARA ACTUALIZAR EL ESTADO DE LOS DATOS DEL USUARIO.
@@ -205,6 +223,13 @@ class RegisterViewModel : ViewModel() {
             else -> null
         }
     }
+    private fun validateRoutineType(): String? {
+        return when {
+            routineType.isEmpty() -> "Este campo no puede estar vacío"
+            else -> null
+        }
+    }
+
 
     // VALIDACIONES DE CADA UNO DE LOS CAMPOS.
 
@@ -219,6 +244,7 @@ class RegisterViewModel : ViewModel() {
     private fun updateConfirmPasswordError(error: String?) { confirmPasswordError = error }
     private fun updateUsernameError(error: String?) { usernameError = error }
     private fun updateExperienceLevelError(error: String?) { experienceLevelError = error }
+    private fun updateRoutineTypeError(error: String?) { routineTypeError = error }
     // ACTUALIZACIÓN DEL ESTADO DE CADA UNO DE LOS ERRORES DE LOS CAMPOS.
 
     fun updateProgressRegister() : Boolean{
@@ -267,10 +293,12 @@ class RegisterViewModel : ViewModel() {
         experienceLevelError = validateExperienceLevel()
         updateUsernameError(usernameError)
         updateExperienceLevelError(experienceLevelError)
-        if (usernameError == null && experienceLevelError == null) {
+        updateRoutineTypeError(routineTypeError)
+        if (usernameError == null && experienceLevelError == null && routineTypeError == null) {
             formRegister()
         }
     }
+
 
     @OptIn(UnstableApi::class)
     private fun formRegister() {
@@ -285,7 +313,9 @@ class RegisterViewModel : ViewModel() {
                 email = email,
                 password = password,
                 username = username,
-                experience_level_id = experienceLevel.toInt()
+                experience_level_id = experienceLevel.toInt(),
+                routine_type_id = routineType.toInt(),
+                injuries = injuriesList
             )
             try {
                 val response = apiService.register(userData) //SOLICITUD POST
@@ -308,6 +338,7 @@ class RegisterViewModel : ViewModel() {
             }
         }
     } // FUNCIÓN PARA ENVIAR LA SOLICITUD DE REGISTRO.
+
     private fun clearFields() {
         name = ""
         lastname = ""
@@ -320,6 +351,7 @@ class RegisterViewModel : ViewModel() {
         confirmPassword = ""
         username = ""
         experienceLevel = ""
+        routineType = ""
         progress= 0F
     } // LIMPIAR CAMPOS DE TEXTO
     fun resetStates(){

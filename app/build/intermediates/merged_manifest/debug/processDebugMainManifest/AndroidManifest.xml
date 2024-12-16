@@ -8,15 +8,21 @@
         android:minSdkVersion="31"
         android:targetSdkVersion="34" />
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Permisos necesarios -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <permission
         android:name="com.example.trackingfitness.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.example.trackingfitness.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Agregar meta-data para CameraX -->
     <application
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -31,6 +37,10 @@
         android:supportsRtl="true"
         android:testOnly="true"
         android:theme="@style/Theme.TrackingFitness" >
+        <meta-data
+            android:name="androidx.camera.cameraX"
+            android:value="androidx.camera.camera2.Camera2Config" />
+
         <activity
             android:name="com.example.trackingfitness.MainActivity"
             android:exported="true"

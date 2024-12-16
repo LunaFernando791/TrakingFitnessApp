@@ -16,7 +16,7 @@ import com.example.trackingfitness.screens.RegisterThreeScreen
 import com.example.trackingfitness.screens.RegisterTwoScreen
 import com.example.trackingfitness.screens.RegisterOneScreen
 import com.example.trackingfitness.screens.StartScreen
-import com.example.trackingfitness.screens.ExerciseScreen
+import com.example.trackingfitness.screens.ExerciseListScreen
 import com.example.trackingfitness.screens.ProfileScreen
 import com.example.trackingfitness.viewModel.LoginViewModel
 import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
@@ -82,8 +82,8 @@ fun AppNavigation(){
             PrincipalScreen(navController = navController,
                 userSession = userSessionManager)
         }
-        composable(AppScreens.ExerciseScreen.route) {
-            ExerciseScreen(navController = navController)
+        composable(AppScreens.ExerciseListScreen.route) {
+            ExerciseListScreen(navController = navController)
         }
         composable(AppScreens.ChangePassScreen.route) {
             ChangePassScreen(
@@ -96,6 +96,9 @@ fun AppNavigation(){
                 navController = navController,
                 userSession = userSessionManager
             )
+        }
+        composable(AppScreens.ExerciseCameraScreen.route) {
+            
         }
     }
 }
