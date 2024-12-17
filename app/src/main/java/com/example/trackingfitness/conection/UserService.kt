@@ -2,8 +2,10 @@ package com.example.trackingfitness.conection
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 // Clases para manejar las respuestas y las solicitudes de la API.
 data class User(
@@ -56,6 +58,13 @@ data class ResetPasswordResponse(
     val message: String
 )
 
+data class UpdateEmailRequest(
+    val email: String
+)
+data class UpdateEmailResponse(
+    val message: String
+)
+
 interface UserService { // Interfaz para definir las operaciones del servicio.
 
     @POST("/api/register")
@@ -64,11 +73,22 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
     @POST("/api/login")
     suspend fun loginUser(@Body loginRequestUser: LoginRequestUser): Response<LoginResponseUser>
     // Ruta para iniciar sesión.
+
     @POST("/api/logout")
     suspend fun logout(
         @Header("Authorization") token: String
     ): Response<Unit>
     // Ruta para cerrar sesión.
+    @DELETE("/api/account-settings")
+    suspend fun deleteAccount(
+        @Header("Authorization") token: String
+    ): Response<Unit>
+    @PUT("/api/account-settings/email")
+    suspend fun updateEmail(
+        @Header("Authorization") token: String,
+        @Body updateEmailRequest: UpdateEmailRequest
+    ): Response<UpdateEmailResponse>
+
 
     @POST("/api/auth/forget-password")
     suspend fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest): Response<ForgotPasswordResponse>

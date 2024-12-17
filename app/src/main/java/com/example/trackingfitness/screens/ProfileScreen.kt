@@ -3,6 +3,7 @@ package com.example.trackingfitness.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,9 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -29,7 +34,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -43,7 +47,8 @@ fun ProfileScreen(
     userSession: UserSessionManager
 ){
     Surface (
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
     ){
         Image(
             painter = painterResource(if (darkTheme.value) R.drawable.fondodark else R.drawable.fondoblanco2),
@@ -69,7 +74,21 @@ fun BodyContentProfile(
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(
+            modifier = Modifier
+                .padding(end = 275.dp),
+            onClick = {
+                navController.navigate("homeScreen")
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.primary
+            )
+        ) {
+            Text(text = "Volver")
+        }
+        Spacer(modifier = Modifier.height(20.dp))
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(200.dp))
@@ -81,7 +100,6 @@ fun BodyContentProfile(
                 .width(200.dp)
                 .height(200.dp)
                 .background(MaterialTheme.colorScheme.background)
-
         ){
             Text(text = "Imagen de perfil.")
         }
@@ -105,89 +123,154 @@ fun BodyContentProfile(
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Column(
+        LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
+                .fillMaxSize()
                 .clip(RoundedCornerShape(20.dp))
                 .border(
                     3.dp,
                     color = MaterialTheme.colorScheme.tertiary,
                     RoundedCornerShape(20.dp)
                 )
-                .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
 
         ){
-            Spacer(modifier = Modifier.height(30.dp))
-            DynamicInfoRow(
-                items = listOf(
-                    "Nombre" to userSessionManager.getUserSession().name,
-                    "Apellido" to userSessionManager.getUserSession().lastname,
+            item {
+                Spacer(modifier = Modifier.height(30.dp))
+                DynamicInfoRow(
+                    items = listOf(
+                        "Nombre" to userSessionManager.getUserSession().name,
+                        "Apellido" to userSessionManager.getUserSession().lastname,
+                    )
                 )
-            )
-            DynamicInfoRow(
-                items = listOf(
-                    "Genero" to userSessionManager.getUserSession().gender,
-                    "Experiencia" to userSessionManager.getUserSession().experienceLevel,
+                DynamicInfoRow(
+                    items = listOf(
+                        "Genero" to userSessionManager.getUserSession().gender,
+                        "Experiencia" to userSessionManager.getUserSession().experienceLevel,
+                    )
                 )
-            )
-            DynamicInfoRow(
-                items = listOf(
-                    "Altura" to userSessionManager.getUserSession().height,
-                    "Peso" to userSessionManager.getUserSession().weight,
-                    "Edad" to userSessionManager.getUserSession().age
+                DynamicInfoRow(
+                    items = listOf(
+                        "Altura" to userSessionManager.getUserSession().height,
+                        "Peso" to userSessionManager.getUserSession().weight,
+                        "Edad" to userSessionManager.getUserSession().age
+                    )
                 )
-            )
-            Spacer(modifier = Modifier.height(30.dp))
-            DynamicInfoRow(
-                items = listOf(
-                    "Correo" to userSessionManager.getUserSession().email
-                )
-            )
-            Row(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                Button(
+                Row (
                     modifier = Modifier
-                        .padding(10.dp),
-                    onClick = {
-                        //userSessionManager.logoutUser()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.primary
-                    )) {
-                    Text(text = "Editar Perfil")
+                        .padding(horizontal = 50.dp)
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Correo",
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+                        Text(
+                            text = userSessionManager.getUserSession().email,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp,
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Editar",
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.padding(top = 10.dp)
+                                .width(50.dp)
+                                .height(30.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(MaterialTheme.colorScheme.secondary)
+                                .clickable {
+                                    navController.navigate("editEmailScreen")
+                                }
+                        )
+                    }
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Password",
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Editar",
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.padding(top = 10.dp)
+                                .width(50.dp)
+                                .height(30.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(MaterialTheme.colorScheme.secondary)
+                                .clickable {
+                                    navController.navigate("editPasswordScreen")
+                                }
+                        )
+                    }
                 }
-                Button(
+                Row(
                     modifier = Modifier
-                        .padding(10.dp),
-                    onClick = {
-                        navController.navigate("homeScreen")
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.primary
-                    )) {
-                    Text(text = "Volver")
+                        .fillMaxWidth()
+                        .padding(top = 20.dp)
+                        .background(MaterialTheme.colorScheme.background),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .padding(10.dp),
+                        onClick = {
+                            //userSessionManager.logoutUser()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = if (darkTheme.value) Color.White else Color.Black
+                        )
+                    ) {
+                        Text(text = "Editar Perfil")
+                    }
                 }
-            }
-            Button(
-                modifier = Modifier
-                    .padding(10.dp),
-                onClick = {
-                    userSessionManager.logoutUser()
-                    navController.navigate("startScreen")
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red,
-                    contentColor = MaterialTheme.colorScheme.primary
-                )) {
-                Text(text = "Cerrar sesión")
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 40.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Button(
+                        modifier = Modifier
+                            .padding(10.dp),
+                        onClick = {
+                            userSessionManager.logoutUser()
+                            navController.navigate("startScreen")
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Red,
+                            contentColor = if (darkTheme.value) Color.White else Color.Black
+                        )
+                    ) {
+                        Text(text = "Cerrar sesión")
+                    }
+                    Button(
+                        modifier = Modifier
+                            .padding(10.dp),
+                        onClick = {
+                            userSessionManager.deleteUserAccount()
+                            navController.navigate("startScreen")
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Red,
+                            contentColor = if (darkTheme.value) Color.White else Color.Black
+                        )
+                    ) {
+                        Text(text = "Eliminar cuenta")
+                    }
+                }
             }
         }
     }
@@ -202,8 +285,7 @@ fun DynamicInfoRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 50.dp, vertical = 15.dp)
-            .background(MaterialTheme.colorScheme.background),
+            .padding(horizontal = 50.dp, vertical = 15.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -211,13 +293,53 @@ fun DynamicInfoRow(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                val valueModifier: String
+                when (label) {
+                    "Altura" -> {
+                        valueModifier = "$value m"
+                    }
+
+                    "Peso" -> {
+                        valueModifier = "$value kg"
+                    }
+
+                    "Edad" -> {
+                        valueModifier = "$value años"
+                    }
+
+                    "Genero" -> {
+                        valueModifier = when (value) {
+                            "1" -> "Masculino"
+                            "2" -> "Femenino"
+                            "3" -> "Otro"
+                            else -> ""
+                        }
+                    }
+                    "Experiencia" -> {
+                        valueModifier = when (value) {
+                            "1" -> "Principiante"
+                            "2" -> "Intermedio"
+                            "3" -> "Avanzado"
+                            else -> ""
+                        }
+                    }
+                    else ->{
+                        valueModifier = value
+                    }
+                }
                 Text(text = label, fontSize = 20.sp)
                 Text(
-                    text = value,
+                    text = valueModifier,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    )
+                    fontSize = 20.sp
+                )
             }
         }
     }
 }
+
+
+
+
+
+

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.trackingfitness.screens.ChangePassScreen
+import com.example.trackingfitness.screens.EditEmailScreen
 import com.example.trackingfitness.screens.LoginScreen
 import com.example.trackingfitness.screens.OTPScreen
 import com.example.trackingfitness.screens.PrincipalScreen
@@ -99,6 +100,18 @@ fun AppNavigation(){
         }
         composable(AppScreens.ExerciseCameraScreen.route) {
             
+        }
+        composable(AppScreens.EditEmailScreen.route) {
+            EditEmailScreen(
+                navController = navController,
+                userSession = userSessionManager
+            )
+        }
+        composable(AppScreens.EditPasswordScreen.route) {
+            /*EditPasswordScreen(
+                navController = navController,
+                userSessionManager = userSessionManager
+            )*/
         }
     }
 }

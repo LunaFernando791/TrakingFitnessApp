@@ -3,14 +3,47 @@ package com.example.trackingfitness.viewModel
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.RetrofitInstance
+import com.example.trackingfitness.conection.UpdateEmailRequest
 import com.example.trackingfitness.conection.UserService
 import kotlinx.coroutines.launch
 
 class UserSessionManager(application: Context) : AndroidViewModel(application as Application) {
     private val apiService: UserService = RetrofitInstance.api
+    var email by mutableStateOf("")
+    private var emailError by mutableStateOf<String?>(null)
+
+    fun changeEmailValue(newEmail: String) {
+        this.email = newEmail
+    }
+
+    private fun validateEmail(): String? {
+        return when {
+            email.isEmpty() -> "Este campo no puede estar vacío"
+            !android.util.Patterns.EMAIL_ADDRESS.matcher(email)
+                .matches() -> "El formato de correo electrónico no es válido"
+            else -> null
+        }
+    }
+    private fun updateEmailError(error: String?) {
+        emailError = error
+    }
+    fun obtenerEmailError(): String? {
+        return emailError
+    }
+
+
+    fun validateAndUpdate(): Boolean{
+        val emailValidationError = validateEmail()
+        updateEmailError(emailValidationError)
+        return emailValidationError == null
+    }
+
     fun saveUserSession(
         token: String,
         name: String,
@@ -79,6 +112,49 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             }
         }
     }
+    fun deleteUserAccount() {
+        val sharedPreferences = getApplication<Application>().getSharedPreferences(
+            "user_session",
+            Context.MODE_PRIVATE
+        )
+        viewModelScope.launch {
+            try {
+                val response = apiService.deleteAccount("Bearer ${getUserSession().token}")
+                if (response.isSuccessful) {
+                    Log.d("DeleteAccount", "Delete account")
+                    sharedPreferences.edit().clear().apply() // Limpiar aquí
+                } else {
+                    Log.e("DeleteAccount", "Delete account failed: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("DeleteAccount", "Error: ${e.localizedMessage}")
+            }
+        }
+    }
+    fun updateEmail(newEmail: String) {
+        val sharedPreferences = getApplication<Application>().getSharedPreferences(
+            "user_session",
+            Context.MODE_PRIVATE
+        )
+        viewModelScope.launch {
+            try {
+                val response = apiService.updateEmail("Bearer ${getUserSession().token}", UpdateEmailRequest(newEmail))
+                Log.d("UpdateEmail", "Response: $email")
+                if (response.isSuccessful) {
+                    Log.d("UpdateEmail", "Update email success: ${response.message()}")
+                    sharedPreferences.edit().putString("email", newEmail).apply()
+                } else {
+                    Log.e("UpdateEmail", "Update email failed: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("UpdateEmail", "Error: ${e.localizedMessage}")
+                Log.e("UpdateEmail", "Error: ${e.stackTrace}")
+                Log.e("UpdateEmail", "Error: ${e.cause}")
+                Log.e("UpdateEmail", "Error: ${e.suppressed}")
+            }
+        }
+    }
+
 }
 
 data class User(
