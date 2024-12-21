@@ -36,7 +36,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:testOnly="true"
-        android:theme="@style/Theme.TrackingFitness" >
+        android:theme="@style/Theme.TrackingFitness"
+        android:usesCleartextTraffic="true" >
         <meta-data
             android:name="androidx.camera.cameraX"
             android:value="androidx.camera.camera2.Camera2Config" />

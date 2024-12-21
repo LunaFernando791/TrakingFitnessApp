@@ -20,6 +20,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -104,10 +107,12 @@ fun LoginScreen(
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
+        val loginSuccess by loginViewModel.loginSuccess.collectAsState()
         Button(
             onClick = {
                 if(loginViewModel.validateAndUpdate()){
                     loginViewModel.loginUser()
+
                 }
             }, colors = ButtonDefaults.buttonColors(
                 containerColor =MaterialTheme.colorScheme.secondary,
@@ -122,9 +127,12 @@ fun LoginScreen(
         if (loginViewModel.loginError) {
             WarningMessage(message = loginViewModel.loginMessage)
         }
-        if (loginViewModel.loginSuccess) {
-            WarningMessage(message = "Inicio de sesión exitoso")
-            navController.navigate(AppScreens.PrincipalScreen.route)
+        // Navegación basada en el estado de loginSuccess
+        if (loginSuccess) {
+            LaunchedEffect(Unit) {
+                navController.navigate(AppScreens.PrincipalScreen.route)
+                loginViewModel.resetLoginState() // Restablecer el estado si es necesario
+            }
         }
         if (loginViewModel.loginUnverified) {
             WarningMessage(message = loginViewModel.loginMessage)

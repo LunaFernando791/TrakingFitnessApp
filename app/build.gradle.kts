@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.compose.material:material:1.7.5")
     implementation(libs.androidx.media3.common)
     implementation(libs.material)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,7 +75,5 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.compose.material:material-icons-core:1.3.0")
     implementation("androidx.compose.material:material-icons-extended:1.3.0")
-
-
 
 }

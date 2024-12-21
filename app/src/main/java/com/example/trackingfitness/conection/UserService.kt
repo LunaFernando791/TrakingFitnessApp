@@ -1,11 +1,14 @@
 package com.example.trackingfitness.conection
 
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 
 // Clases para manejar las respuestas y las solicitudes de la API.
 data class User(
@@ -17,6 +20,7 @@ data class User(
     val gender_id: Int,
     val email: String,
     val password: String,
+    val password_confirmation: String,
     val username: String,
     val experience_level_id: Int,
     val routine_type_id: Int,
@@ -65,6 +69,10 @@ data class UpdateEmailResponse(
     val message: String
 )
 
+data class ResponseIcon(
+    val message: String
+)
+
 interface UserService { // Interfaz para definir las operaciones del servicio.
 
     @POST("/api/register")
@@ -88,6 +96,14 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
         @Header("Authorization") token: String,
         @Body updateEmailRequest: UpdateEmailRequest
     ): Response<UpdateEmailResponse>
+
+    @GET("/api/icon/{filename}")
+    suspend fun getIcon(
+        @Header("Authorization") token: String,
+        @Path("filename") id: String
+    ): Response<ResponseBody>
+
+    // Ruta para obtener un icono por su ID.
 
 
     @POST("/api/auth/forget-password")

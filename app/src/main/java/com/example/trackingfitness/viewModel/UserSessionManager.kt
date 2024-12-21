@@ -2,21 +2,41 @@ package com.example.trackingfitness.viewModel
 
 import android.app.Application
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.RetrofitInstance
 import com.example.trackingfitness.conection.UpdateEmailRequest
 import com.example.trackingfitness.conection.UserService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+
+data class User(
+    val token: String,
+    val name: String,
+    val lastname: String,
+    val age: String,
+    val height: String,
+    val weight: String,
+    val gender: String,
+    val email: String,
+    val username: String,
+    val experienceLevel: String
+)
 
 class UserSessionManager(application: Context) : AndroidViewModel(application as Application) {
     private val apiService: UserService = RetrofitInstance.api
     var email by mutableStateOf("")
     private var emailError by mutableStateOf<String?>(null)
+    var unLoginOk by mutableStateOf(false)
 
     fun changeEmailValue(newEmail: String) {
         this.email = newEmail
@@ -36,7 +56,6 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     fun obtenerEmailError(): String? {
         return emailError
     }
-
 
     fun validateAndUpdate(): Boolean{
         val emailValidationError = validateEmail()
@@ -90,8 +109,12 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         )
     }
     fun isUserLoggedIn(): Boolean {
+        Log.d("isUserLoggedIn", "Token: ${getUserSession().token}")
         return getUserSession().token.isNotEmpty()
     }
+
+    private val _logoutState = MutableStateFlow(false)
+    val logoutState: StateFlow<Boolean> = _logoutState
 
     fun logoutUser() {
         val sharedPreferences = getApplication<Application>().getSharedPreferences(
@@ -104,6 +127,7 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                 if (response.isSuccessful) {
                     Log.d("Logout", "Logout success: ${response.message()}")
                     sharedPreferences.edit().clear().apply() // Limpiar aquí
+                    _logoutState.value = true // Notificar éxito
                 } else {
                     Log.e("Logout", "Logout failed: ${response.errorBody()?.string()}")
                 }
@@ -155,17 +179,41 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         }
     }
 
+    private suspend fun getImageProfile(): Bitmap? {
+        return try {
+            val response = apiService.getIcon("Bearer ${getUserSession().token}", "8.png")
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                responseBody?.byteStream()?.let { inputStream ->
+                    BitmapFactory.decodeStream(inputStream) ?: run {
+                        Log.e("GetIcon", "No se pudo decodificar la imagen")
+                        null
+                    }
+                }
+            } else {
+                Log.e("GetIcon", "Error al obtener imagen: ${response.errorBody()?.string()}")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("GetIcon", "Excepción al obtener imagen: ${e.localizedMessage}")
+            null
+        }
+    }
+
+    private val _profileImage = MutableLiveData<Bitmap?>()
+    val profileImage: LiveData<Bitmap?> = _profileImage
+
+    fun fetchImageProfile() {
+        viewModelScope.launch {
+            val bitmap = getImageProfile()
+            if (bitmap != null) {
+                _profileImage.postValue(bitmap)
+            } else {
+                Log.e("FetchImageProfile", "No se pudo obtener la imagen de perfil")
+                // Aquí podrías agregar un Toast o actualizar algún mensaje en la UI
+            }
+        }
+    }
+
 }
 
-data class User(
-    val token: String,
-    val name: String,
-    val lastname: String,
-    val age: String,
-    val height: String,
-    val weight: String,
-    val gender: String,
-    val email: String,
-    val username: String,
-    val experienceLevel: String
-)

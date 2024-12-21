@@ -1,5 +1,6 @@
 package com.example.trackingfitness.viewModel
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -26,13 +27,14 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     var passwordError by mutableStateOf<String?>(null)
     // Variables para el mensaje de error
 
-    var loginSuccess by mutableStateOf(false)
+    private val _loginSuccess = MutableStateFlow(false)
+    var loginSuccess: StateFlow<Boolean> = _loginSuccess
     var loginError by mutableStateOf(false)
     var loginUnverified by mutableStateOf(false)
     var loginMessage by mutableStateOf("")
     // Variables para el éxito y el error de inicio de sesión
 
-    var accessToken: String? = null
+    private var accessToken: String? = null
     // Variable para el token de acceso
 
     private val _loginState = MutableStateFlow<Result<LoginResponseUser>?>(null)
@@ -83,6 +85,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // Actualización de los errores
+
     val context = getApplication<Application>().applicationContext
     fun loginUser() {
         viewModelScope.launch {
@@ -98,7 +101,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                             loginUnverified = true
                         } else {
                             val userLogin = UserSessionManager(context)
-                            loginSuccess = true
+                            _loginSuccess.value = true // Aquí actualizas el estado
                             accessToken = body.access_token
                             userLogin.saveUserSession(
                                 accessToken!!,
@@ -132,4 +135,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         email = ""
         password = ""
     } // LIMPIAR CAMPOS DE TEXTO
+
+    fun resetLoginState() {
+        _loginSuccess.value = false
+    }
 }

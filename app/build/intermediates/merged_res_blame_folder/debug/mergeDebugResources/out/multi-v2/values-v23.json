@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-65:/values-v23/values-v23.xml",
+            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-66:/values-v23/values-v23.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\0ec193e5a2bee9ec6eac6135ad88f536\\transformed\\appcompat-1.6.1\\res\\values-v23\\values-v23.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\5f258542d5accf9a2b68e79f104e482d\\transformed\\appcompat-1.6.1\\res\\values-v23\\values-v23.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,20,34,35,36,39,43,44,45,46",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -15,7 +15,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\3cf9a5e130b05f36f7be0b2fbf8b91c0\\transformed\\cardview-1.0.0\\res\\values-v23\\values-v23.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\77fc3a087e6fad197dd3d74ac79c8aed\\transformed\\cardview-1.0.0\\res\\values-v23\\values-v23.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -34,7 +34,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\486832b359b5b64176703e572cd94ccf\\transformed\\material-1.12.0\\res\\values-v23\\values-v23.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\d5a3d3a6309825169bd8d1746283e87a\\transformed\\material-1.12.0\\res\\values-v23\\values-v23.xml",
                     "from": {
                         "startLines": "2,5,9,13,16,19,22,25,28,32",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",

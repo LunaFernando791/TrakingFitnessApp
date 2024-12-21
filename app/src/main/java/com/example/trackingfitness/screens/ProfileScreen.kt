@@ -1,5 +1,6 @@
 package com.example.trackingfitness.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,10 +28,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +54,8 @@ fun ProfileScreen(
     userSession: UserSessionManager
 ){
     Surface (
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ){
         Image(
@@ -89,6 +97,9 @@ fun BodyContentProfile(
             Text(text = "Volver")
         }
         Spacer(modifier = Modifier.height(20.dp))
+        LaunchedEffect(Unit) {
+            userSessionManager.fetchImageProfile()
+        }
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(200.dp))
@@ -101,7 +112,24 @@ fun BodyContentProfile(
                 .height(200.dp)
                 .background(MaterialTheme.colorScheme.background)
         ){
-            Text(text = "Imagen de perfil.")
+            // Observa la imagen del LiveData
+            val profileImage by userSessionManager.profileImage.observeAsState()
+            if (profileImage != null) {
+                Image(
+                    bitmap = profileImage!!.asImageBitmap(),
+                    contentDescription = "Imagen de perfil",
+                    modifier = Modifier
+                        .size(200.dp)
+                        .clip(RoundedCornerShape(100.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Text(
+                    text = "Cargando imagen...",
+                    modifier = Modifier.align(Alignment.Center),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
         Spacer(modifier = Modifier.height(30.dp))
         Text(
@@ -182,7 +210,8 @@ fun BodyContentProfile(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Editar",
                             tint = MaterialTheme.colorScheme.tertiary,
-                            modifier = Modifier.padding(top = 10.dp)
+                            modifier = Modifier
+                                .padding(top = 10.dp)
                                 .width(50.dp)
                                 .height(30.dp)
                                 .clip(RoundedCornerShape(10.dp))
@@ -204,7 +233,8 @@ fun BodyContentProfile(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Editar",
                             tint = MaterialTheme.colorScheme.tertiary,
-                            modifier = Modifier.padding(top = 10.dp)
+                            modifier = Modifier
+                                .padding(top = 10.dp)
                                 .width(50.dp)
                                 .height(30.dp)
                                 .clip(RoundedCornerShape(10.dp))
@@ -242,6 +272,7 @@ fun BodyContentProfile(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
+                    val logoutState by userSessionManager.logoutState.collectAsState()
                     Button(
                         modifier = Modifier
                             .padding(10.dp),
@@ -275,7 +306,6 @@ fun BodyContentProfile(
         }
     }
 }
-
 
 @Composable
 fun DynamicInfoRow(

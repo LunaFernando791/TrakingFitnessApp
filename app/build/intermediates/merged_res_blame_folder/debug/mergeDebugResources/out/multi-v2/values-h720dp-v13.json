@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-65:/values-h720dp-v13/values-h720dp-v13.xml",
+            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-66:/values-h720dp-v13/values-h720dp-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\0ec193e5a2bee9ec6eac6135ad88f536\\transformed\\appcompat-1.6.1\\res\\values-h720dp-v13\\values-h720dp-v13.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\5f258542d5accf9a2b68e79f104e482d\\transformed\\appcompat-1.6.1\\res\\values-h720dp-v13\\values-h720dp-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

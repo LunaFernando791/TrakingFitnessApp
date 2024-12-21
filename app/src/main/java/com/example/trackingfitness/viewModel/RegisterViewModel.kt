@@ -312,6 +312,7 @@ class RegisterViewModel : ViewModel() {
                 gender_id = gender.toInt(),
                 email = email,
                 password = password,
+                password_confirmation = confirmPassword,
                 username = username,
                 experience_level_id = experienceLevel.toInt(),
                 routine_type_id = routineType.toInt(),
@@ -320,6 +321,7 @@ class RegisterViewModel : ViewModel() {
             try {
                 val response = apiService.register(userData) //SOLICITUD POST
                 Log.d("Registration", "Response: $response")
+                Log.d("Registration", "UserData: $userData")
                 if (response.isSuccessful) {
                     registrationSuccess = true
                     clearFields()
@@ -358,8 +360,5 @@ class RegisterViewModel : ViewModel() {
         registrationSuccess = false
         errorRegister = false
     }
-
-
-
 
 }

@@ -1,5 +1,6 @@
 package com.example.trackingfitness.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.trackingfitness.R
+import com.example.trackingfitness.activity.handleBackPress
 import com.example.trackingfitness.customFontFamily
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
@@ -33,6 +35,8 @@ import com.example.trackingfitness.navigation.AppScreens
 
 @Composable//VISTA DE INICIO PARA INICIAR SESIÓN O REGISTRARTE
 fun StartScreen(navController: NavHostController) {
+    BackHandler {
+    }
     BodyContent(navController = navController)
 }
 
