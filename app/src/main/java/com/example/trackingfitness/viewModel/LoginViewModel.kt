@@ -115,7 +115,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                                 body.user.username,
                                 body.user.experience_level_id.toString()
                             )
-                            Log.d("Login", "User: ${body.user}")
                         }
                     }
                 } else {

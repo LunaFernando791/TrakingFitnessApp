@@ -108,13 +108,25 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             experienceLevel = sharedPreferences.getString("experienceLevel", "")!!
         )
     }
-    fun isUserLoggedIn(): Boolean {
-        Log.d("isUserLoggedIn", "Token: ${getUserSession().token}")
-        return getUserSession().token.isNotEmpty()
-    }
 
-    private val _logoutState = MutableStateFlow(false)
-    val logoutState: StateFlow<Boolean> = _logoutState
+    suspend fun isUserLoggedIn(): Boolean {
+        return try {
+            val sharedPreferences = getApplication<Application>().getSharedPreferences(
+                "user_session",
+                Context.MODE_PRIVATE
+            )
+            if (sharedPreferences.getString("token", "")!!.isEmpty()) {
+                return false
+            }
+            else {
+                val response =
+                    apiService.validateToken("Bearer ${sharedPreferences.getString("token", "")}")
+                response.isSuccessful && (response.body()?.valid ?: false)
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
 
     fun logoutUser() {
         val sharedPreferences = getApplication<Application>().getSharedPreferences(
@@ -127,7 +139,6 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                 if (response.isSuccessful) {
                     Log.d("Logout", "Logout success: ${response.message()}")
                     sharedPreferences.edit().clear().apply() // Limpiar aquí
-                    _logoutState.value = true // Notificar éxito
                 } else {
                     Log.e("Logout", "Logout failed: ${response.errorBody()?.string()}")
                 }
@@ -155,6 +166,7 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             }
         }
     }
+
     fun updateEmail(newEmail: String) {
         val sharedPreferences = getApplication<Application>().getSharedPreferences(
             "user_session",

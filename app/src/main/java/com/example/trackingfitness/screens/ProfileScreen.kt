@@ -272,7 +272,6 @@ fun BodyContentProfile(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
-                    val logoutState by userSessionManager.logoutState.collectAsState()
                     Button(
                         modifier = Modifier
                             .padding(10.dp),

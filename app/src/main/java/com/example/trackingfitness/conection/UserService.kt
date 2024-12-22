@@ -73,6 +73,10 @@ data class ResponseIcon(
     val message: String
 )
 
+data class ResponseTokenValid(
+    val valid: Boolean
+)
+
 interface UserService { // Interfaz para definir las operaciones del servicio.
 
     @POST("/api/register")
@@ -96,6 +100,12 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
         @Header("Authorization") token: String,
         @Body updateEmailRequest: UpdateEmailRequest
     ): Response<UpdateEmailResponse>
+
+    @GET("/api/token/valid")
+    suspend fun validateToken(
+        @Header("Authorization") token: String
+    ): Response<ResponseTokenValid>
+
 
     @GET("/api/icon/{filename}")
     suspend fun getIcon(
