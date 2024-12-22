@@ -101,7 +101,7 @@ fun BodyScreenContent(
             modifier = Modifier
                 .padding(10.dp),
             onClick = {
-                if(userSession.validateAndUpdate()) {
+                if(userSession.validateAndUpdateEmail()) {
                     userSession.updateEmail(userSession.email)
                     userSession.logoutUser()
                     navController.navigate("startScreen")

@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.trackingfitness.darkTheme
-import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.viewModel.UserSessionManager
 
 
@@ -36,7 +35,7 @@ fun EditPasswordScreen(
             .fillMaxSize()
             .padding(16.dp)
     ){
-        BodyScreenContent(
+        BodyScreen(
             navController,
             userSession
         )
@@ -70,9 +69,7 @@ fun BodyScreen(
         }
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            modifier = Modifier
-                .padding(horizontal = 20.dp),
-            text = "Actualiza tu correo electrónico",
+            text = "Actualiza tu contraseña",
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary
@@ -81,28 +78,50 @@ fun BodyScreen(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
             fontSize = 15.sp,
-            text = "Ingresa tu correo y luego verifícalo para volver a iniciar sesión",
+            text = "Actualiza tu contraseña y luego inicia sesión de nuevo para comprobarlo.",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(15.dp))
         CustomTextField(
-            value = userSession.email,
-            onValueChange = { userSession.changeEmailValue(it) },
-            label = "Nuevo correo electrónico",
+            value = userSession.oldPassword,
+            onValueChange = { userSession.changeOldPasswordValue(it) },
+            label = "Anterior contraseña",
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
             ),
-            isError = userSession.obtenerEmailError() != null,
-            errorMessage = userSession.obtenerEmailError()
+            isError = userSession.obtenerPasswordError() != null,
+            errorMessage = userSession.obtenerPasswordError()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        CustomTextField(
+            value = userSession.newPassword,
+            onValueChange = { userSession.changeNewPasswordValue(it) },
+            label = "Nueva contraseña",
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+            ),
+            isError = userSession.obtenerPasswordError() != null,
+            errorMessage = userSession.obtenerPasswordError()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        CustomTextField(
+            value = userSession.passwordConfirmation,
+            onValueChange = { userSession.changePasswordConfirmationValue(it) },
+            label = "Confirmar contraseña",
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+            ),
+            isError = userSession.obtenerPasswordError() != null,
+            errorMessage = userSession.obtenerPasswordError()
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button (
             modifier = Modifier
                 .padding(10.dp),
             onClick = {
-                if(userSession.validateAndUpdate()) {
-                    userSession.updateEmail(userSession.email)
+                if(userSession.validateAndUpdatePassword()) {
+                    userSession.updatePassword(userSession.oldPassword, userSession.newPassword, userSession.passwordConfirmation)
                     userSession.logoutUser()
                     navController.navigate("startScreen")
                 }

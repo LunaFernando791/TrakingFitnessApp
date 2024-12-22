@@ -69,7 +69,12 @@ data class UpdateEmailResponse(
     val message: String
 )
 
-data class ResponseIcon(
+data class UpdatePasswordRequest(
+    val current_password: String,
+    val new_password: String,
+    val new_password_confirmation: String
+)
+data class UpdatePasswordResponse(
     val message: String
 )
 
@@ -100,6 +105,11 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
         @Header("Authorization") token: String,
         @Body updateEmailRequest: UpdateEmailRequest
     ): Response<UpdateEmailResponse>
+    @PUT("/api/account-settings/password")
+    suspend fun updatePassword(
+        @Header("Authorization") token: String,
+        @Body updatePasswordRequest: UpdatePasswordRequest
+    ): Response<UpdatePasswordResponse>
 
     @GET("/api/token/valid")
     suspend fun validateToken(

@@ -35,7 +35,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -102,15 +104,14 @@ fun BodyContentProfile(
         }
         Box(
             modifier = Modifier
+                .shadow(10.dp, shape = RoundedCornerShape(200.dp), ambientColor = Color.Black, spotColor = Color.Black)
                 .clip(RoundedCornerShape(200.dp))
-                .border(
-                    2.dp,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    RoundedCornerShape(200.dp)
-                )
                 .width(200.dp)
                 .height(200.dp)
-                .background(MaterialTheme.colorScheme.background)
+                .background(
+                    MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(200.dp)
+                )
         ){
             // Observa la imagen del LiveData
             val profileImage by userSessionManager.profileImage.observeAsState()
@@ -134,15 +135,11 @@ fun BodyContentProfile(
         Spacer(modifier = Modifier.height(30.dp))
         Text(
             modifier = Modifier
+                .shadow(8.dp, shape = RoundedCornerShape(16.dp), ambientColor = Color.Black, spotColor = Color.Black)
+                .clip(RoundedCornerShape(20.dp))
                 .width(200.dp)
                 .height(50.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .border(
-                    2.dp,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    RoundedCornerShape(20.dp)
-                )
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
                 .wrapContentSize(Alignment.Center),
             text = userSessionManager.getUserSession().username,
             color = MaterialTheme.colorScheme.primary,
@@ -154,15 +151,10 @@ fun BodyContentProfile(
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxSize()
+                .shadow(8.dp, shape = RoundedCornerShape(16.dp), ambientColor = Color.Black, spotColor = Color.Black)
                 .clip(RoundedCornerShape(20.dp))
-                .border(
-                    3.dp,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    RoundedCornerShape(20.dp)
-                )
-                .background(MaterialTheme.colorScheme.background)
-
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
         ){
             item {
                 Spacer(modifier = Modifier.height(30.dp))
@@ -188,8 +180,7 @@ fun BodyContentProfile(
                 Row (
                     modifier = Modifier
                         .padding(horizontal = 50.dp)
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.background),
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
                     Column(
@@ -215,7 +206,7 @@ fun BodyContentProfile(
                                 .width(50.dp)
                                 .height(30.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(MaterialTheme.colorScheme.secondary)
+                                .background(MaterialTheme.colorScheme.background)
                                 .clickable {
                                     navController.navigate("editEmailScreen")
                                 }
@@ -238,7 +229,7 @@ fun BodyContentProfile(
                                 .width(50.dp)
                                 .height(30.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(MaterialTheme.colorScheme.secondary)
+                                .background(MaterialTheme.colorScheme.background)
                                 .clickable {
                                     navController.navigate("editPasswordScreen")
                                 }
@@ -248,8 +239,7 @@ fun BodyContentProfile(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 20.dp)
-                        .background(MaterialTheme.colorScheme.background),
+                        .padding(top = 20.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Button(
@@ -259,7 +249,7 @@ fun BodyContentProfile(
                             //userSessionManager.logoutUser()
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary,
+                            containerColor = MaterialTheme.colorScheme.background,
                             contentColor = if (darkTheme.value) Color.White else Color.Black
                         )
                     ) {
@@ -281,7 +271,7 @@ fun BodyContentProfile(
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Red,
-                            contentColor = if (darkTheme.value) Color.White else Color.Black
+                            contentColor = Color.White
                         )
                     ) {
                         Text(text = "Cerrar sesión")
@@ -295,7 +285,7 @@ fun BodyContentProfile(
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Red,
-                            contentColor = if (darkTheme.value) Color.White else Color.Black
+                            contentColor = Color.White
                         )
                     ) {
                         Text(text = "Eliminar cuenta")

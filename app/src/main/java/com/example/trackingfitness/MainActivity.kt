@@ -18,7 +18,7 @@ import com.example.trackingfitness.navigation.AppNavigation
 import com.example.trackingfitness.ui.theme.TrackingFitnessTheme
 
 val customFontFamily = FontFamily(Font(R.font.custom_font))
-var darkTheme = mutableStateOf(true)
+var darkTheme = mutableStateOf(false)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

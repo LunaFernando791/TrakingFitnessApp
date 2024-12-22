@@ -129,7 +129,7 @@ fun CustomTextField(
             .border(
                 2.dp,
                 if (isError) Color.Red else MaterialTheme.colorScheme.tertiary,
-                RoundedCornerShape(12.dp)
+                RoundedCornerShape(15.dp)
             )
             .height(50.dp),
         keyboardOptions = keyboardOptions

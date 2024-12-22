@@ -14,6 +14,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.RetrofitInstance
 import com.example.trackingfitness.conection.UpdateEmailRequest
+import com.example.trackingfitness.conection.UpdatePasswordRequest
 import com.example.trackingfitness.conection.UserService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,8 +36,21 @@ data class User(
 class UserSessionManager(application: Context) : AndroidViewModel(application as Application) {
     private val apiService: UserService = RetrofitInstance.api
     var email by mutableStateOf("")
+    var oldPassword by mutableStateOf("")
+    var newPassword by mutableStateOf("")
+    var passwordConfirmation by mutableStateOf("")
     private var emailError by mutableStateOf<String?>(null)
-    var unLoginOk by mutableStateOf(false)
+    private var passwordError by mutableStateOf<String?>(null)
+
+    fun changeOldPasswordValue(newOldPassword: String) {
+        this.oldPassword = newOldPassword
+    }
+    fun changeNewPasswordValue(newNewPassword: String) {
+        this.newPassword = newNewPassword
+    }
+    fun changePasswordConfirmationValue(newPasswordConfirmation: String) {
+        this.passwordConfirmation = newPasswordConfirmation
+    }
 
     fun changeEmailValue(newEmail: String) {
         this.email = newEmail
@@ -50,6 +64,20 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             else -> null
         }
     }
+    private fun validatePassword(): String? {
+        return when {
+            oldPassword.isEmpty() -> "Este campo no puede estar vacío"
+            newPassword.isEmpty() -> "Este campo no puede estar vacío"
+            passwordConfirmation.isEmpty() -> "Este campo no puede estar vacío"
+            else -> null
+    }}
+    private fun updatePasswordError(error: String?) {
+        passwordError = error
+    }
+    fun obtenerPasswordError(): String? {
+        return passwordError
+    }
+
     private fun updateEmailError(error: String?) {
         emailError = error
     }
@@ -57,10 +85,15 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         return emailError
     }
 
-    fun validateAndUpdate(): Boolean{
+    fun validateAndUpdateEmail(): Boolean{
         val emailValidationError = validateEmail()
         updateEmailError(emailValidationError)
         return emailValidationError == null
+    }
+    fun validateAndUpdatePassword(): Boolean{
+        val passwordValidationError = validatePassword()
+        updatePasswordError(passwordValidationError)
+        return passwordValidationError == null
     }
 
     fun saveUserSession(
@@ -190,6 +223,26 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             }
         }
     }
+    fun updatePassword(oldPassword: String, newPassword: String, passwordConfirmation: String) {
+        viewModelScope.launch {
+            val response = apiService.updatePassword("Bearer ${getUserSession().token}", UpdatePasswordRequest(oldPassword, newPassword, passwordConfirmation))
+            try {
+                if (response.isSuccessful) {
+                    Log.d("UpdatePassword", "Update password success: ${response.message()}")
+                } else {
+                    Log.e("UpdateEmail", "Update password failed: ${response.errorBody()?.string()}")
+                    Log.d("API Response", response.errorBody().toString())
+                    Log.d("API Response", response.message())
+                }
+            } catch (e: Exception) {
+                Log.e("UpdateEmail", "Error: ${e.localizedMessage}")
+                Log.e("UpdateEmail", "Error: ${e.stackTrace}")
+                Log.e("UpdateEmail", "Error: ${e.cause}")
+                Log.e("UpdateEmail", "Error: ${e.suppressed}")
+            }
+        }
+        cleanTextFields()
+    }
 
     private suspend fun getImageProfile(): Bitmap? {
         return try {
@@ -225,6 +278,12 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                 // Aquí podrías agregar un Toast o actualizar algún mensaje en la UI
             }
         }
+    }
+
+    private fun cleanTextFields(){
+        oldPassword = ""
+        newPassword = ""
+        passwordConfirmation = ""
     }
 
 }

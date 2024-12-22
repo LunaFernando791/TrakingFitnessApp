@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,8 +28,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -78,7 +81,6 @@ fun BodyContent(
             Text(
                 modifier = Modifier.padding(end = 30.dp),
                 text = "Bienvenido ${userSessionManager.getUserSession().name}",
-                color = MaterialTheme.colorScheme.primary,
                 style = TextStyle(
                     fontSize = 25.sp,
                     shadow = Shadow(
@@ -99,13 +101,13 @@ fun BodyContent(
                 )
                 Text(
                     text = if (darkTheme.value) "Modo Oscuro" else "Modo Claro",
-                    color = MaterialTheme.colorScheme.primary,
                     style = TextStyle(
                         fontSize = 10.sp,
                     )
                 )
             }
         }
+        Spacer(modifier = Modifier.height(20.dp))
         Row(
             modifier = Modifier.padding(horizontal = 15.dp)
         ) {
@@ -126,19 +128,14 @@ fun BodyContent(
 fun MyCalendar() {
     Box( // CALENDAR TO SHOW THE DAY TO DAY PROGRESS
         modifier = Modifier
+            .shadow(8.dp, shape = RoundedCornerShape(16.dp), ambientColor = Color.Black, spotColor = Color.Black)
             .clip(RoundedCornerShape(16.dp))
             .width(400.dp)
             .height(320.dp)
-            .background(MaterialTheme.colorScheme.secondary)
-            .border(
-                width = 2.dp,
-                color = MaterialTheme.colorScheme.tertiary,
-                shape = RoundedCornerShape(16.dp)
-            )
+            .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape) // Fondo blanco con la misma forma // Sombra hacia afuera
     ) {
         Text(
             text = "SIGUE TU DÍA A DÍA...",
-            color = MaterialTheme.colorScheme.primary,
             style = TextStyle(
                 fontSize = 20.sp,
                 shadow = Shadow(
@@ -160,18 +157,14 @@ fun TopMenu(
     Box( // Botón para iniciar la rutina
         modifier = Modifier
             .padding(
-                vertical = 25.dp,
+                vertical = 15.dp,
                 horizontal = 10.dp
             )
-            .border(
-                width = 2.dp,
-                color = MaterialTheme.colorScheme.tertiary,
-                shape = RoundedCornerShape(16.dp)
-            )
+            .shadow(8.dp, shape = RoundedCornerShape(16.dp), ambientColor = Color.Black, spotColor = Color.Black)
             .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.secondary)  // Color de fondo
             .width(170.dp)
             .height(300.dp)
+            .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)  // Color de fondo
     ) {
         Column(
             modifier = Modifier
@@ -181,7 +174,6 @@ fun TopMenu(
         ) {
             Text(
                 text = "Empieza tu rutina diaria...",
-                color = MaterialTheme.colorScheme.primary,
                 style = TextStyle(
                     fontSize = 30.sp,
                     shadow = Shadow(
@@ -215,16 +207,12 @@ fun TopMenu(
             ){
         Row( // Botón para ver el ranking
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 25.dp, horizontal = 10.dp)
+                .padding(vertical = 15.dp, horizontal = 10.dp)
+                .shadow(8.dp, shape = RoundedCornerShape(16.dp), ambientColor = Color.Black, spotColor = Color.Black)
                 .clip(RoundedCornerShape(16.dp))
-                .border(
-                    width = 3.dp,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    shape = RoundedCornerShape(16.dp)
-                )
+                .fillMaxWidth()
                 .height(130.dp)
-                .background(MaterialTheme.colorScheme.secondary),
+                .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -239,21 +227,16 @@ fun TopMenu(
             Text(
                 text = "Ranking semanal.",
                 fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.primary,
                 )
         }
         Row( // Botón para ver el perfil
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(vertical = 15.dp, horizontal = 10.dp)
+                .shadow(8.dp, shape = RoundedCornerShape(16.dp), ambientColor = Color.Black, spotColor = Color.Black)
                 .clip(RoundedCornerShape(16.dp))
-                .border(
-                    width = 3.dp,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    shape = RoundedCornerShape(16.dp)
-                )
+                .fillMaxWidth()
                 .height(130.dp)
-                .background(MaterialTheme.colorScheme.secondary)
+                .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
                 .clickable { navController.navigate("profileScreen") },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
@@ -266,7 +249,6 @@ fun TopMenu(
             )
             Text(
                 text = "Mi Perfil",
-                color = MaterialTheme.colorScheme.primary,
                 fontSize = 25.sp,
                 modifier = Modifier
                     .padding(start = 5.dp)
