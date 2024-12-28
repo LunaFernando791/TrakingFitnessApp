@@ -151,6 +151,5 @@ class RecoverPasswordViewModel: ViewModel() {
                 e.localizedMessage?.let { Log.e("Error", it) }
             }
         }
-
     }
 }

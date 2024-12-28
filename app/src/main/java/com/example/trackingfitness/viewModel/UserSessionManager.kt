@@ -15,46 +15,47 @@ import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.RetrofitInstance
 import com.example.trackingfitness.conection.UpdateEmailRequest
 import com.example.trackingfitness.conection.UpdatePasswordRequest
+import com.example.trackingfitness.conection.UserRequest
 import com.example.trackingfitness.conection.UserService
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.InputStream
+import com.example.trackingfitness.conection.User as UserUpdate
 
 data class User(
     val token: String,
-    val name: String,
-    val lastname: String,
-    val age: String,
-    val height: String,
-    val weight: String,
-    val gender: String,
-    val email: String,
-    val username: String,
-    val experienceLevel: String
+    var name: String,
+    var lastname: String,
+    var age: String,
+    var height: String,
+    var weight: String,
+    var gender: String,
+    var email: String,
+    var username: String,
+    val injuries: List<Int>,
+    val experienceLevel: String,
+    val routineType: String
 )
 
 class UserSessionManager(application: Context) : AndroidViewModel(application as Application) {
+
     private val apiService: UserService = RetrofitInstance.api
+    val sharedPreferences = getApplication<Application>().getSharedPreferences("user_session",
+        Context.MODE_PRIVATE)
     var email by mutableStateOf("")
     var oldPassword by mutableStateOf("")
     var newPassword by mutableStateOf("")
     var passwordConfirmation by mutableStateOf("")
+
     private var emailError by mutableStateOf<String?>(null)
     private var passwordError by mutableStateOf<String?>(null)
-
-    fun changeOldPasswordValue(newOldPassword: String) {
-        this.oldPassword = newOldPassword
-    }
-    fun changeNewPasswordValue(newNewPassword: String) {
-        this.newPassword = newNewPassword
-    }
-    fun changePasswordConfirmationValue(newPasswordConfirmation: String) {
-        this.passwordConfirmation = newPasswordConfirmation
-    }
-
-    fun changeEmailValue(newEmail: String) {
-        this.email = newEmail
-    }
+    private var nameError by mutableStateOf<String?>(null)
+    private var lastnameError by mutableStateOf<String?>(null)
+    private var usernameError by mutableStateOf<String?>(null)
+    private var ageError by mutableStateOf<String?>(null)
+    private var heightError by mutableStateOf<String?>(null)
+    private var weightError by mutableStateOf<String?>(null)
+    private var genderError by mutableStateOf<String?>(null)
+    private var experienceLevelError by mutableStateOf<String?>(null)
 
     private fun validateEmail(): String? {
         return when {
@@ -64,6 +65,64 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             else -> null
         }
     }
+    private fun validateName(): String? {
+        return when {
+            getUserSession().name.isEmpty() -> "Este campo no puede estar vacío"
+            getUserSession().name.length < 3 -> "El nombre debe contener al menos 3 caracteres"
+            !getUserSession().name.all { it.isLetter() } -> "El nombre debe contener solo letras"
+            else -> null
+        }
+    }
+    private fun validateLastname(): String? {
+        return when {
+            getUserSession().lastname.isEmpty() -> "Este campo no puede estar vacío"
+            getUserSession().lastname.length < 3 -> "El apellido debe contener al menos 3 caracteres"
+            !getUserSession().lastname.all { it.isLetter() } -> "El apellido debe contener solo letras"
+            else -> null
+        }
+    }
+    private fun validateUsername(): String? {
+        return when {
+            getUserSession().username.isEmpty() -> "Este campo no puede estar vacío"
+            getUserSession().username.length < 8 -> "El nombre de usuario debe contener al menos 8 caracteres"
+            else -> null
+        }
+    }
+    private fun validateAge(): String? {
+        return when {
+            getUserSession().age.isEmpty() -> "Este campo no puede estar vacío"
+            getUserSession().age.isEmpty() -> "Este campo no puede estar vacío"
+            !getUserSession().age.all { it.isDigit() } -> "La edad debe contener solo números"
+            else -> null
+        }
+    }
+    private fun validateHeight(): String? {
+        return when {
+            getUserSession().height.isEmpty() -> "Este campo no puede estar vacío"
+            !getUserSession().height.all { it.isDigit() } -> "La altura debe contener solo números"
+            else -> null
+        }
+    }
+    private fun validateWeight(): String? {
+        return when {
+            getUserSession().weight.isEmpty() -> "Este campo no puede estar vacío"
+            !getUserSession().weight.all { it.isDigit() } -> "El peso debe contener solo números"
+            else -> null
+        }
+    }
+    private fun validateGender(): String? {
+        return when {
+            getUserSession().gender.isEmpty() -> "Este campo no puede estar vacío"
+            else -> null
+        }
+    }
+    private fun validateExperienceLevel(): String? {
+        return when {
+            getUserSession().experienceLevel.isEmpty() -> "Este campo no puede estar vacío"
+            else -> null
+        }
+    }
+
     private fun validatePassword(): String? {
         return when {
             oldPassword.isEmpty() -> "Este campo no puede estar vacío"
@@ -71,11 +130,74 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             passwordConfirmation.isEmpty() -> "Este campo no puede estar vacío"
             else -> null
     }}
+
+    fun changeEmailValue(newValue: String) {
+        email = newValue
+    }
+    fun changeOldPasswordValue(newValue: String) {
+        oldPassword = newValue
+    }
+    fun changeNewPasswordValue(newValue: String) {
+        newPassword = newValue
+    }
+    fun changePasswordConfirmationValue(newValue: String) {
+        passwordConfirmation = newValue
+    }
+
     private fun updatePasswordError(error: String?) {
         passwordError = error
     }
     fun obtenerPasswordError(): String? {
         return passwordError
+    }
+    private fun updateNameError(error: String?) {
+        nameError = error
+    }
+    fun obtenerNameError(): String? {
+        return nameError
+        }
+    private fun updateLastnameError(error: String?) {
+        lastnameError = error
+    }
+    fun obtenerLastnameError(): String? {
+        return lastnameError
+    }
+    private fun updateAgeError(error: String?) {
+        ageError = error
+    }
+    fun obtenerAgeError(): String? {
+        return ageError
+    }
+    private fun updateHeightError(error: String?) {
+        heightError = error
+    }
+    fun obtenerHeightError(): String? {
+        return heightError
+    }
+    private fun updateWeightError(error: String?) {
+        weightError = error
+    }
+    fun obtenerWeightError(): String? {
+        return weightError
+    }
+    private fun updateGenderError(error: String?) {
+        genderError = error
+    }
+    fun obtenerGenderError(): String? {
+        return genderError
+    }
+    private fun updateExperienceLevelError(error: String?) {
+        experienceLevelError = error
+    }
+    fun obtenerExperienceLevelError(): String? {
+        return experienceLevelError
+    }
+
+    private fun updateUsernameError(error: String?) {
+        usernameError = error
+    }
+    fun obtenerUsernameError(): String? {
+        return usernameError
     }
 
     private fun updateEmailError(error: String?) {
@@ -83,6 +205,28 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     }
     fun obtenerEmailError(): String? {
         return emailError
+    }
+
+    fun validateUserSettings(): Boolean{
+        val nameValidationError = validateName()
+        val lastnameValidationError = validateLastname()
+        val usernameValidationError = validateUsername()
+        val ageValidationError = validateAge()
+        val heightValidationError = validateHeight()
+        val weightValidationError = validateWeight()
+        val genderValidationError = validateGender()
+        val experienceLevelValidationError = validateExperienceLevel()
+        updateNameError(nameValidationError)
+        updateLastnameError(lastnameValidationError)
+        updateUsernameError(usernameValidationError)
+        updateAgeError(ageValidationError)
+        updateHeightError(heightValidationError)
+        updateWeightError(weightValidationError)
+        updateGenderError(genderValidationError)
+        updateExperienceLevelError(experienceLevelValidationError)
+        return nameValidationError == null && lastnameValidationError == null && usernameValidationError == null &&
+                ageValidationError == null && heightValidationError == null && weightValidationError == null &&
+                genderValidationError == null && experienceLevelValidationError == null
     }
 
     fun validateAndUpdateEmail(): Boolean{
@@ -106,10 +250,9 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         gender: String,
         email: String,
         username: String,
-        experienceLevel: String
+        experienceLevel: String,
+        routineType: String
     ) {
-        val sharedPreferences = getApplication<Application>().getSharedPreferences("user_session",
-            Context.MODE_PRIVATE)
         sharedPreferences.edit().apply {
             putString("token", token)
             putString("name", name)
@@ -121,6 +264,7 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             putString("email", email)
             putString("username", username)
             putString("experienceLevel", experienceLevel)
+            putString("routineType", routineType)
             apply()
         }
     }
@@ -138,7 +282,9 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             gender = sharedPreferences.getString("gender", "")!!,
             email = sharedPreferences.getString("email", "")!!,
             username = sharedPreferences.getString("username", "")!!,
-            experienceLevel = sharedPreferences.getString("experienceLevel", "")!!
+            injuries = listOf(),
+            experienceLevel = sharedPreferences.getString("experienceLevel", "")!!,
+            routineType = sharedPreferences.getString("routineType", "")!!
         )
     }
 
@@ -246,10 +392,10 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
 
     private suspend fun getImageProfile(): Bitmap? {
         return try {
-            val response = apiService.getIcon("Bearer ${getUserSession().token}", "8.png")
+            val response = apiService.getIcon("Bearer ${getUserSession().token}", "7.png")
             if (response.isSuccessful) {
                 val responseBody = response.body()
-                responseBody?.byteStream()?.let { inputStream ->
+                responseBody?.byteStream()?.let {inputStream: InputStream? ->
                     BitmapFactory.decodeStream(inputStream) ?: run {
                         Log.e("GetIcon", "No se pudo decodificar la imagen")
                         null
@@ -276,6 +422,26 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             } else {
                 Log.e("FetchImageProfile", "No se pudo obtener la imagen de perfil")
                 // Aquí podrías agregar un Toast o actualizar algún mensaje en la UI
+            }
+        }
+    }
+
+    fun updateAccount(){
+        viewModelScope.launch {
+            val request = UserRequest(getUserSession().name, getUserSession().lastname,
+                getUserSession().age.toInt(), getUserSession().height.toFloat(), getUserSession().weight.toFloat(),
+                getUserSession().username, getUserSession().gender.toInt(), getUserSession().experienceLevel.toInt(),
+                getUserSession().injuries, getUserSession().routineType.toInt()
+            )
+                try {
+                val response = apiService.updateAccount("Bearer ${getUserSession().token}", request)
+                if (response.isSuccessful) {
+                    Log.d("UpdateAccount", "Update account success: ${response.message()}")
+                } else {
+                    Log.e("UpdateAccount", "Update account failed: ${response.errorBody()?.string()}")
+                }
+            }catch (e: Exception) {
+                Log.e("UpdateAccount", "Error: ${e.localizedMessage}")
             }
         }
     }

@@ -3,6 +3,7 @@ package com.example.trackingfitness.viewModel
 import android.util.Log
 import android.util.Patterns
 import androidx.annotation.OptIn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -44,7 +45,7 @@ class RegisterViewModel : ViewModel() {
     // VARIABLES PARA EL PROGRESO DE LA BARRA
     var progress by mutableFloatStateOf(0.0f)
         private set
-    private val _progressColor = mutableStateOf(if (darkTheme.value) BlueGreen else Color.Gray)
+    private val _progressColor = mutableStateOf(if (darkTheme.value) Color.White else BlueGreen)
     val progressColor: State<Color> get() = _progressColor
     private val _trackColor = mutableStateOf(Color.Gray)
     val trackColor: State<Color> get() = _trackColor
@@ -314,8 +315,6 @@ class RegisterViewModel : ViewModel() {
                 password = password,
                 password_confirmation = confirmPassword,
                 username = username,
-                experience_level_id = experienceLevel.toInt(),
-                routine_type_id = routineType.toInt(),
                 injuries = injuriesList
             )
             try {

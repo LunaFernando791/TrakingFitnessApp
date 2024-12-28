@@ -170,7 +170,7 @@ fun CustomTextField(
         ) },
         visualTransformation = visualTransformation,
         colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
             focusedLabelColor = Color.LightGray,
             focusedIndicatorColor = if (isError) Color.Red else MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = if (isError) Color.Red else MaterialTheme.colorScheme.tertiary,
@@ -232,10 +232,10 @@ fun CustomTextFieldMenu(
                     fontSize = 15.sp
                 ),
                 colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
                     focusedLabelColor = Color.LightGray,
-                    focusedIndicatorColor = if (isError) Color.Red else Color.Blue,
-                    unfocusedIndicatorColor = if (isError) Color.Red else Color.Gray,
+                    focusedIndicatorColor = if (isError) Color.Red else MaterialTheme.colorScheme.primary,
+                    unfocusedIndicatorColor = if (isError) Color.Red else MaterialTheme.colorScheme.tertiary,
                     errorIndicatorColor = Color.Red
                 ),
                 modifier = Modifier

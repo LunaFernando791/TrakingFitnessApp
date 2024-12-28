@@ -103,6 +103,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                             val userLogin = UserSessionManager(context)
                             _loginSuccess.value = true // Aquí actualizas el estado
                             accessToken = body.access_token
+                            Log.d("Login", "Login successful")
+                            Log.d("Login", "Token: $accessToken")
+                            Log.d("Login", "User: ${body.user}")
+                            Log.d("Login", "UserTrainingInformation: ${body.user_training_information}")
                             userLogin.saveUserSession(
                                 accessToken!!,
                                 body.user.personal_name,
@@ -113,7 +117,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                                 body.user.gender_id.toString(),
                                 body.user.email,
                                 body.user.username,
-                                body.user.experience_level_id.toString()
+                                body.user_training_information.experience_level_id.toString(),
+                                body.user_training_information.routine_type_id.toString()
                             )
                         }
                     }
