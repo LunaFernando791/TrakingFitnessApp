@@ -1,20 +1,27 @@
 package com.example.trackingfitness.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
@@ -58,9 +65,10 @@ fun BodyProfile(
     val weight = remember { mutableStateOf(user.value.weight) }
     val gender = remember { mutableStateOf(user.value.gender) }
     val username = remember { mutableStateOf(user.value.username) }
+    val injuries = remember { mutableStateOf(user.value.injuries) }
     val experienceLevel = remember { mutableStateOf(user.value.experienceLevel) }
     LazyColumn(
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .clip(RoundedCornerShape(20.dp))
@@ -184,6 +192,7 @@ fun BodyProfile(
                 errorMessage = userSession.obtenerExperienceLevelError()
             )
             Spacer(modifier = Modifier.height(15.dp))
+            InjuriesOptions(injuries)
             Button(
                 onClick = {
                     userSession.saveUserSession(
@@ -196,6 +205,8 @@ fun BodyProfile(
                         gender = gender.value,
                         email = user.value.email,
                         username = username.value,
+                        iconNumber = user.value.iconNumber,
+                        injuries = injuries.value.toString(),
                         experienceLevel = user.value.experienceLevel,
                         routineType = user.value.routineType
                     )
@@ -213,6 +224,50 @@ fun BodyProfile(
                     text = "Guardar cambios",
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxSize()
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun InjuriesOptions(
+    injuries: MutableState<List<Int?>>
+){
+    val selectedInjuries = remember { mutableStateListOf<Int>().apply { addAll(injuries.value.filterNotNull()) } }
+    val injuriesList = listOf(
+        1 to "Neck",
+        2 to "Shoulder",
+        3 to "Hip",
+        4 to "Knee",
+        5 to "Waist",
+        6 to "Leg",
+        7 to "Wrist"
+    )
+    Column(
+        modifier = Modifier.padding(10.dp)
+    ){
+        injuriesList.forEach { (id, name) ->
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ){
+                Checkbox(
+                    checked = selectedInjuries.contains(id),
+                    onCheckedChange = { isChecked ->
+                        if (isChecked) {
+                            selectedInjuries.add(id) // Agregar el ID a la lista
+                        } else {
+                            selectedInjuries.remove(id) // Remover el ID de la lista
+                        }
+                        injuries.value = selectedInjuries.toList()
+                    }
+                )
+                Text(
+                    text = name,
+                    modifier = Modifier.padding(start = 8.dp)
                 )
             }
         }

@@ -24,10 +24,24 @@ data class User(
     val username: String,
     val injuries: List<Int>,
 )
+
+data class UserResponse(
+    val personal_name: String,
+    val last_name: String,
+    val age: Int,
+    val height: Float,
+    val weight: Float,
+    val gender_id: Int,
+    val email: String,
+    val username: String,
+    val icon_number: String,
+)
+
 data class UserTrainingInformation(
     val user_id: Int,
     val routine_type_id: Int,
     val experience_level_id: Int,
+
 )
 
 data class RegisterResponse(
@@ -37,7 +51,8 @@ data class RegisterResponse(
 data class LoginResponseUser(
     val access_token: String?,
     val token_type: String?,
-    val user: User,
+    val user: UserResponse,
+    val user_injuries: List<Int>,
     val user_training_information: UserTrainingInformation,
     val message: String?
 )
@@ -99,11 +114,22 @@ data class UserRequest(
 )
 
 data class ResponseUpdateAccount(
-    val message: String,
-    val user: User,
-    val user_training_information: UserTrainingInformation
+    val user: UserResponse,
+    val user_training_information: UserTrainingInformation,
+    val user_injuries: List<Int>,
 )
 
+data class ImageResponse(
+    val id: Int,
+    val image_url: String
+)
+
+data class UpdateIconRequest(
+    val icon_number: String
+)
+data class UpdateIconResponse(
+    val message: String
+)
 
 interface UserService { // Interfaz para definir las operaciones del servicio.
 
@@ -129,11 +155,27 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
         @Path("filename") id: String
     ): Response<ResponseBody>
     // Ruta para obtener un icono por su ID.
+    @GET("/api/user/edit-icon")
+    suspend fun getImages(
+    ): Response<List<ImageResponse>>
+    // Ruta que trae todas las imagenes del servidor, para que el usuario las seleccione.
+    @PUT("/api/user/update-icon")
+    suspend fun updateIcon(
+        @Header("Authorization") token: String,
+        @Body updateIconRequest: UpdateIconRequest,
+    ): Response<UpdateIconResponse>
+    // Ruta para actualizar el icono del usuario.
+
 
     @DELETE("/api/account-settings")
     suspend fun deleteAccount(
         @Header("Authorization") token: String
     ): Response<Unit>
+    @GET("/api/account-settings")
+    suspend fun getAccountSettings(
+        @Header("Authorization") token: String
+    ): Response<ResponseUpdateAccount>
+    // Ruta para obtener la configuración de la cuenta.
     @PUT("/api/account-settings/email")
     suspend fun updateEmail(
         @Header("Authorization") token: String,

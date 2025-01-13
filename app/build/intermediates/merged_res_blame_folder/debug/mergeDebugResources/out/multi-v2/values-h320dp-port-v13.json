@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-66:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-69:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\c654ed1ff62d502a4b27843e48b3db71\\transformed\\material-1.12.0\\res\\values-h320dp-port-v13\\values-h320dp-port-v13.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\0901a4e1727f92894d9d7d75ca5a7fac\\transformed\\material-1.12.0\\res\\values-h320dp-port-v13\\values-h320dp-port-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

@@ -46,12 +46,14 @@ import androidx.navigation.NavController
 import com.example.trackingfitness.R
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.viewModel.UserSessionManager
+import com.google.ar.sceneform.rendering.Material
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
     userSession: UserSessionManager
 ){
+    userSession.getUserInformation()
     Surface (
         modifier = Modifier
             .fillMaxSize()
@@ -96,43 +98,79 @@ fun BodyContentProfile(
             Text(text = "Volver")
         }
         Spacer(modifier = Modifier.height(20.dp))
-        LaunchedEffect(Unit) {
+        LaunchedEffect(true) {
             userSessionManager.fetchImageProfile()
         }
-        Box(
-            modifier = Modifier
-                .shadow(10.dp, shape = RoundedCornerShape(200.dp), ambientColor = Color.Black, spotColor = Color.Black)
-                .clip(RoundedCornerShape(200.dp))
-                .width(200.dp)
-                .height(200.dp)
-                .background(
-                    MaterialTheme.colorScheme.secondary,
-                    shape = RoundedCornerShape(200.dp)
-                )
-        ){
-            // Observa la imagen del LiveData
-            val profileImage by userSessionManager.profileImage.observeAsState()
-            if (profileImage != null) {
-                Image(
-                    bitmap = profileImage!!.asImageBitmap(),
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Image(
+                    painter = painterResource(R.drawable.edit_button),
                     contentDescription = "Imagen de perfil",
                     modifier = Modifier
-                        .size(200.dp)
-                        .clip(RoundedCornerShape(100.dp)),
+                        .shadow(
+                            10.dp,
+                            shape = RoundedCornerShape(200.dp),
+                            ambientColor = Color.Black,
+                            spotColor = Color.Black
+                        )
+                        .background(MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(200.dp))
+                        .size(40.dp)
+                        .clickable {
+                            navController.navigate("editProfilePicture")
+                        },
                     contentScale = ContentScale.Crop
                 )
-            } else {
-                Text(
-                    text = "Cargando imagen...",
-                    modifier = Modifier.align(Alignment.Center),
-                    textAlign = TextAlign.Center
-                )
+            Box(
+                modifier = Modifier
+                    .padding(
+                        start = 20.dp,
+                        end = 60.dp
+                    )
+                    .shadow(
+                        10.dp,
+                        shape = RoundedCornerShape(200.dp),
+                        ambientColor = Color.Black,
+                        spotColor = Color.Black
+                    )
+                    .clip(RoundedCornerShape(200.dp))
+                    .width(200.dp)
+                    .height(200.dp)
+                    .background(
+                        MaterialTheme.colorScheme.secondary,
+                        shape = RoundedCornerShape(200.dp)
+                    )
+            ) {
+                // Observa la imagen del LiveData
+                val profileImage by userSessionManager.profileImage.observeAsState()
+                if (profileImage != null) {
+                    Image(
+                        bitmap = profileImage!!.asImageBitmap(),
+                        contentDescription = "Imagen de perfil",
+                        modifier = Modifier
+                            .size(200.dp)
+                            .clip(RoundedCornerShape(100.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Text(
+                        text = "Cargando imagen...",
+                        modifier = Modifier.align(Alignment.Center),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(30.dp))
         Text(
             modifier = Modifier
-                .shadow(8.dp, shape = RoundedCornerShape(16.dp), ambientColor = Color.Black, spotColor = Color.Black)
+                .shadow(
+                    8.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    ambientColor = Color.Black,
+                    spotColor = Color.Black
+                )
                 .clip(RoundedCornerShape(20.dp))
                 .width(200.dp)
                 .height(50.dp)
@@ -148,7 +186,12 @@ fun BodyContentProfile(
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .shadow(8.dp, shape = RoundedCornerShape(16.dp), ambientColor = Color.Black, spotColor = Color.Black)
+                .shadow(
+                    8.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    ambientColor = Color.Black,
+                    spotColor = Color.Black
+                )
                 .clip(RoundedCornerShape(20.dp))
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
@@ -239,6 +282,12 @@ fun BodyContentProfile(
                         "Objetivo" to userSessionManager.getUserSession().routineType
                     )
                 )
+                DynamicInfoRow(
+                    items = listOf(
+                        "Lesiones activas" to userSessionManager.getUserSession().injuries
+                    )
+                )
+                Spacer(modifier = Modifier.height(30.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -301,7 +350,7 @@ fun BodyContentProfile(
 
 @Composable
 fun DynamicInfoRow(
-    items: List<Pair<String, String>>,
+    items: List<Pair<String, Any>>,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -358,15 +407,40 @@ fun DynamicInfoRow(
                             else -> ""
                         }
                     }
+                    "Lesiones activas" -> {
+                        val injuryDescription = mapOf(
+                            1 to "neck",
+                            2 to "shoulder",
+                            3 to "hip",
+                            4 to "knee",
+                            5 to "waist",
+                            6 to "leg",
+                            7 to "wrist"
+                        )
+                        // Asegurarse de que value es una lista de enteros
+                        valueModifier = if (value is List<*>) {
+                            (value as List<Int>).map { injuryDescription[it] ?: "Unknown injury" }
+                                .joinToString(", ")
+                        } else {
+                            "No injuries"
+                        }
+                    }
                     else ->{
-                        valueModifier = value
+                        valueModifier = value.toString()
                     }
                 }
-                Text(text = label, fontSize = 20.sp)
+                Text(
+                    text = label,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                )
                 Text(
                     text = valueModifier,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(if (label == "Lesiones activas" || label == "Objetivo") 5.dp else 0.dp)
                 )
             }
         }

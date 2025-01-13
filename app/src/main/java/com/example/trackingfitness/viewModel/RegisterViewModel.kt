@@ -3,7 +3,6 @@ package com.example.trackingfitness.viewModel
 import android.util.Log
 import android.util.Patterns
 import androidx.annotation.OptIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf

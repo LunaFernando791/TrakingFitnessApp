@@ -17,4 +17,5 @@ sealed class AppScreens(val route: String) {
     data object EditPasswordScreen : AppScreens("editPasswordScreen")
     data object EditEmailScreen : AppScreens("editEmailScreen")
     data object EditProfileScreen : AppScreens("editProfileScreen")
+    data object EditProfilePicture : AppScreens("editProfilePicture")
 }

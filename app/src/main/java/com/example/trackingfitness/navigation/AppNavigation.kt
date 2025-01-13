@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trackingfitness.screens.ChangePassScreen
 import com.example.trackingfitness.screens.EditEmailScreen
 import com.example.trackingfitness.screens.EditPasswordScreen
+import com.example.trackingfitness.screens.EditProfilePicture
 import com.example.trackingfitness.screens.EditProfileScreen
 import com.example.trackingfitness.screens.LoginScreen
 import com.example.trackingfitness.screens.OTPScreen
@@ -26,6 +27,7 @@ import com.example.trackingfitness.screens.RegisterOneScreen
 import com.example.trackingfitness.screens.StartScreen
 import com.example.trackingfitness.screens.ExerciseListScreen
 import com.example.trackingfitness.screens.ProfileScreen
+import com.example.trackingfitness.viewModel.ImageViewModel
 import com.example.trackingfitness.viewModel.LoginViewModel
 import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
 import com.example.trackingfitness.viewModel.RegisterViewModel
@@ -38,6 +40,7 @@ fun AppNavigation(){
     val registerViewModel: RegisterViewModel = viewModel()
     val loginViewModel: LoginViewModel = viewModel()
     val recoverPasswordViewModel: RecoverPasswordViewModel = viewModel()
+    val imageViewModel: ImageViewModel = viewModel()
     var startDestination by remember { mutableStateOf(AppScreens.StartScreen.route) }
     val userSessionManager = UserSessionManager(LocalContext.current.applicationContext)
     LaunchedEffect(Unit) {
@@ -110,7 +113,13 @@ fun AppNavigation(){
             )
         }
         composable(AppScreens.ExerciseCameraScreen.route) {
-            
+
+        }
+        composable(AppScreens.EditProfileScreen.route) {
+            EditProfileScreen(
+                navController = navController,
+                userSession = userSessionManager
+            )
         }
         composable(AppScreens.EditEmailScreen.route) {
             EditEmailScreen(
@@ -124,10 +133,11 @@ fun AppNavigation(){
                 userSession = userSessionManager
             )
         }
-        composable(AppScreens.EditProfileScreen.route) {
-            EditProfileScreen(
+        composable(AppScreens.EditProfilePicture.route) {
+            EditProfilePicture(
+                imageViewModel = imageViewModel,
                 navController = navController,
-                userSession = userSessionManager
+                userSessionManager = userSessionManager
             )
         }
     }

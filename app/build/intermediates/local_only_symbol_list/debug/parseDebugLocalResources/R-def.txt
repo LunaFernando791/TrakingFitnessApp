@@ -8,6 +8,8 @@ color teal_200
 color teal_700
 color white
 drawable calorias
+drawable edit_button
+drawable edit_button_dark
 drawable fondoblanco2
 drawable fondodark
 drawable ftlogo

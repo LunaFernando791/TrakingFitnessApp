@@ -1,6 +1,5 @@
 package com.example.trackingfitness.viewModel
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -106,6 +105,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                             Log.d("Login", "Login successful")
                             Log.d("Login", "Token: $accessToken")
                             Log.d("Login", "User: ${body.user}")
+                            Log.d("Login", "UserInjuries: ${body.user_injuries}")
                             Log.d("Login", "UserTrainingInformation: ${body.user_training_information}")
                             userLogin.saveUserSession(
                                 accessToken!!,
@@ -117,6 +117,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                                 body.user.gender_id.toString(),
                                 body.user.email,
                                 body.user.username,
+                                body.user.icon_number,
+                                body.user_injuries.toString(),
                                 body.user_training_information.experience_level_id.toString(),
                                 body.user_training_information.routine_type_id.toString()
                             )

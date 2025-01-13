@@ -2,6 +2,7 @@ package com.example.trackingfitness.viewModel
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
@@ -14,12 +15,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.RetrofitInstance
 import com.example.trackingfitness.conection.UpdateEmailRequest
+import com.example.trackingfitness.conection.UpdateIconRequest
 import com.example.trackingfitness.conection.UpdatePasswordRequest
 import com.example.trackingfitness.conection.UserRequest
 import com.example.trackingfitness.conection.UserService
 import kotlinx.coroutines.launch
 import java.io.InputStream
-import com.example.trackingfitness.conection.User as UserUpdate
 
 data class User(
     val token: String,
@@ -31,7 +32,8 @@ data class User(
     var gender: String,
     var email: String,
     var username: String,
-    val injuries: List<Int>,
+    var iconNumber: String,
+    var injuries: List<Int?>,
     val experienceLevel: String,
     val routineType: String
 )
@@ -39,7 +41,7 @@ data class User(
 class UserSessionManager(application: Context) : AndroidViewModel(application as Application) {
 
     private val apiService: UserService = RetrofitInstance.api
-    val sharedPreferences = getApplication<Application>().getSharedPreferences("user_session",
+    private val sharedPreferences: SharedPreferences = getApplication<Application>().getSharedPreferences("user_session",
         Context.MODE_PRIVATE)
     var email by mutableStateOf("")
     var oldPassword by mutableStateOf("")
@@ -250,6 +252,8 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         gender: String,
         email: String,
         username: String,
+        iconNumber: String,
+        injuries: String,
         experienceLevel: String,
         routineType: String
     ) {
@@ -263,6 +267,8 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             putString("gender", gender)
             putString("email", email)
             putString("username", username)
+            putString("iconNumber", iconNumber)
+            putString("injuries", injuries)
             putString("experienceLevel", experienceLevel)
             putString("routineType", routineType)
             apply()
@@ -272,6 +278,11 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     fun getUserSession(): User {
         val sharedPreferences = getApplication<Application>().getSharedPreferences("user_session",
             Context.MODE_PRIVATE)
+        val userInjuriesString = sharedPreferences.getString("injuries", "[]")
+        val userInjuriesList = userInjuriesString
+            ?.removeSurrounding("[", "]")
+            ?.split(",")
+            ?.mapNotNull { it.trim().toIntOrNull() }
         return User(
             name = sharedPreferences.getString("name", "")!!,
             token = sharedPreferences.getString("token", "")!!,
@@ -282,7 +293,8 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             gender = sharedPreferences.getString("gender", "")!!,
             email = sharedPreferences.getString("email", "")!!,
             username = sharedPreferences.getString("username", "")!!,
-            injuries = listOf(),
+            injuries = userInjuriesList!!,
+            iconNumber = sharedPreferences.getString("iconNumber", "")!!,
             experienceLevel = sharedPreferences.getString("experienceLevel", "")!!,
             routineType = sharedPreferences.getString("routineType", "")!!
         )
@@ -390,9 +402,45 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         cleanTextFields()
     }
 
+    fun getUserInformation(){
+        viewModelScope.launch {
+            try {
+                val response = apiService.getAccountSettings("Bearer ${getUserSession().token}")
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    Log.d("GetInformation", "Get information success: ${response.message()}")
+                    if (body != null) {
+                        saveUserSession(
+                            getUserSession().token,
+                            body.user.personal_name,
+                            body.user.last_name,
+                            body.user.age.toString(),
+                            body.user.height.toString(),
+                            body.user.weight.toString(),
+                            body.user.gender_id.toString(),
+                            body.user.email,
+                            body.user.username,
+                            body.user.icon_number,
+                            body.user_injuries.toString(),
+                            body.user_training_information.experience_level_id.toString(),
+                            body.user_training_information.routine_type_id.toString()
+                        )
+                    }
+                } else {
+                    Log.e("GetInformation", "Get information failed: ${response.errorBody()?.string()}")
+                }
+            }
+            catch (e: Exception) {
+                Log.e("GetInformation", "Error: ${e.localizedMessage}")
+                }
+        }
+    }
+
     private suspend fun getImageProfile(): Bitmap? {
         return try {
-            val response = apiService.getIcon("Bearer ${getUserSession().token}", "7.png")
+            val response = apiService.getIcon("Bearer ${getUserSession().token}",
+                getUserSession().iconNumber
+            )
             if (response.isSuccessful) {
                 val responseBody = response.body()
                 responseBody?.byteStream()?.let {inputStream: InputStream? ->
@@ -431,7 +479,7 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             val request = UserRequest(getUserSession().name, getUserSession().lastname,
                 getUserSession().age.toInt(), getUserSession().height.toFloat(), getUserSession().weight.toFloat(),
                 getUserSession().username, getUserSession().gender.toInt(), getUserSession().experienceLevel.toInt(),
-                getUserSession().injuries, getUserSession().routineType.toInt()
+                getUserSession().injuries.map { it ?: 0 },getUserSession().routineType.toInt()
             )
                 try {
                 val response = apiService.updateAccount("Bearer ${getUserSession().token}", request)
@@ -442,6 +490,28 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                 }
             }catch (e: Exception) {
                 Log.e("UpdateAccount", "Error: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun updateIcon(iconNumber: String){
+        val updateIconRequest = UpdateIconRequest(iconNumber)
+        Log.d("UpdateIcon", "Response: ${updateIconRequest.icon_number}")
+        viewModelScope.launch {
+            try {
+                val response = apiService.updateIcon("Bearer ${getUserSession().token}", updateIconRequest)
+                if (response.isSuccessful) {
+                    Log.d("UpdateIcon", "Update icon success: ${response.message()}")
+                } else {
+                    Log.e("UpdateIcon", "Update icon failed: ${response.errorBody()?.string()}")
+                }
+            }
+            catch (e: Exception) {
+                Log.e("UpdateIcon", "Error: ${e.localizedMessage}")
+                Log.e("UpdateIcon", "Error: ${e.stackTrace}")
+                Log.e("UpdateIcon", "Error: ${e.message}")
+                Log.e("UpdateIcon", "Error: ${e.cause}")
+                Log.e("UpdateIcon", "Error: ${e.suppressed}")
             }
         }
     }
