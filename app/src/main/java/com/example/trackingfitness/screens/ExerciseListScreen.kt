@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.trackingfitness.R
+import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.ui.theme.BlueGreen
@@ -61,23 +62,11 @@ fun ExerciseListScreen(
                 .padding(20.dp)
         ) {
             item {
-                Button(
+                BackButton(
+                    navController = navController,
+                    ruta = "homeScreen",
                     modifier = Modifier
-                        .padding(10.dp),
-                    onClick = {
-                        navController.navigate(AppScreens.PrincipalScreen.route)
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Text(
-                        text = "Volver",
-                        fontSize = 18.sp,
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                }
+                    .padding(end = 275.dp))
                 Text(
                     text = "Lista de ejercicios",
                     fontSize = 35.sp,

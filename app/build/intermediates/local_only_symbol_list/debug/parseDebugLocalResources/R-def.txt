@@ -7,11 +7,13 @@ color purple_700
 color teal_200
 color teal_700
 color white
+drawable agregar_usuario
 drawable calorias
 drawable edit_button
 drawable edit_button_dark
 drawable fondoblanco2
 drawable fondodark
+drawable friend
 drawable ftlogo
 drawable home
 drawable ic_launcher_background

@@ -1,6 +1,5 @@
 package com.example.trackingfitness.screens
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,15 +12,11 @@ import androidx.navigation.NavController
 import com.example.trackingfitness.activity.CustomTextField
 import com.example.trackingfitness.activity.CustomTextFieldMenu
 import com.example.trackingfitness.activity.RegisterForm
-import com.example.trackingfitness.activity.handleBackPress
 import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.viewModel.RegisterViewModel
 
 @Composable
 fun RegisterOneScreen(navController: NavController, viewModel: RegisterViewModel){
-    BackHandler {
-        handleBackPress(navController, viewModel)
-    }
     RegisterForm(
         viewModel = viewModel, content = {
             CustomTextField(

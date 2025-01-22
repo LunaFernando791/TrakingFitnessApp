@@ -44,9 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.trackingfitness.R
+import com.example.trackingfitness.activity.BackButton
+import com.example.trackingfitness.activity.ExperienceBar
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.viewModel.UserSessionManager
-import com.google.ar.sceneform.rendering.Material
 
 @Composable
 fun ProfileScreen(
@@ -84,19 +85,11 @@ fun BodyContentProfile(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Spacer(modifier = Modifier.height(20.dp))
-        Button(
+        BackButton(
+            navController = navController,
+            ruta = "homeScreen",
             modifier = Modifier
-                .padding(end = 275.dp),
-            onClick = {
-                navController.navigate("homeScreen")
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.primary
-            )
-        ) {
-            Text(text = "Volver")
-        }
+            .padding(end = 275.dp))
         Spacer(modifier = Modifier.height(20.dp))
         LaunchedEffect(true) {
             userSessionManager.fetchImageProfile()
@@ -186,6 +179,7 @@ fun BodyContentProfile(
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
+                .padding(horizontal = 5.dp)
                 .shadow(
                     8.dp,
                     shape = RoundedCornerShape(16.dp),
@@ -198,6 +192,7 @@ fun BodyContentProfile(
         ){
             item {
                 Spacer(modifier = Modifier.height(30.dp))
+                ExperienceBar(userSessionManager.getUserSession().userLevel, userSessionManager.getUserSession().progressLevel, modifier = Modifier.padding(horizontal = 15.dp))
                 DynamicInfoRow(
                     items = listOf(
                         "Nombre" to userSessionManager.getUserSession().name,
@@ -215,6 +210,16 @@ fun BodyContentProfile(
                         "Altura" to userSessionManager.getUserSession().height,
                         "Peso" to userSessionManager.getUserSession().weight,
                         "Edad" to userSessionManager.getUserSession().age
+                    )
+                )
+                DynamicInfoRow(
+                    items = listOf(
+                        "Objetivo" to userSessionManager.getUserSession().routineType
+                    )
+                )
+                DynamicInfoRow(
+                    items = listOf(
+                        "Lesiones activas" to userSessionManager.getUserSession().injuries
                     )
                 )
                 Row (
@@ -276,18 +281,6 @@ fun BodyContentProfile(
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(30.dp))
-                DynamicInfoRow(
-                    items = listOf(
-                        "Objetivo" to userSessionManager.getUserSession().routineType
-                    )
-                )
-                DynamicInfoRow(
-                    items = listOf(
-                        "Lesiones activas" to userSessionManager.getUserSession().injuries
-                    )
-                )
-                Spacer(modifier = Modifier.height(30.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -356,13 +349,15 @@ fun DynamicInfoRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 50.dp, vertical = 15.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .padding(vertical = 15.dp),
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         items.forEach { (label, value) ->
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(horizontal = 30.dp)
             ) {
                 val valueModifier: String
                 when (label) {
@@ -409,18 +404,19 @@ fun DynamicInfoRow(
                     }
                     "Lesiones activas" -> {
                         val injuryDescription = mapOf(
-                            1 to "neck",
-                            2 to "shoulder",
-                            3 to "hip",
-                            4 to "knee",
-                            5 to "waist",
-                            6 to "leg",
-                            7 to "wrist"
+                            1 to "Cuello",
+                            2 to "Hombro",
+                            3 to "Cadera",
+                            4 to "Rodilla",
+                            5 to "Cintura",
+                            6 to "Pierna",
+                            7 to "Muñeca"
                         )
                         // Asegurarse de que value es una lista de enteros
                         valueModifier = if (value is List<*>) {
-                            (value as List<Int>).map { injuryDescription[it] ?: "Unknown injury" }
-                                .joinToString(", ")
+                            (value as List<*>).joinToString(", ") {
+                                injuryDescription[it] ?: "Unknown injury"
+                            }
                         } else {
                             "No injuries"
                         }

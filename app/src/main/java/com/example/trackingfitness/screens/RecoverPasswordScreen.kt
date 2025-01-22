@@ -31,16 +31,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.activity.ErrorMessages
 import com.example.trackingfitness.customFontFamily
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
-import com.example.trackingfitness.viewModel.LoginViewModel
 import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
 
 @Composable
 fun RecoverPasswordScreen(navController: NavController, recoverPasswordViewModel: RecoverPasswordViewModel){
-    ContainerContent(recoverPasswordViewModel, navController,)
+    ContainerContent(recoverPasswordViewModel, navController)
 }
 
 
@@ -53,6 +53,11 @@ fun ContainerContent(viewModel: RecoverPasswordViewModel, navController: NavCont
             .padding(25.dp)
     ){
         Spacer(modifier = Modifier.height(20.dp))
+        BackButton(
+            navController = navController,
+            ruta = "startScreen",
+            modifier = Modifier
+            .padding(end = 275.dp))
         Text(
             text = "Recover password",
             color = MaterialTheme.colorScheme.primary,

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.viewModel.UserSessionManager
 
@@ -55,19 +56,11 @@ fun BodyScreenContent(
             .padding(10.dp)
     ) {
         Spacer(modifier = Modifier.height(20.dp))
-        Button(
+        BackButton(
+            navController = navController,
+            ruta = "profileScreen",
             modifier = Modifier
-                .padding(end = 275.dp),
-            onClick = {
-                navController.navigate("profileScreen")
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.primary
-            )
-        ) {
-            Text(text = "Volver")
-        }
+            .padding(end = 275.dp))
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             modifier = Modifier

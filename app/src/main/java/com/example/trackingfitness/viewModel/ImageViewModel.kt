@@ -12,8 +12,10 @@ import kotlinx.coroutines.launch
 
 class ImageViewModel() : ViewModel() {
     private val apiService: UserService = RetrofitInstance.api
+
     private val _images = MutableLiveData<List<ImageResponse>>()
     val images: LiveData<List<ImageResponse>> get() = _images
+
     fun fetchImages(
     ) {
         viewModelScope.launch {
@@ -34,5 +36,4 @@ class ImageViewModel() : ViewModel() {
     fun onImageSelected(imageId: String, imageUrl: String) {
         Log.d("SelectedImage", "Imagen seleccionada: $imageId")
     }
-
 }

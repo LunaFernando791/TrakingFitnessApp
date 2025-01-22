@@ -3,6 +3,7 @@ agp = "8.5.0"
 androidxJunit = "1.2.1"
 classes = "1.5.2"
 converterGson = "2.9.0"
+featherIcons = "4.29.0>"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -24,6 +25,7 @@ androidx-classes = { module = "androidx.test:classes", version.ref = "classes" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-junit-v121 = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+feather-icons = { module = "compose.icons.feather:feather-icons", version.ref = "featherIcons" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

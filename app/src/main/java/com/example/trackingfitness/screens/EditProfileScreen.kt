@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.activity.CustomTextFieldMenu
 import com.example.trackingfitness.viewModel.UserSessionManager
 
@@ -76,6 +77,11 @@ fun BodyProfile(
             .padding(20.dp),
     ) {
         item{
+            BackButton(
+                navController = navController,
+                ruta = "profileScreen",
+                modifier = Modifier
+                .padding(end = 275.dp))
             Text(
                 modifier = Modifier
                     .padding(horizontal = 15.dp),

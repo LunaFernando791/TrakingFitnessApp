@@ -37,11 +37,36 @@ data class UserResponse(
     val icon_number: String,
 )
 
+data class UserFriendInformation(
+    val id: Int,
+    val personal_name: String,
+    val last_name: String,
+    val age: Int,
+    val height: Float,
+    val weight: Float,
+    val username: String,
+    val gender_id: String,
+    val icon_number: String,
+)
+
 data class UserTrainingInformation(
     val user_id: Int,
     val routine_type_id: Int,
     val experience_level_id: Int,
 
+)
+
+data class FriendInformation(
+    val id: Int,
+    val username: String,
+    val icon_url: String,
+)
+
+data class FriendRequest(
+    val id: Int,
+    val sender_id: Int,
+    val sender_username: String,
+    val icon_url: String,
 )
 
 data class RegisterResponse(
@@ -131,6 +156,36 @@ data class UpdateIconResponse(
     val message: String
 )
 
+data class ResponseUserScoreLevel(
+    val score: Int
+)
+
+data class FriendRequestResponse(
+    val friendsRequestCount: Int,
+)
+
+data class FriendsListResponse(
+    val friends: Map<String, FriendInformation>,
+    val friendRequests: List<FriendRequest>,
+    val availableUsers: List<FriendInformation>,
+)
+
+data class FriendProfileResponse(
+    val user: UserFriendInformation,
+    val icon_number: String,
+    val exercise_dates: List<String>,
+    val score: Int,
+    val userMedals: List<Int>,
+)
+
+data class SendFriendRequestResponse(
+    val success: String
+)
+
+data class GetDatesResponse(
+    val exercise_dates: List<String>,
+)
+
 interface UserService { // Interfaz para definir las operaciones del servicio.
 
     @POST("/api/register")
@@ -155,7 +210,7 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
         @Path("filename") id: String
     ): Response<ResponseBody>
     // Ruta para obtener un icono por su ID.
-    @GET("/api/user/edit-icon")
+    @GET("/api/edit-icon")
     suspend fun getImages(
     ): Response<List<ImageResponse>>
     // Ruta que trae todas las imagenes del servidor, para que el usuario las seleccione.
@@ -171,6 +226,7 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
     suspend fun deleteAccount(
         @Header("Authorization") token: String
     ): Response<Unit>
+    //Ruta para eliminar la cuenta.
     @GET("/api/account-settings")
     suspend fun getAccountSettings(
         @Header("Authorization") token: String
@@ -193,6 +249,51 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
         @Header("Authorization") token: String,
         @Body userRequest: UserRequest
     ): Response<ResponseUpdateAccount>
+    //Ruta para actualizar la cuenta.
+    @GET("/api/retrieve/score")
+    suspend fun getScoreLevel(
+        @Header("Authorization") token: String
+    ):Response<ResponseUserScoreLevel>
+    //RUTA QUE OBTIENE EL NIVEL DE EXPERIENCIA DEL USUARIO
+    @GET("/api/friendsRequest")
+    suspend fun getFriendsRequest(
+        @Header("Authorization") token: String
+    ): Response<FriendRequestResponse>
+    //RUTA QUE OBTIENE EL NUMERO DE SOLICITUDES DE AMISTAD DEL USUARIO
+    @GET("/api/friends")
+    suspend fun getFriends(
+        @Header("Authorization") token: String
+    ): Response<FriendsListResponse>
+    /*RUTA QUE OBTIENE LO RELACIONADO A AMIGOS*/
+    @POST("/api/friends/accept/{id}")
+    suspend fun acceptFriendRequest(
+        @Header("Authorization") token: String,
+        @Path("id") friendId: Int
+    ): Response<Unit>
+    //RUTA QUE ACEPTA UNA SOLICITUD DE AMISTAD
+    @POST("/api/friends/reject/{id}")
+    suspend fun declineFriendRequest(
+        @Header("Authorization") token: String,
+        @Path("id") friendId: Int
+    ): Response<FriendRequestResponse>
+    //RUTA QUE RECHAZA UNA SOLICITUD DE AMISTAD
+    @GET("/api/user/{username}")
+    suspend fun getFriendUser(
+        @Header("Authorization") token: String,
+        @Path("username") username: String
+    ): Response<FriendProfileResponse>
+    //RUTA QUE OBTIENE UN USUARIO POR SU NOMBRE DE USUARIO
+    @POST("/api/friends/request/{id}")
+    suspend fun sendFriendRequest(
+        @Header("Authorization") token: String,
+        @Path("id") friendId: Int
+    ): Response<SendFriendRequestResponse>
+    //RUTA QUE ENVIA UNA SOLICITUD DE AMISTAD
+    @GET("/api/dates")
+    suspend fun getDates(
+        @Header("Authorization") token: String
+    ): Response<GetDatesResponse>
+    //RUTA QUE OBTIENE LAS FECHAS DE EJERCICIO DEL USUARIO
 
 
     @POST("/api/auth/forget-password")
