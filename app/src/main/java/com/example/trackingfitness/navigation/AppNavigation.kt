@@ -1,5 +1,6 @@
 package com.example.trackingfitness.navigation
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,6 +33,8 @@ import com.example.trackingfitness.screens.FriendProfileScreen
 import com.example.trackingfitness.screens.FriendsScreen
 import com.example.trackingfitness.screens.ProfileScreen
 import com.example.trackingfitness.viewModel.FriendsViewModel
+import com.example.trackingfitness.tracking.activities.CameraXLivePreviewActivity
+import com.example.trackingfitness.tracking.activities.SettingsActivity
 import com.example.trackingfitness.viewModel.ImageViewModel
 import com.example.trackingfitness.viewModel.LoginViewModel
 import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
@@ -169,6 +172,21 @@ fun AppNavigation(){
                     userSession = userSessionManager,
                     friendsViewModel = friendsViewModel
                 )
+            }
+        }
+
+        composable(AppScreens.SettingsScreen.route) {
+            val context = LocalContext.current
+            LaunchedEffect(Unit) {
+                val intent = Intent(context, SettingsActivity::class.java)
+                context.startActivity(intent)
+            }
+        }
+        composable(AppScreens.CameraXScreen.route) {
+            val context = LocalContext.current
+            LaunchedEffect(Unit) {
+                val intent = Intent(context, CameraXLivePreviewActivity::class.java)
+                context.startActivity(intent)
             }
         }
     }

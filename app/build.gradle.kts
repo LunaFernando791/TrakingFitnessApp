@@ -47,6 +47,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    aaptOptions {
+        noCompress("tflite")
+    }
 }
 
 dependencies {
@@ -69,6 +72,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.rendering)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -80,4 +86,17 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core:1.3.0")
     implementation("androidx.compose.material:material-icons-extended:1.3.0")
 
+    // TensorFlow Lite
+    implementation("org.tensorflow:tensorflow-lite:2.13.0")
+
+    // ML Kit Pose Detection
+    implementation("com.google.mlkit:pose-detection:18.0.0-beta5")
+    implementation("com.google.mlkit:pose-detection-accurate:18.0.0-beta5")
+    implementation("com.google.mlkit:camera:16.0.0-beta3")
+
+    // CameraX
+    implementation("androidx.camera:camera-camera2:1.3.0")
+    implementation("androidx.camera:camera-lifecycle:1.3.0")
+    implementation("androidx.camera:camera-view:1.3.0")
+    implementation("androidx.preference:preference:1.2.1")
 }

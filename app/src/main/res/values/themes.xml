@@ -2,4 +2,5 @@
 <resources>
 
     <style name="Theme.TrackingFitness" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
 </resources>

@@ -122,7 +122,7 @@ fun BodyContent(navController: NavHostController){
                             .padding(vertical = 15.dp, horizontal = 10.dp)
                             .clip(RoundedCornerShape(20.dp))
                             .background(MaterialTheme.colorScheme.secondary)
-                            .clickable { navController.navigate("loginScreen") }
+                            .clickable { navController.navigate(AppScreens.LoginScreen.route) }
                     ) {
                         Text(
                             text = "INICIAR SESIÓN",

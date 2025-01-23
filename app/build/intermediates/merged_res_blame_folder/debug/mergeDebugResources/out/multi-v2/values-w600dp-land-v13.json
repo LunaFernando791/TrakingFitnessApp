@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-69:/values-w600dp-land-v13/values-w600dp-land-v13.xml",
+            "outputFile": "com.example.trackingfitness.app-mergeDebugResources-83:/values-w600dp-land-v13/values-w600dp-land-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\garci\\.gradle\\caches\\transforms-4\\1e18c6f219959e81f60d59cc214ac13c\\transformed\\material-1.12.0\\res\\values-w600dp-land-v13\\values-w600dp-land-v13.xml",
+                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\b5d1c560d515c1105fd0c30c887aad29\\transformed\\material-1.12.0\\res\\values-w600dp-land-v13\\values-w600dp-land-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

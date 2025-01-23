@@ -1,3 +1,68 @@
 <resources>
     <string name="app_name">TrackingFitness</string>
+
+    <!-- Strings para configuración de la cámara. -->
+    <string name="pref_category_key_camera" translatable="false">pckc</string>
+    <string name="pref_category_title_camera" translatable="false">Cámara</string>
+    <string name="pref_key_rear_camera_preview_size" translatable="false">rcpvs</string>
+    <string name="pref_key_rear_camera_picture_size" translatable="false">rcpts</string>
+    <string name="pref_key_front_camera_preview_size" translatable="false">fcpvs</string>
+    <string name="pref_key_front_camera_picture_size" translatable="false">fcpts</string>
+    <string name="pref_key_camerax_rear_camera_target_resolution" translatable="false">crctas</string>
+    <string name="pref_key_camerax_front_camera_target_resolution" translatable="false">cfctas</string>
+    <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
+    <string name="pref_title_rear_camera_preview_size" translatable="false">Tamaño de vista previa de la cámara trasera</string>
+    <string name="pref_title_front_camera_preview_size" translatable="false">Tamaño de vista previa de la cámara frontal</string>
+    <string name="pref_title_camerax_rear_camera_target_resolution" translatable="false">Resolución objetivo de la cámara trasera (CameraX)</string>
+    <string name="pref_title_camerax_front_camera_target_resolution" translatable="false">Resolución objetivo de la cámara frontal (CameraX)</string>
+    <string name="pref_title_camera_live_viewport" translatable="false">Habilitar vista en vivo</string>
+    <string name="pref_summary_camera_live_viewport" translatable="false">No bloquear el dibujo de la vista previa de la cámara durante la detección</string>
+
+    <!-- Strings para el modo de rendimiento del detector de poses. -->
+    <string name="pref_title_pose_detector_performance_mode" translatable="false">Modo de rendimiento</string>
+    <string name="pref_key_live_preview_pose_detection_performance_mode" translatable="false">lppdpm</string>
+    <string name="pref_key_still_image_pose_detection_performance_mode" translatable="false">sipdpm</string>
+    <string name="pref_entries_pose_detector_performance_mode_fast" translatable="false">Rápido</string>
+    <string name="pref_entries_pose_detector_performance_mode_accurate" translatable="false">Preciso</string>
+    <string name="pref_entry_values_pose_detector_performance_mode_fast" translatable="false">1</string>
+    <string name="pref_entry_values_pose_detector_performance_mode_accurate" translatable="false">2</string>
+
+    <!-- Strings para preferencia de uso de GPU en el detector de poses. -->
+    <string name="pref_title_pose_detector_prefer_gpu" translatable="false">Preferir usar GPU</string>
+    <string name="pref_key_pose_detector_prefer_gpu" translatable="false">pdpg</string>
+    <string name="pref_summary_pose_detector_prefer_gpu" translatable="false">Si está habilitado, se usará la GPU siempre que esté disponible, sea estable y devuelva resultados correctos. En este caso, el detector no verificará si la GPU es realmente más rápida que la CPU.</string>
+
+    <!-- Strings para clasificación de poses. -->
+    <string name="pref_title_pose_detector_run_classification" translatable="false">Ejecutar clasificación</string>
+    <string name="pref_key_pose_detector_run_classification" translatable="false">pdrc</string>
+    <string name="pref_summary_pose_detector_run_classification" translatable="false">Clasificar poses. Contar repeticiones en modo de transmisión. Para obtener los mejores resultados de clasificación basados en los datos actuales, mira de lado a la cámara y asegúrate de que todo tu cuerpo esté en el encuadre.</string>
+
+    <!-- Strings para la visualización del valor z del detector de poses. -->
+    <string name="pref_title_pose_detector_visualize_z" translatable="false">Visualizar valor z</string>
+    <string name="pref_key_pose_detector_visualize_z" translatable="false">pdvz</string>
+    <string name="pref_title_pose_detector_rescale_z" translatable="false">Reescalar valor z para visualización</string>
+    <string name="pref_key_pose_detector_rescale_z" translatable="false">pdrz</string>
+
+    <!-- Strings para preferencia de segmentación. -->
+    <string name="pref_key_segmentation_raw_size_mask" translatable="false">srsm</string>
+
+    <!-- Strings para la preferencia de "mostrar probabilidad en el marco" del detector de poses. -->
+    <string name="pref_key_live_preview_pose_detector_show_in_frame_likelihood" translatable="false">lppdsifl</string>
+
+    <!-- Strings para la preferencia de información. -->
+    <string name="pref_title_info_hide" translatable="false">Ocultar información de detección</string>
+    <string name="pref_key_info_hide" translatable="false">ih</string>
+
+    <!-- Strings relacionados con configuraciones. -->
+    <string name="pref_screen" translatable="false">ps</string>
+    <string name="pref_category_pose_detection" translatable="false">Detección de poses</string>
+    <string name="pref_title_pose_detector_show_in_frame_likelihood" translatable="false">Mostrar probabilidad en el marco</string>
+    <string name="pref_screen_title_camerax_live_preview" translatable="false">Configuración de vista en vivo de CameraX</string>
+    <string name="menu_item_settings" translatable="false">Configuraciones</string>
+
+    <string-array name="exercise_options">
+        <item>Pushups</item>
+        <item>Squats</item>
+
+    </string-array>
 </resources>
