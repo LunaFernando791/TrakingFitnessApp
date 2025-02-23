@@ -1,5 +1,6 @@
 package com.example.trackingfitness.conection
 
+import com.example.trackingfitness.viewModel.Medal
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -9,6 +10,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 // Clases para manejar las respuestas y las solicitudes de la API.
 data class User(
@@ -21,6 +23,8 @@ data class User(
     val email: String,
     val password: String,
     val password_confirmation: String,
+    val experience_level_id: Int,
+    val routine_type_id: Int,
     val username: String,
     val injuries: List<Int>,
 )
@@ -56,6 +60,14 @@ data class UserTrainingInformation(
 
 )
 
+data class UserRanking(
+    val id: Int,
+    val username: String,
+    val score: Int,
+    val icon_number: String,
+    val icon_url: String,
+)
+
 data class FriendInformation(
     val id: Int,
     val username: String,
@@ -68,6 +80,7 @@ data class FriendRequest(
     val sender_username: String,
     val icon_url: String,
 )
+
 
 data class RegisterResponse(
     val success: Boolean,
@@ -105,6 +118,13 @@ data class ResetPasswordRequest(
 )
 data class ResetPasswordResponse(
     val message: String
+)
+
+data class RankingResponse(
+    val topUsers: List<UserRanking>,
+    val userPosition: Int,
+    val currentPage: Int,
+    val totalPages: Int,
 )
 
 data class UpdateEmailRequest(
@@ -184,6 +204,15 @@ data class SendFriendRequestResponse(
 
 data class GetDatesResponse(
     val exercise_dates: List<String>,
+)
+
+
+data class AllMedalResponse(
+    val medals: List<Medal>,
+)
+
+data class UserMedalsResponse(
+    val userMedals: List<Int>,
 )
 
 interface UserService { // Interfaz para definir las operaciones del servicio.
@@ -294,6 +323,21 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
         @Header("Authorization") token: String
     ): Response<GetDatesResponse>
     //RUTA QUE OBTIENE LAS FECHAS DE EJERCICIO DEL USUARIO
+    @GET("/api/retrieve/allMedals")
+    suspend fun getMedals(
+    ): Response<AllMedalResponse>
+    //RUTA QUE OBTIENE TODAS LAS MEDALLAS DE LA PÁGINA
+    @GET("/api/retrieve/medals")
+    suspend fun getUserMedals(
+        @Header("Authorization") token: String
+    ): Response<UserMedalsResponse>
+    //RUTA QUE OBTIENE TODAS LAS MEDALLAS DEL USUARIO
+    @GET("/api/scores")
+    suspend fun getRanking(
+        @Header("Authorization") token: String,
+        @Query ("page") page: Int,
+        @Query ("limit") limit: Int
+    ): Response<RankingResponse>
 
 
     @POST("/api/auth/forget-password")

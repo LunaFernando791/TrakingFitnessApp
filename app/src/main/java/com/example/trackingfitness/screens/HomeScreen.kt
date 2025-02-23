@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
@@ -87,14 +91,13 @@ fun BodyContent(
     userSessionManager: UserSessionManager,
     friendsViewModel: FriendsViewModel
 ){
-    val onClickAction = {
-        navController.navigate("friendsScreen")
-    }
-    val datesWithExercise by userSessionManager.exerciseDates.collectAsState()
     LaunchedEffect(Unit) {
         friendsViewModel.friendsRequestCount(userSessionManager.getUserSession().token)
         userSessionManager.getLevel()
+        userSessionManager.getDatesWhenUserExercised()
     }
+    val datesWithExercise by userSessionManager.exerciseDates.collectAsState()
+    val user by userSessionManager.user.collectAsState()
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
@@ -109,7 +112,7 @@ fun BodyContent(
         ){
             Text(
                 modifier = Modifier.padding(end = 30.dp),
-                text = "Bienvenido ${userSessionManager.getUserSession().name}",
+                text = "Welcome ${user.name}",
                 style = TextStyle(
                     fontSize = 25.sp,
                     shadow = Shadow(
@@ -129,7 +132,7 @@ fun BodyContent(
                     }
                 )
                 Text(
-                    text = if (darkTheme.value) "Modo Oscuro" else "Modo Claro",
+                    text = if (darkTheme.value) "Dark mode" else "Light mode",
                     style = TextStyle(
                         fontSize = 10.sp,
                     )
@@ -137,13 +140,20 @@ fun BodyContent(
             }
         }
         ExperienceBar(
-            if(userSessionManager.getUserSession().userLevel.isNotEmpty()) userSessionManager.getUserSession().userLevel else "0",
-            if(userSessionManager.getUserSession().progressLevel.isNotEmpty()) userSessionManager.getUserSession().progressLevel else "0",
+            user.userLevel.ifEmpty { "0" },
+            user.progressLevel.ifEmpty { "0" },
             modifier = Modifier.padding(0.dp)
         )
         TopMenu(navController)
         MyCalendar(datesWithExercise)
-        FriendRequest(friendsViewModel ,onClickAction)
+        Row(
+            modifier = Modifier
+                .padding(top = 15.dp),
+            horizontalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            MedalBottom {navController.navigate("medalsScreen")}
+            FriendRequest(friendsViewModel){navController.navigate("friendsScreen")}
+        }
     }
 }
 
@@ -179,7 +189,7 @@ fun TopMenu(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Empieza tu rutina diaria...",
+                    text = "Start your routine...",
                     style = TextStyle(
                         fontSize = 30.sp,
                         shadow = Shadow(
@@ -189,19 +199,23 @@ fun TopMenu(
                         )
                     ),
                 )
-                Box(modifier = Modifier
+                Box(
+                    modifier = Modifier
                     .padding(vertical = 10.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color.Gray)
-                    .fillMaxSize()
+                    .clip(RoundedCornerShape(35.dp))
+                    .background(MaterialTheme.colorScheme.onSecondaryContainer)
+                    .width(180.dp)
+                    .height(120.dp)
                     .clickable {
-                        navController.navigate("exerciseListScreen")
-                    }) {
-                    val img = painterResource(R.drawable.playicon)
-                    Image(
-                        painter = img,
-                        contentDescription = "startImage",
-                        modifier = Modifier.fillMaxSize()
+                        navController.navigate("camera_screen")
+                    },
+                    contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.PlayCircleOutline,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        contentDescription = "profile Details",
+                        modifier = Modifier
+                            .size(100.dp)
                     )
                 }
 
@@ -223,7 +237,8 @@ fun TopMenu(
                     .clip(RoundedCornerShape(16.dp))
                     .fillMaxWidth()
                     .height(110.dp)
-                    .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape),
+                    .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
+                    .clickable { navController.navigate("rankingScreen") },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -236,14 +251,14 @@ fun TopMenu(
                         .padding(start = 30.dp, end = 10.dp)
                 )
                 Text(
-                    text = "Ranking semanal.",
+                    text = "Monthly Ranking",
                     fontSize = 20.sp,
                 )
             }
             Row(
                 // Botón para ver el perfil
                 modifier = Modifier
-                    .padding(vertical = 15.dp, horizontal = 15.dp)
+                    .padding( horizontal = 15.dp)
                     .shadow(
                         8.dp,
                         shape = RoundedCornerShape(16.dp),
@@ -252,7 +267,7 @@ fun TopMenu(
                     )
                     .clip(RoundedCornerShape(16.dp))
                     .fillMaxWidth()
-                    .height(110.dp)
+                    .height(120.dp)
                     .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
                     .clickable { navController.navigate("profileScreen") },
                 horizontalArrangement = Arrangement.Center,
@@ -266,7 +281,7 @@ fun TopMenu(
                         .size(55.dp)
                 )
                 Text(
-                    text = "Mi Perfil",
+                    text = "Profile",
                     fontSize = 25.sp,
                     modifier = Modifier
                         .padding(start = 5.dp)
@@ -295,7 +310,7 @@ fun MyCalendar(
             .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
     ) {
         Text(
-            text = "SIGUE TU DÍA A DÍA...",
+            text = "DAY TO DAY...",
             style = TextStyle(
                 fontSize = 20.sp,
                 shadow = Shadow(
@@ -314,62 +329,77 @@ fun MyCalendar(
 fun FriendRequest(
     friendsViewModel: FriendsViewModel,
     onClickAction: () -> Unit
-){
-    if (friendsViewModel.user.value.friendRequestCount!= 0) {
-        Box(
-            modifier = Modifier
-                .size(30.dp)
-                .offset(x = 185.dp, y = 15.dp)
-                .clip(RoundedCornerShape(200.dp))
-                .background(Color.Red)
-                .zIndex(1f),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = friendsViewModel.user.value.friendRequestCount.toString(),
-                color = Color.White,
-                fontSize = 12.sp
-            )
-        }
-    }else{
-        Spacer(modifier = Modifier.size(15.dp))
-    }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+) {
+    // Contenedor padre que permite que el contador rojo flote
+    Box(
         modifier = Modifier
-            .clickable { onClickAction() }
-            .shadow(
-                8.dp,
-                shape = RoundedCornerShape(16.dp),
-                ambientColor = Color.Black,
-                spotColor = Color.Black
-            )
-            .clip(RoundedCornerShape(16.dp))
-            .width(200.dp)
-            .height(200.dp)
-            .background(
-                MaterialTheme.colorScheme.secondary,
-                shape = RectangleShape
-            )
-            .padding(bottom = 15.dp),
-    ){
-        Text(
-            text = "SOLICITUDES DE AMISTAD",
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(15.dp)
-        )
-        Image(
-            painter = painterResource(id = R.drawable.agregar_usuario),
-            contentDescription = "agregar usuario",
+            .wrapContentSize(), // Ajusta el tamaño al contenido
+        contentAlignment = Alignment.Center
+    ) {
+        // Contenedor principal (el cuadro de "Solicitudes de amistad")
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(70.dp),
-            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(
-                MaterialTheme.colorScheme.primary
-            )
-        )
-    }
+                .wrapContentSize()
+                .clickable { onClickAction() }
+                .shadow(
+                    8.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    ambientColor = Color.Black,
+                    spotColor = Color.Black
+                )
+                .clip(RoundedCornerShape(16.dp))
+                .width(200.dp)
+                .height(200.dp)
+                .background(
+                    MaterialTheme.colorScheme.secondary,
+                    shape = RectangleShape
+                )
+        ) {
+            // Contenido principal
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    text = "MY FRIENDS",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(15.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.agregar_usuario),
+                    contentDescription = "agregar usuario",
+                    modifier = Modifier
+                        .size(60.dp)
+                        .wrapContentSize(),
+                    colorFilter = ColorFilter.tint(
+                        MaterialTheme.colorScheme.primary
+                    )
+                )
+            }
+        }
 
+        // Contador rojo flotante (fuera del contenedor principal)
+        if(friendsViewModel.user.value.friendRequestCount != 0) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd) // Alinea en la esquina superior derecha del contenedor padre
+                    .offset(x = 10.dp, y = (-10).dp) // Ajusta la posición para que flote
+                    .size(30.dp)
+                    .clip(RoundedCornerShape(200.dp))
+                    .background(Color.Red)
+                    .zIndex(1f), // Asegura que esté por encima de otros elementos
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = friendsViewModel.user.value.friendRequestCount.toString(),
+                    color = Color.White,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
 }
 
 // Botón para cambiar el tema
@@ -388,11 +418,41 @@ fun ToggleSwitch(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
 }
 
 @Composable
+fun MedalBottom(
+    onClickAction: () -> Unit
+){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .wrapContentSize()
+            .shadow(
+                8.dp,
+                shape = RoundedCornerShape(16.dp),
+                ambientColor = Color.Black,
+                spotColor = Color.Black
+            )
+            .clip(RoundedCornerShape(16.dp))
+            .width(200.dp)
+            .height(200.dp)
+            .background(
+                MaterialTheme.colorScheme.secondary,
+                shape = RectangleShape
+            )
+            .clickable { onClickAction() }
+    ) {
+        Text(text = "MY MEDALS",modifier = Modifier.wrapContentSize())
+        Icon(imageVector = Icons.Default.Star, contentDescription = "medals",modifier = Modifier.wrapContentSize().size(60.dp))
+    }
+}
+
+@Composable
 fun ExerciseCalendar(datesWithExercise: List<LocalDate>) {
     val currentMonth = remember { mutableStateOf(YearMonth.now()) }
 
     Column(
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier
+            .padding(10.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -413,7 +473,9 @@ fun MonthCalendar(
 ) {
     // Cabecera para cambiar de mes
     Row(
-        modifier = Modifier.fillMaxWidth().padding(0.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -447,7 +509,7 @@ fun MonthCalendar(
                     .aspectRatio(1f) // Cuadrado perfecto
                     .clip(RoundedCornerShape(16.dp))
                     .background(
-                        if (isExerciseDay) if (darkTheme.value) Color.White else BlueGreen else Color.Transparent,
+                        if (isExerciseDay) if (darkTheme.value) Color.White else MaterialTheme.colorScheme.onSecondaryContainer else Color.Transparent,
                     )
                     .padding(5.dp),
                 contentAlignment = Alignment.TopCenter,

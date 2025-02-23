@@ -313,6 +313,8 @@ class RegisterViewModel : ViewModel() {
                 email = email,
                 password = password,
                 password_confirmation = confirmPassword,
+                experience_level_id = experienceLevel.toInt(),
+                routine_type_id = routineType.toInt(),
                 username = username,
                 injuries = injuriesList
             )

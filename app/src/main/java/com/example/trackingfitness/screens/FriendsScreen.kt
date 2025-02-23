@@ -88,6 +88,9 @@ fun FriendsBodyContent(
     navController: NavController,
     friendsViewModel: FriendsViewModel
 ){
+    LaunchedEffect(Unit) {
+        friendsViewModel.showFriend(userSessionManager.getUserSession().token)
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -107,9 +110,6 @@ fun FriendsBodyContent(
                 .background(if (darkTheme.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background),
         ) {
             item {
-                LaunchedEffect(Unit) {
-                    friendsViewModel.showFriend(userSessionManager.getUserSession().token)
-                }
                 val userFriends = friendsViewModel.user
                 Column(
                     modifier = Modifier
@@ -118,7 +118,7 @@ fun FriendsBodyContent(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Solicitudes pendientes",
+                        text = "Pending Friend Requests",
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -127,7 +127,7 @@ fun FriendsBodyContent(
                             Spacer(modifier = Modifier.height(20.dp))
                             Text(
                                 text =
-                                "No tienes solicitudes pendientes.",
+                                "Don't have any friend requests.",
                             )
                         }
                         else -> { // Cuando hay solicitudes pendientes
@@ -145,7 +145,7 @@ fun FriendsBodyContent(
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
-                        text = "Lista de amigos",
+                        text = "Friends",
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -153,7 +153,7 @@ fun FriendsBodyContent(
                         userFriends.value.friends.isEmpty() -> { // Cuando no hay amigos
                             Spacer(modifier = Modifier.height(20.dp))
                             Text(
-                                text = "No tienes amigos en este momento.",
+                                text = "You don't have any friends.",
                                 modifier = Modifier.fillMaxSize(),
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.primary
@@ -165,7 +165,7 @@ fun FriendsBodyContent(
                         }
                     }
                     Text(
-                        text = "Lista de usuarios disponibles",
+                        text = "Available Users",
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -173,7 +173,7 @@ fun FriendsBodyContent(
                         userFriends.value.availableUsers?.isEmpty() == true -> { // Cuando no hay amigos
                             Spacer(modifier = Modifier.height(20.dp))
                             Text(
-                                text = "No tienes amigos en este momento.",
+                                text = "There are no available users.",
                                 modifier = Modifier.fillMaxSize(),
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.primary
@@ -193,7 +193,7 @@ fun FriendsBodyContent(
                 }
             }
         }
-        if(friendsViewModel.success.value == "Solicitud de amistad enviada."){
+        if(friendsViewModel.success.value == "Request sent."){
             Toast.makeText(
                 LocalContext.current,
                 friendsViewModel.success.value,
@@ -276,7 +276,7 @@ fun FriendRequestCard(
                     )
                 ) {
                     Text(
-                        text = "Aceptar",
+                        text = "Accept",
                         color = Color.White
                     )
                 }
@@ -293,7 +293,7 @@ fun FriendRequestCard(
                     )
                 ) {
                     Text(
-                        text = "Rechazar",
+                        text = "Decline",
                         color = Color.White
                     )
                 }
@@ -321,7 +321,7 @@ fun SearchableFriendList(
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
-            label = { if(!areFriends) Text("Buscar usuario") else Text("Buscar amigo") },
+            label = { if(!areFriends) Text("Search user") else Text("Search friend") },
             leadingIcon = {
                 Icon(
                     Icons.Default.Search,
@@ -344,7 +344,7 @@ fun SearchableFriendList(
         )
         if (filteredFriends.isEmpty()) {
             Text(
-                text = "No se encontraron resultados.",
+                text = "No friends found.",
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(16.dp),
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
@@ -426,7 +426,7 @@ fun FriendProfileCard(
                 )
             ) {
                 Text(
-                    text = "Agregar",
+                    text = "Add",
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = 10.sp,
                     textAlign = TextAlign.Center,

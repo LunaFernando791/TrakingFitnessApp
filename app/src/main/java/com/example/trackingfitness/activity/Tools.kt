@@ -1,6 +1,8 @@
 package com.example.trackingfitness.activity
 
 import android.app.Activity
+import android.graphics.drawable.Icon
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,8 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,11 +34,13 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
+import com.example.trackingfitness.R
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.ui.theme.BlueGreen
 import com.example.trackingfitness.viewModel.UserSessionManager
@@ -59,7 +67,11 @@ fun BackButton(navController: NavController,ruta: String, modifier: Modifier = M
             contentColor = MaterialTheme.colorScheme.primary
         )
     ) {
-        Text(text = "Volver")
+        Icon(
+            imageVector = Icons.Default.ArrowBackIosNew,
+            contentDescription = "Back",
+            tint = MaterialTheme.colorScheme.primary
+        )
     }
 }
 
@@ -91,12 +103,13 @@ fun ExperienceBar(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "NIVEL")
+                Text(text = "Level")
                 Text(text = userLevel.ifEmpty { "0" })
             }
         }
         Column{
-
+            Log.d("percentageProgress", percentageProgress)
+            Log.d("I'm here", "percentageProgress: ")
             val progressBar = if (percentageProgress.toFloat() == 0.0f) {
                 0
             }else{
@@ -110,7 +123,7 @@ fun ExperienceBar(
                     .height(10.dp)
                     .clip(RoundedCornerShape(40.dp))
                 ,
-                color = if (darkTheme.value) Color.White else BlueGreen,
+                color = if (darkTheme.value) Color.White else MaterialTheme.colorScheme.onSecondaryContainer,
                 trackColor = MaterialTheme.colorScheme.secondary,
             )
             Text(

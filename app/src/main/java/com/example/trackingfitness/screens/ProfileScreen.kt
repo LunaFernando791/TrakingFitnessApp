@@ -140,7 +140,7 @@ fun BodyContentProfile(
                 if (profileImage != null) {
                     Image(
                         bitmap = profileImage!!.asImageBitmap(),
-                        contentDescription = "Imagen de perfil",
+                        contentDescription = "Profile Image",
                         modifier = Modifier
                             .size(200.dp)
                             .clip(RoundedCornerShape(100.dp)),
@@ -148,7 +148,7 @@ fun BodyContentProfile(
                     )
                 } else {
                     Text(
-                        text = "Cargando imagen...",
+                        text = "Loading...",
                         modifier = Modifier.align(Alignment.Center),
                         textAlign = TextAlign.Center
                     )
@@ -195,31 +195,31 @@ fun BodyContentProfile(
                 ExperienceBar(userSessionManager.getUserSession().userLevel, userSessionManager.getUserSession().progressLevel, modifier = Modifier.padding(horizontal = 15.dp))
                 DynamicInfoRow(
                     items = listOf(
-                        "Nombre" to userSessionManager.getUserSession().name,
-                        "Apellido" to userSessionManager.getUserSession().lastname,
+                        "Name" to userSessionManager.getUserSession().name,
+                        "Lastname" to userSessionManager.getUserSession().lastname,
                     )
                 )
                 DynamicInfoRow(
                     items = listOf(
-                        "Genero" to userSessionManager.getUserSession().gender,
-                        "Experiencia" to userSessionManager.getUserSession().experienceLevel,
+                        "Gender" to userSessionManager.getUserSession().gender,
+                        "Experience" to userSessionManager.getUserSession().experienceLevel,
                     )
                 )
                 DynamicInfoRow(
                     items = listOf(
-                        "Altura" to userSessionManager.getUserSession().height,
-                        "Peso" to userSessionManager.getUserSession().weight,
-                        "Edad" to userSessionManager.getUserSession().age
+                        "Height" to userSessionManager.getUserSession().height,
+                        "Weight" to userSessionManager.getUserSession().weight,
+                        "Age" to userSessionManager.getUserSession().age
                     )
                 )
                 DynamicInfoRow(
                     items = listOf(
-                        "Objetivo" to userSessionManager.getUserSession().routineType
+                        "Goal" to userSessionManager.getUserSession().routineType
                     )
                 )
                 DynamicInfoRow(
                     items = listOf(
-                        "Lesiones activas" to userSessionManager.getUserSession().injuries
+                        "Active Injuries" to userSessionManager.getUserSession().injuries
                     )
                 )
                 Row (
@@ -232,7 +232,7 @@ fun BodyContentProfile(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Correo",
+                            text = "Email",
                             fontSize = 20.sp,
                             modifier = Modifier.padding(top = 10.dp)
                         )
@@ -244,7 +244,7 @@ fun BodyContentProfile(
                         )
                         Icon(
                             imageVector = Icons.Default.Edit,
-                            contentDescription = "Editar",
+                            contentDescription = "Edit",
                             tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier
                                 .padding(top = 10.dp)
@@ -267,7 +267,7 @@ fun BodyContentProfile(
                         )
                         Icon(
                             imageVector = Icons.Default.Edit,
-                            contentDescription = "Editar",
+                            contentDescription = "Edit",
                             tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier
                                 .padding(top = 10.dp)
@@ -298,7 +298,7 @@ fun BodyContentProfile(
                             contentColor = if (darkTheme.value) Color.White else Color.Black
                         )
                     ) {
-                        Text(text = "Editar Perfil")
+                        Text(text = "Edit profile")
                     }
                 }
                 Row(
@@ -319,7 +319,7 @@ fun BodyContentProfile(
                             contentColor = Color.White
                         )
                     ) {
-                        Text(text = "Cerrar sesión")
+                        Text(text = "Log out")
                     }
                     Button(
                         modifier = Modifier
@@ -333,7 +333,7 @@ fun BodyContentProfile(
                             contentColor = Color.White
                         )
                     ) {
-                        Text(text = "Eliminar cuenta")
+                        Text(text = "Delete account")
                     }
                 }
             }
@@ -361,35 +361,35 @@ fun DynamicInfoRow(
             ) {
                 val valueModifier: String
                 when (label) {
-                    "Altura" -> {
+                    "Height" -> {
                         valueModifier = "$value m"
                     }
 
-                    "Peso" -> {
+                    "Weight" -> {
                         valueModifier = "$value kg"
                     }
 
-                    "Edad" -> {
-                        valueModifier = "$value años"
+                    "Age" -> {
+                        valueModifier = "$value"
                     }
 
-                    "Genero" -> {
+                    "Gender" -> {
                         valueModifier = when (value) {
-                            "1" -> "Masculino"
-                            "2" -> "Femenino"
-                            "3" -> "Otro"
+                            "1" -> "Male"
+                            "2" -> "Female"
+                            "3" -> "Other"
                             else -> ""
                         }
                     }
-                    "Experiencia" -> {
+                    "Experience" -> {
                         valueModifier = when (value) {
-                            "1" -> "Principiante"
-                            "2" -> "Intermedio"
-                            "3" -> "Avanzado"
+                            "1" -> "Beginner"
+                            "2" -> "Intermediate"
+                            "3" -> "Advanced"
                             else -> ""
                         }
                     }
-                    "Objetivo" -> {
+                    "Goal" -> {
                         valueModifier = when (value) {
                             "1" -> "Improve cardiovascular health"
                             "2" -> "Strengthen muscles"
@@ -402,15 +402,15 @@ fun DynamicInfoRow(
                             else -> ""
                         }
                     }
-                    "Lesiones activas" -> {
+                    "Active Injuries" -> {
                         val injuryDescription = mapOf(
-                            1 to "Cuello",
-                            2 to "Hombro",
-                            3 to "Cadera",
-                            4 to "Rodilla",
-                            5 to "Cintura",
-                            6 to "Pierna",
-                            7 to "Muñeca"
+                            1 to "Neck",
+                            2 to "Shoulder",
+                            3 to "Hip",
+                            4 to "Knee",
+                            5 to "Waist",
+                            6 to "Leg",
+                            7 to "Wrist"
                         )
                         // Asegurarse de que value es una lista de enteros
                         valueModifier = if (value is List<*>) {
@@ -436,7 +436,7 @@ fun DynamicInfoRow(
                     fontSize = 20.sp,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(if (label == "Lesiones activas" || label == "Objetivo") 5.dp else 0.dp)
+                        .padding(if (label == "Active injuries" || label == "Goal") 5.dp else 0.dp)
                 )
             }
         }

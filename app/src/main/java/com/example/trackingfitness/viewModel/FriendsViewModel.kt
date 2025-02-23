@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.RetrofitInstance
 import com.example.trackingfitness.conection.UserService
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 data class ShowUser(
     var icon_url: String,
@@ -20,6 +22,8 @@ data class ShowUser(
     var gender: String,
     var height: String,
     var weight: String,
+    var exercise_dates: List<LocalDate>?,
+    var userMedals: List<Int> = emptyList()
 )
 
 data class FriendInformation(
@@ -64,7 +68,9 @@ class FriendsViewModel : ViewModel() {
         height = "",
         weight = "",
         experience_level = "",
-        userLevel = ""
+        userLevel = "",
+        exercise_dates = emptyList(),
+        userMedals = emptyList()
         )
     )
     val friendProfile: State<ShowUser> = _friendProfile
@@ -152,7 +158,6 @@ class FriendsViewModel : ViewModel() {
                             friendRequests = friendRequestsMap
                         )
                     }
-
                     // Lista de amigos
                     val friendsMap = body?.friends?.mapValues { (_, value) ->
                         FriendInformation(
@@ -166,7 +171,6 @@ class FriendsViewModel : ViewModel() {
                             friends = friendsMap
                         )
                     }
-
                     //Usuarios disponibles
                     val availableUsers = body?.availableUsers?.associateBy { it.id }
                         ?.mapValues{ (_, value) ->
@@ -210,6 +214,7 @@ class FriendsViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val body = response.body()
                     val (level, progressLevel) = calculateUserLevel(body?.score ?: 0)
+                    val dateFormatter = DateTimeFormatter.ISO_DATE
                     _friendProfile.value = friendProfile.value.copy(
                         icon_url = body?.icon_number ?: "",
                         experience_level = progressLevel.toString(),
@@ -221,7 +226,10 @@ class FriendsViewModel : ViewModel() {
                         gender = body?.user?.gender_id.toString(),
                         height = body?.user?.height.toString(),
                         weight = body?.user?.weight.toString(),
+                        exercise_dates = body?.exercise_dates?.map { LocalDate.parse(it, dateFormatter) },
+                        userMedals = body?.userMedals ?: emptyList()
                     )
+                    Log.d("FriendProfile", "Friend profile: ${friendProfile.value}")
                 } else {
                     Log.e("FriendProfile", "Get friend profile failed: ${response.errorBody()?.string()}")
                     }

@@ -24,6 +24,7 @@ class ImageViewModel() : ViewModel() {
                 Log.d("ImageViewModel", "Response: $response")
                 if (response.isSuccessful && response.body() != null) {
                     _images.value = response.body()
+                    Log.d("ImageViewModel", "Images fetched: ${_images.value}")
                 } else {
                     Log.e("ImageViewModel", "Error fetching images: ${response.errorBody()?.string()}")
                 }

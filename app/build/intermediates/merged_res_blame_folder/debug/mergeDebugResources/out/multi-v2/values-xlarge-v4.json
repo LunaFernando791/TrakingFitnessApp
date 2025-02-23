@@ -4,7 +4,7 @@
             "outputFile": "com.example.trackingfitness.app-mergeDebugResources-83:/values-xlarge-v4/values-xlarge-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\377588eb848c4f858b70b1e7f7d7ba1e\\transformed\\appcompat-1.7.0\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\8.10.2\\transforms\\2e0e7480b3d1ba7c014ea7cc39d32455\\transformed\\appcompat-1.7.0\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7",
                         "startColumns": "4,4,4,4,4,4",

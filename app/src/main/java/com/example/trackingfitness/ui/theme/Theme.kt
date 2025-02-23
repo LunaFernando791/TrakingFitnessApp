@@ -13,7 +13,9 @@ private val DarkColorScheme = darkColorScheme(
     background = OnBackgroundColor,
     surface = Color.Black,
     secondary = OnBoxColor,
-    tertiary = OnBorderColor
+    tertiary = OnBorderColor,
+    onSecondary = OnBorderColor,
+    onSecondaryContainer = PositionColor
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -21,6 +23,8 @@ private val LightColorScheme = lightColorScheme(
     background = BackgroundColor,
     secondary = BoxColor,
     tertiary = BorderColor,
+    onSecondary = RankingColor,
+    onSecondaryContainer = PositionColor
 )
 
 @Composable

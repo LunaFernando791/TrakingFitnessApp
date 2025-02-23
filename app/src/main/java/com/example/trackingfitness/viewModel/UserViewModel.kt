@@ -7,13 +7,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.trackingfitness.conection.RankingResponse
 import com.example.trackingfitness.conection.RetrofitInstance
 import com.example.trackingfitness.conection.UpdateEmailRequest
 import com.example.trackingfitness.conection.UpdateIconRequest
@@ -39,26 +39,51 @@ data class User(
     var username: String,
     var iconNumber: String,
     var injuries: List<Int?>,
-    val experienceLevel: String,
+    var experienceLevel: String,
     val routineType: String,
     var progressLevel: String,
     var userLevel: String,
+    var userMedals: List<Int> = emptyList()
 )
-
 class UserSessionManager(application: Context) : AndroidViewModel(application as Application) {
-
     private val apiService: UserService = RetrofitInstance.api
-    private val sharedPreferences: SharedPreferences = getApplication<Application>().getSharedPreferences("user_session",
-        Context.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences =
+        getApplication<Application>().getSharedPreferences(
+            "user_session",
+            Context.MODE_PRIVATE
+        )
     var email by mutableStateOf("")
     var oldPassword by mutableStateOf("")
     var newPassword by mutableStateOf("")
     var passwordConfirmation by mutableStateOf("")
-    private var progressLevel by mutableIntStateOf(0)
-        private set
     private val _exerciseDates = MutableStateFlow(emptyList<LocalDate>())
     var exerciseDates: StateFlow<List<LocalDate>> = _exerciseDates
 
+    private val _ranking = MutableStateFlow<RankingResponse?>(null)
+    var ranking: StateFlow<RankingResponse?> = _ranking
+
+
+    private var _user = MutableStateFlow(
+        User(
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            emptyList(),
+            "",
+            "",
+            "",
+            "",
+            emptyList()
+        )
+    )
+    var user: StateFlow<User> = _user
     private var emailError by mutableStateOf<String?>(null)
     private var passwordError by mutableStateOf<String?>(null)
     private var nameError by mutableStateOf<String?>(null)
@@ -70,24 +95,26 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     private var genderError by mutableStateOf<String?>(null)
     private var experienceLevelError by mutableStateOf<String?>(null)
 
-    private fun incrementLevelProgress(score: Int) {
+    private fun incrementLevelProgress() {
         val limit = 2000
-        val level = score/limit
-        val currentProgressLevel = score-(level * limit)
-        progressLevel = if (currentProgressLevel <= 2000) {
-            currentProgressLevel
-        }else{
-            0
-        }
-        sharedPreferences.edit().putString("level", level.toString()).apply()
-        sharedPreferences.edit().putString("score", progressLevel.toString()).apply()
+        val experience = _user.value.experienceLevel.toIntOrNull() ?: 0
+        val userLevel = (experience / limit)
+        val currentProgressLevel = experience - (userLevel * limit)
+        _user.value = _user.value.copy(
+            userLevel =  userLevel.toString(),
+            progressLevel = if(currentProgressLevel<=2000){
+                currentProgressLevel.toString()
+            }else{
+                "0"
+            }
+        )
     }
-
     private fun validateEmail(): String? {
         return when {
             email.isEmpty() -> "Este campo no puede estar vacío"
             !android.util.Patterns.EMAIL_ADDRESS.matcher(email)
                 .matches() -> "El formato de correo electrónico no es válido"
+
             else -> null
         }
     }
@@ -148,24 +175,27 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             else -> null
         }
     }
-
     private fun validatePassword(): String? {
         return when {
             oldPassword.isEmpty() -> "Este campo no puede estar vacío"
             newPassword.isEmpty() -> "Este campo no puede estar vacío"
             passwordConfirmation.isEmpty() -> "Este campo no puede estar vacío"
             else -> null
-    }}
+        }
+    }
 
     fun changeEmailValue(newValue: String) {
         email = newValue
     }
+
     fun changeOldPasswordValue(newValue: String) {
         oldPassword = newValue
     }
+
     fun changeNewPasswordValue(newValue: String) {
         newPassword = newValue
     }
+
     fun changePasswordConfirmationValue(newValue: String) {
         passwordConfirmation = newValue
     }
@@ -173,48 +203,63 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     private fun updatePasswordError(error: String?) {
         passwordError = error
     }
+
     fun obtenerPasswordError(): String? {
         return passwordError
     }
+
     private fun updateNameError(error: String?) {
         nameError = error
     }
+
     fun obtenerNameError(): String? {
         return nameError
-        }
+    }
+
     private fun updateLastnameError(error: String?) {
         lastnameError = error
     }
+
     fun obtenerLastnameError(): String? {
         return lastnameError
     }
+
     private fun updateAgeError(error: String?) {
         ageError = error
     }
+
     fun obtenerAgeError(): String? {
         return ageError
     }
+
     private fun updateHeightError(error: String?) {
         heightError = error
     }
+
     fun obtenerHeightError(): String? {
         return heightError
     }
+
     private fun updateWeightError(error: String?) {
         weightError = error
     }
+
     fun obtenerWeightError(): String? {
         return weightError
     }
+
     private fun updateGenderError(error: String?) {
         genderError = error
     }
+
     fun obtenerGenderError(): String? {
         return genderError
     }
+
     private fun updateExperienceLevelError(error: String?) {
         experienceLevelError = error
     }
+
     fun obtenerExperienceLevelError(): String? {
         return experienceLevelError
     }
@@ -222,6 +267,7 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     private fun updateUsernameError(error: String?) {
         usernameError = error
     }
+
     fun obtenerUsernameError(): String? {
         return usernameError
     }
@@ -229,11 +275,12 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     private fun updateEmailError(error: String?) {
         emailError = error
     }
+
     fun obtenerEmailError(): String? {
         return emailError
     }
 
-    fun validateUserSettings(): Boolean{
+    fun validateUserSettings(): Boolean {
         val nameValidationError = validateName()
         val lastnameValidationError = validateLastname()
         val usernameValidationError = validateUsername()
@@ -255,12 +302,13 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                 genderValidationError == null && experienceLevelValidationError == null
     }
 
-    fun validateAndUpdateEmail(): Boolean{
+    fun validateAndUpdateEmail(): Boolean {
         val emailValidationError = validateEmail()
         updateEmailError(emailValidationError)
         return emailValidationError == null
     }
-    fun validateAndUpdatePassword(): Boolean{
+
+    fun validateAndUpdatePassword(): Boolean {
         val passwordValidationError = validatePassword()
         updatePasswordError(passwordValidationError)
         return passwordValidationError == null
@@ -300,8 +348,10 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     }
 
     fun getUserSession(): User {
-        val sharedPreferences = getApplication<Application>().getSharedPreferences("user_session",
-            Context.MODE_PRIVATE)
+        val sharedPreferences = getApplication<Application>().getSharedPreferences(
+            "user_session",
+            Context.MODE_PRIVATE
+        )
         val userInjuriesString = sharedPreferences.getString("injuries", "[]")
         val userInjuriesList = userInjuriesString
             ?.removeSurrounding("[", "]")
@@ -325,7 +375,6 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             userLevel = sharedPreferences.getString("level", "")!!
         )
     }
-
     suspend fun isUserLoggedIn(): Boolean {
         return try {
             val sharedPreferences = getApplication<Application>().getSharedPreferences(
@@ -335,8 +384,7 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             if (sharedPreferences.getString("token", "")!!.isEmpty()) {
                 Log.d("isUserLoggedIn", "Token is empty")
                 return false
-            }
-            else {
+            } else {
                 val response =
                     apiService.validateToken("Bearer ${sharedPreferences.getString("token", "")}")
                 response.isSuccessful && (response.body()?.valid ?: false)
@@ -345,7 +393,6 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             false
         }
     }
-
     fun logoutUser() {
         val sharedPreferences = getApplication<Application>().getSharedPreferences(
             "user_session",
@@ -377,14 +424,16 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                     Log.d("DeleteAccount", "Delete account")
                     sharedPreferences.edit().clear().apply() // Limpiar aquí
                 } else {
-                    Log.e("DeleteAccount", "Delete account failed: ${response.errorBody()?.string()}")
+                    Log.e(
+                        "DeleteAccount",
+                        "Delete account failed: ${response.errorBody()?.string()}"
+                    )
                 }
             } catch (e: Exception) {
                 Log.e("DeleteAccount", "Error: ${e.localizedMessage}")
             }
         }
     }
-
     fun updateEmail(newEmail: String) {
         val sharedPreferences = getApplication<Application>().getSharedPreferences(
             "user_session",
@@ -392,7 +441,10 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         )
         viewModelScope.launch {
             try {
-                val response = apiService.updateEmail("Bearer ${getUserSession().token}", UpdateEmailRequest(newEmail))
+                val response = apiService.updateEmail(
+                    "Bearer ${getUserSession().token}",
+                    UpdateEmailRequest(newEmail)
+                )
                 Log.d("UpdateEmail", "Response: $email")
                 if (response.isSuccessful) {
                     Log.d("UpdateEmail", "Update email success: ${response.message()}")
@@ -410,12 +462,18 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     }
     fun updatePassword(oldPassword: String, newPassword: String, passwordConfirmation: String) {
         viewModelScope.launch {
-            val response = apiService.updatePassword("Bearer ${getUserSession().token}", UpdatePasswordRequest(oldPassword, newPassword, passwordConfirmation))
+            val response = apiService.updatePassword(
+                "Bearer ${getUserSession().token}",
+                UpdatePasswordRequest(oldPassword, newPassword, passwordConfirmation)
+            )
             try {
                 if (response.isSuccessful) {
                     Log.d("UpdatePassword", "Update password success: ${response.message()}")
                 } else {
-                    Log.e("UpdateEmail", "Update password failed: ${response.errorBody()?.string()}")
+                    Log.e(
+                        "UpdateEmail",
+                        "Update password failed: ${response.errorBody()?.string()}"
+                    )
                     Log.d("API Response", response.errorBody().toString())
                     Log.d("API Response", response.message())
                 }
@@ -428,8 +486,7 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         }
         cleanTextFields()
     }
-
-    fun getUserInformation(){
+    fun getUserInformation() {
         viewModelScope.launch {
             try {
                 val response = apiService.getAccountSettings("Bearer ${getUserSession().token}")
@@ -453,23 +510,25 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                         )
                     }
                 } else {
-                    Log.e("GetInformation", "Get information failed: ${response.errorBody()?.string()}")
+                    Log.e(
+                        "GetInformation",
+                        "Get information failed: ${response.errorBody()?.string()}"
+                    )
                 }
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.e("GetInformation", "Error: ${e.localizedMessage}")
-                }
+            }
         }
     }
-
     private suspend fun getImageProfile(): Bitmap? {
         return try {
-            val response = apiService.getIcon("Bearer ${getUserSession().token}",
+            val response = apiService.getIcon(
+                "Bearer ${getUserSession().token}",
                 getUserSession().iconNumber
             )
             if (response.isSuccessful) {
                 val responseBody = response.body()
-                responseBody?.byteStream()?.let {inputStream: InputStream? ->
+                responseBody?.byteStream()?.let { inputStream: InputStream? ->
                     BitmapFactory.decodeStream(inputStream) ?: run {
                         Log.e("GetIcon", "No se pudo decodificar la imagen")
                         null
@@ -484,10 +543,8 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             null
         }
     }
-
     private val _profileImage = MutableLiveData<Bitmap?>()
     val profileImage: LiveData<Bitmap?> = _profileImage
-
     fun fetchImageProfile() {
         viewModelScope.launch {
             val bitmap = getImageProfile()
@@ -499,44 +556,51 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
             }
         }
     }
-
-    fun updateAccount(){
+    fun updateAccount() {
         viewModelScope.launch {
-            val request = UserRequest(getUserSession().name, getUserSession().lastname,
-                getUserSession().age.toInt(), getUserSession().height.toFloat(), getUserSession().weight.toFloat(),
-                getUserSession().username, getUserSession().gender.toInt(), getUserSession().experienceLevel.toInt(),
-                getUserSession().injuries.map { it ?: 0 },getUserSession().routineType.toInt()
+            val request = UserRequest(
+                getUserSession().name,
+                getUserSession().lastname,
+                getUserSession().age.toInt(),
+                getUserSession().height.toFloat(),
+                getUserSession().weight.toFloat(),
+                getUserSession().username,
+                getUserSession().gender.toInt(),
+                getUserSession().experienceLevel.toInt(),
+                getUserSession().injuries.map { it ?: 0 },
+                getUserSession().routineType.toInt()
             )
             try {
                 val response = apiService.updateAccount("Bearer ${getUserSession().token}", request)
                 if (response.isSuccessful) {
                     Log.d("UpdateAccount", "Update account success: ${response.message()}")
                 } else {
-                    Log.e("UpdateAccount", "Update account failed: ${response.errorBody()?.string()}")
+                    Log.e(
+                        "UpdateAccount",
+                        "Update account failed: ${response.errorBody()?.string()}"
+                    )
                 }
-            }catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.e("UpdateAccount", "Error: ${e.localizedMessage}")
             }
         }
     }
-
-    fun updateIcon(iconNumber: String){
+    fun updateIcon(iconNumber: String) {
         val updateIconRequest = UpdateIconRequest(iconNumber)
         viewModelScope.launch {
             try {
-                val response = apiService.updateIcon("Bearer ${getUserSession().token}", updateIconRequest)
+                val response =
+                    apiService.updateIcon("Bearer ${getUserSession().token}", updateIconRequest)
                 if (response.isSuccessful) {
                     Log.d("UpdateIcon", "Update icon success: ${response.message()}")
                 } else {
                     Log.e("UpdateIcon", "Update icon failed: ${response.errorBody()?.string()}")
                 }
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.e("UpdateIcon", "Error: ${e.localizedMessage}")
             }
         }
     }
-
     fun getLevel() {
         viewModelScope.launch {
             try {
@@ -544,18 +608,21 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        incrementLevelProgress(body.score)
+                        val puntosExp = body.score
+                        _user.value.experienceLevel = puntosExp.toString()
+                        incrementLevelProgress()
+                        Log.d("GetLevel", "Level: $puntosExp")
                     }
                 } else {
                     Log.e("GetLevel", "Get level failed: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
                 Log.e("GetLevel", "Error: ${e.localizedMessage}")
+                Log.e("Este es el error.", "Este es el error.")
             }
         }
     }
-
-    fun getDatesWhenUserExercised(){
+    fun getDatesWhenUserExercised() {
         viewModelScope.launch {
             try {
                 val response = apiService.getDates("Bearer ${getUserSession().token}")
@@ -564,14 +631,51 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                     if (body != null) {
                         Log.d("GetDates", "Dates: $body")
                         val dateFormatter = DateTimeFormatter.ISO_DATE
-                        _exerciseDates.value = body.exercise_dates.map { LocalDate.parse(it, dateFormatter) }
+                        _exerciseDates.value =
+                            body.exercise_dates.map { LocalDate.parse(it, dateFormatter) }
                     }
-
                 } else {
                     Log.e("GetDates", "Get dates failed: ${response.errorBody()?.string()}")
                 }
-            }catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.e("GetDates", "Error: ${e.localizedMessage}")
+            }
+        }
+    }
+    fun getUserMedals() {
+        viewModelScope.launch {
+            try {
+                val response = apiService.getUserMedals("Bearer ${getUserSession().token}")
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        Log.d("GetMedals", "Medals: $body")
+                        _user.value.userMedals = body.userMedals
+                    }
+                } else {
+                    Log.e("GetMedals", "Get medals failed: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("GetMedals", "Error: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun showRanking(){
+        viewModelScope.launch {
+            try {
+                val response = apiService.getRanking("Bearer ${getUserSession().token}", 1,25)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        _ranking.value = body
+                        Log.d("GetRanking", "Ranking: $body")
+                    }
+                    } else {
+                    Log.e("GetRanking", "Get ranking failed: ${response.errorBody()?.string()}")
+                }
+            }catch (e: Exception) {
+                Log.e("GetRanking", "Error: ${e.localizedMessage}")
             }
         }
     }
@@ -581,9 +685,10 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         newPassword = ""
         passwordConfirmation = ""
     }
-
     init {
         getDatesWhenUserExercised()
+        getLevel()
+        getUserMedals()
     }
 }
 

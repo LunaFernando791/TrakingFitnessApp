@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.0"
+agp = "8.8.1"
 androidxJunit = "1.2.1"
 classes = "1.5.2"
 converterGson = "2.9.0"
@@ -22,6 +22,7 @@ rendering = "1.17.1"
 appcompat = "1.7.0"
 activity = "1.8.0"
 constraintlayout = "2.2.0"
+tasksVision = "0.10.3"
 
 [libraries]
 androidx-classes = { module = "androidx.test:classes", version.ref = "classes" }
@@ -52,6 +53,7 @@ rendering = { group = "com.google.ar.sceneform", name = "rendering", version.ref
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "tasksVision" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

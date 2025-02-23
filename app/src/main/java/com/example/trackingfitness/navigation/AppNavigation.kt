@@ -31,7 +31,9 @@ import com.example.trackingfitness.screens.StartScreen
 import com.example.trackingfitness.screens.ExerciseListScreen
 import com.example.trackingfitness.screens.FriendProfileScreen
 import com.example.trackingfitness.screens.FriendsScreen
+import com.example.trackingfitness.screens.MedalScreen
 import com.example.trackingfitness.screens.ProfileScreen
+import com.example.trackingfitness.screens.RankingScreen
 import com.example.trackingfitness.viewModel.FriendsViewModel
 import com.example.trackingfitness.tracking.activities.CameraXLivePreviewActivity
 import com.example.trackingfitness.tracking.activities.SettingsActivity
@@ -174,6 +176,9 @@ fun AppNavigation(){
                 )
             }
         }
+        composable(AppScreens.MedalsScreen.route) {
+            MedalScreen(navController = navController, userSessionManager = userSessionManager)
+        }
 
         composable(AppScreens.SettingsScreen.route) {
             val context = LocalContext.current
@@ -188,6 +193,9 @@ fun AppNavigation(){
                 val intent = Intent(context, CameraXLivePreviewActivity::class.java)
                 context.startActivity(intent)
             }
+        }
+        composable(AppScreens.RankingScreen.route) {
+            RankingScreen(navController = navController, userSessionManager = userSessionManager)
         }
     }
 }

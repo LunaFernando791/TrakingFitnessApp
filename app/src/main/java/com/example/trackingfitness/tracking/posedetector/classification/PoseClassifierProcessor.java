@@ -94,7 +94,7 @@ public class PoseClassifierProcessor {
     String predictedClass = getClassLabel(maxIndex);
     Log.d(TAG, "Clase predicha: " + predictedClass);
 
-    if (currentExerciseTransitions.values().contains(predictedClass)) {
+    if (currentExerciseTransitions.containsValue(predictedClass)) {
       lastState = currentState;
       currentState = predictedClass;
 

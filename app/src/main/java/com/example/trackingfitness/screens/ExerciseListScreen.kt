@@ -35,7 +35,6 @@ import androidx.navigation.NavController
 import com.example.trackingfitness.R
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.darkTheme
-import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.ui.theme.BlueGreen
 
 
