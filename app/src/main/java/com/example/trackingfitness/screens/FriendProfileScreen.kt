@@ -31,9 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -140,20 +143,20 @@ fun FriendProfileBodyContent(
                 )
                 DynamicInfoRow(
                     items = listOf(
-                        "Nombre" to friendProfile.value.name,
-                        "Apellido" to friendProfile.value.last_name,
+                        "Name" to friendProfile.value.name,
+                        "Lastname" to friendProfile.value.last_name,
                     )
                 )
                 DynamicInfoRow(
                     items = listOf(
-                        "Edad" to friendProfile.value.age,
-                        "Altura" to friendProfile.value.height,
-                        "Peso" to friendProfile.value.weight,
+                        "Age" to friendProfile.value.age,
+                        "Height" to friendProfile.value.height,
+                        "Weight" to friendProfile.value.weight,
                     )
                 )
                 DynamicInfoRow(
                     items = listOf(
-                        "Genero" to friendProfile.value.gender,
+                        "Gender" to friendProfile.value.gender,
                     )
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -194,18 +197,28 @@ fun MedalList(
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
+            style = TextStyle(
+                shadow = Shadow(
+                    color = Color.Gray,
+                    offset = Offset(4f, 4f),
+                    blurRadius = 8f
+                )
+            ),
         )
         Spacer(modifier = Modifier.height(20.dp))
-        // Divide la lista en grupos de 3
         medals.chunked(3).forEach { rowMedals ->
             Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.width(600.dp),
-                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+                    .padding(5.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 rowMedals.forEach { medal ->
                     Log.d("Medal", medal.showMedal())
-                    MedalCard(medalUrl = medal.showMedal(), onClick = {})
+                    MedalCard(
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(80.dp)
+                        ,medalUrl = medal.showMedal(), onClick = {})
 
                 }
             }
@@ -223,7 +236,7 @@ fun MedalList(
                 contentColor = Color.White
             )
         ) {
-            Text(text = "Eliminar amigo")
+            Text(text = "Delete friend")
         }
     }
 }

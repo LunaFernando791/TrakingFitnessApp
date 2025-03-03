@@ -395,7 +395,8 @@ fun FriendProfileCard(
                 shape = RectangleShape
             )
             .clickable {
-                navController.navigate("friendProfileScreen/${friend.username}")
+                if(isFriend)
+                    navController.navigate("friendProfileScreen/${friend.username}")
             }
     ) {
         Image(

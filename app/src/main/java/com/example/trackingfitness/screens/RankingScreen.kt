@@ -31,8 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -82,11 +86,16 @@ fun RankingBodyContent(
                 .padding(end = 275.dp)
         )
         Text(
-            text = "Global Ranking",
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier,
-            maxLines = 1
+            text = "GLOBAL RANKING",
+            style = TextStyle(
+                shadow = Shadow(
+                    color = Color.Gray,
+                    offset = Offset(4f, 4f),
+                    blurRadius = 8f
+                )
+            ),
+            fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+            modifier = Modifier.padding(top = 15.dp, start = 15.dp)
         )
         Spacer(
             modifier = Modifier
@@ -121,6 +130,8 @@ fun RankingList(ranking: RankingResponse) {
                 ambientColor = Color.Black,
                 spotColor = Color.Black
             )
+            .fillMaxWidth()
+            .height(700.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.secondary),
     ) {
@@ -141,15 +152,15 @@ fun RankingList(ranking: RankingResponse) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 if (posicion == ranking.userPosition) {
-                    Text(text = "Your position")
+                    Text(text = "You: ")
                 }
                 Text(text = posicion.toString())
-                val url = "http://192.168.1.13:8000" + user.icon_url
+                val url = "http://192.168.1.7:8000" + user.icon_url
                 Log.d("URL", url)
                 Image(
                     modifier = Modifier
-                        .height(70.dp)
-                        .width(70.dp)
+                        .height(50.dp)
+                        .width(50.dp)
                         .clip(RoundedCornerShape(100.dp)),
                     contentScale = ContentScale.Crop,
                     painter = rememberAsyncImagePainter(url),
@@ -165,20 +176,33 @@ fun RankingList(ranking: RankingResponse) {
                 }
             }
         }
+        Spacer(modifier = Modifier.height(5.dp))
         // Botón de "Siguiente"
         if (fin < ranking.topUsers.size) {
             Button(
                 onClick = { paginaActual += 1 },
                 modifier = Modifier
                     .align(Alignment.End) // Alinear el botón a la derecha
-                    .padding(top = 8.dp),
+                    .padding(horizontal = 8.dp)
+                    .height(30.dp),
                 colors =
                     androidx.compose.material3.ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.onSecondaryContainer,
                         contentColor = MaterialTheme.colorScheme.secondary
                     )
             ) {
-                Text("Siguiente")
+                Text(
+                    text = "Next",
+                    textAlign = TextAlign.Center,
+                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    style = TextStyle(
+                        shadow = Shadow(
+                            color = Color.Gray,
+                            offset = Offset(4f, 4f),
+                            blurRadius = 8f
+                        )
+                    )
+                )
             }
         }
         if (inicio > 0) {
@@ -186,13 +210,24 @@ fun RankingList(ranking: RankingResponse) {
                 onClick = { paginaActual -= 1 },
                 modifier = Modifier
                     .align(Alignment.End) // Alinear el botón a la derecha
-                    .padding(top = 8.dp),
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
+                    .height(30.dp),
                 colors = androidx.compose.material3.ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     contentColor = MaterialTheme.colorScheme.secondary
                 )
             ){
-                Text("Anterior")
+                Text(
+                    text = "Previous",
+                    textAlign = TextAlign.Center,
+                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    style = TextStyle(
+                        shadow = Shadow(
+                            color = Color.Gray,
+                            offset = Offset(4f, 4f),
+                            blurRadius = 8f
+                        )
+                    ))
             }
         }
     }

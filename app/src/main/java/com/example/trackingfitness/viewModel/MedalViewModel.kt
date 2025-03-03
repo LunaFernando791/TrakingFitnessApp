@@ -24,9 +24,9 @@ data class Medal(
     }
     fun showMedal(): String {
         return if (unLocked) {
-            "http://192.168.1.13:8000/storage/$image_path"
+            "http://192.168.1.7:8000/storage/$image_path"
         } else {
-            "http://192.168.1.13:8000/storage/medals/locked.png"
+            "http://192.168.1.7:8000/storage/medals/locked.png"
         }
     }
 }

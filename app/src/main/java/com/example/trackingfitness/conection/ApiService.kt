@@ -1,6 +1,7 @@
 package com.example.trackingfitness.conection
 
 import com.example.trackingfitness.viewModel.Medal
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -74,14 +75,39 @@ data class FriendInformation(
     val icon_url: String,
 )
 
+data class Exercise(
+    val id: Int,
+    val name: String,
+    val description: String,
+    val video_url: String,
+    val image_path: String,
+    val experience_level_id: Int,
+    val warning: String,
+)
+
+data class MyExercise(
+    val exercise_id: Int,
+    val status: String,
+    val exercise_name: String,
+    val image_path: String,
+    val description: String,
+)
+
+data class MyExerciseResponse(
+    val selectedExercises: List<MyExercise>,
+)
+data class Sets(
+    val name: String,
+    val reps: List<Int>,
+    val sets: List<Int>,
+)
+
 data class FriendRequest(
     val id: Int,
     val sender_id: Int,
     val sender_username: String,
     val icon_url: String,
 )
-
-
 data class RegisterResponse(
     val success: Boolean,
     val message: String
@@ -214,6 +240,29 @@ data class AllMedalResponse(
 data class UserMedalsResponse(
     val userMedals: List<Int>,
 )
+data class RoutineResponse(
+    val routineType: String,
+    val exercises: List<Exercise>,
+    val routineSets: Sets,
+    val exercisesList: List<Exercise>,
+    val creada: String,
+)
+
+data class ExerciseResponse(
+    val message: String,
+)
+
+data class ExerciseRequest(
+    val id: Int,
+    val sets: Int,
+    val reps: Int
+)
+data class CurrentExerciseResponse(
+    val exercise: Exercise,
+    val sets: Int,
+    val reps: Int,
+)
+
 
 interface UserService { // Interfaz para definir las operaciones del servicio.
 
@@ -338,6 +387,29 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
         @Query ("page") page: Int,
         @Query ("limit") limit: Int
     ): Response<RankingResponse>
+    @GET("/api/routine/create")
+    suspend fun createRoutine(
+        @Header("Authorization") token: String
+    ): Response<RoutineResponse>
+    //RUTA QUE CREA UNA RUTINA
+    @POST("/api/routine/save")
+    suspend fun saveRoutine(
+        @Header("Authorization") token: String,
+        @Body body: RequestBody
+    ): Response<ExerciseResponse>
+    //RUTA QUE OBTIENE LA RUTINA DEL USUARIO
+    @GET("/api/routine/show")
+    suspend fun getMyRoutine(
+        @Header("Authorization") token: String
+    ): Response<MyExerciseResponse>
+    //RUTA QUE OBTIENE LA RUTINA DEL USUARIO
+    @GET("/api/exercise/{id}")
+    suspend fun getMyExercises(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<CurrentExerciseResponse>
+    //Route to get one exercise in specific
+
 
 
     @POST("/api/auth/forget-password")

@@ -29,7 +29,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -65,7 +69,7 @@ fun BodyMedalContainer(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(
-                30.dp
+                20.dp
             )
     ) {
         medalList.value.forEach(
@@ -84,19 +88,24 @@ fun BodyMedalContainer(
             navController = navController,
             ruta = "homeScreen",
             modifier = Modifier
-                .padding(end = 275.dp)
+                .padding(end = 240.dp)
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "Your Medals",
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier,
-            maxLines = 1
+            text = "YOUR MEDALS",
+            style = TextStyle(
+                shadow = Shadow(
+                    color = Color.Gray,
+                    offset = Offset(4f, 4f),
+                    blurRadius = 8f
+                )
+            ),
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            modifier = Modifier.padding(top = 15.dp, start = 15.dp)
         )
         Spacer(modifier = Modifier.height(20.dp))
         LazyVerticalGrid(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             columns = GridCells.Fixed(3), // Definir 3 columnas
             modifier = Modifier
@@ -114,11 +123,11 @@ fun BodyMedalContainer(
 }
 
 @Composable
-fun MedalCard(medalUrl: String, onClick: () -> Unit){
+fun MedalCard(modifier: Modifier = Modifier,medalUrl: String, onClick: () -> Unit){
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .height(120.dp)
+        modifier = modifier
+            .height(110.dp)
             .width(120.dp)
             .clickable { onClick() },
     ) {

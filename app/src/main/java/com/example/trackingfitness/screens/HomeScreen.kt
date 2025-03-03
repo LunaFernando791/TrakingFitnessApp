@@ -1,5 +1,7 @@
 package com.example.trackingfitness.screens
 
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -103,7 +105,7 @@ fun BodyContent(
             .background(MaterialTheme.colorScheme.background)
             .padding(15.dp)
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Row (
             modifier = Modifier
                 .fillMaxWidth(),
@@ -114,7 +116,7 @@ fun BodyContent(
                 modifier = Modifier.padding(end = 30.dp),
                 text = "Welcome ${user.name}",
                 style = TextStyle(
-                    fontSize = 25.sp,
+                    fontSize = 20.sp,
                     shadow = Shadow(
                         color = Color.Gray,
                         offset = Offset(10f, 10f),
@@ -144,7 +146,7 @@ fun BodyContent(
             user.progressLevel.ifEmpty { "0" },
             modifier = Modifier.padding(0.dp)
         )
-        TopMenu(navController)
+        TopMenu(userSessionManager, navController)
         MyCalendar(datesWithExercise)
         Row(
             modifier = Modifier
@@ -160,6 +162,7 @@ fun BodyContent(
 // Menú de opciones
 @Composable
 fun TopMenu(
+    userSessionManager: UserSessionManager,
     navController: NavController
 ) {
     Row {
@@ -175,8 +178,8 @@ fun TopMenu(
                     spotColor = Color.Black
                 )
                 .clip(RoundedCornerShape(16.dp))
-                .width(170.dp)
-                .height(250.dp)
+                .width(130.dp)
+                .height(160.dp)
                 .background(
                     MaterialTheme.colorScheme.secondary,
                     shape = RectangleShape
@@ -184,30 +187,31 @@ fun TopMenu(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(10.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "Start your routine...",
                     style = TextStyle(
-                        fontSize = 30.sp,
                         shadow = Shadow(
                             color = Color.Gray,
                             offset = Offset(4f, 4f),
                             blurRadius = 8f
                         )
                     ),
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 )
+                Spacer(modifier = Modifier.height(10.dp))
                 Box(
                     modifier = Modifier
-                    .padding(vertical = 10.dp)
-                    .clip(RoundedCornerShape(35.dp))
+                    .padding(vertical = 5.dp)
+                    .clip(RoundedCornerShape(25.dp))
                     .background(MaterialTheme.colorScheme.onSecondaryContainer)
-                    .width(180.dp)
-                    .height(120.dp)
+                    .width(100.dp)
+                    .height(70.dp)
                     .clickable {
-                        navController.navigate("camera_screen")
+                            navController.navigate("exerciseListScreen")
                     },
                     contentAlignment = Alignment.Center) {
                     Icon(
@@ -215,7 +219,7 @@ fun TopMenu(
                         tint = MaterialTheme.colorScheme.secondary,
                         contentDescription = "profile Details",
                         modifier = Modifier
-                            .size(100.dp)
+                            .size(50.dp)
                     )
                 }
 
@@ -236,7 +240,7 @@ fun TopMenu(
                     )
                     .clip(RoundedCornerShape(16.dp))
                     .fillMaxWidth()
-                    .height(110.dp)
+                    .height(70.dp)
                     .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
                     .clickable { navController.navigate("rankingScreen") },
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -247,12 +251,19 @@ fun TopMenu(
                     tint = MaterialTheme.colorScheme.primary,
                     contentDescription = "profile Details",
                     modifier = Modifier
-                        .size(90.dp)
+                        .size(80.dp)
                         .padding(start = 30.dp, end = 10.dp)
                 )
                 Text(
                     text = "Monthly Ranking",
-                    fontSize = 20.sp,
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    style = TextStyle(
+                        shadow = Shadow(
+                            color = Color.Gray,
+                            offset = Offset(4f, 4f),
+                            blurRadius = 8f
+                        )
+                    )
                 )
             }
             Row(
@@ -267,7 +278,7 @@ fun TopMenu(
                     )
                     .clip(RoundedCornerShape(16.dp))
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(70.dp)
                     .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
                     .clickable { navController.navigate("profileScreen") },
                 horizontalArrangement = Arrangement.Center,
@@ -278,13 +289,20 @@ fun TopMenu(
                     tint = MaterialTheme.colorScheme.primary,
                     contentDescription = "profile Details",
                     modifier = Modifier
-                        .size(55.dp)
+                        .size(40.dp)
                 )
                 Text(
                     text = "Profile",
-                    fontSize = 25.sp,
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
                     modifier = Modifier
-                        .padding(start = 5.dp)
+                        .padding(start = 5.dp),
+                    style = TextStyle(
+                        shadow = Shadow(
+                            color = Color.Gray,
+                            offset = Offset(4f, 4f),
+                            blurRadius = 8f
+                        )
+                    )
                 )
             }
         }
@@ -306,19 +324,19 @@ fun MyCalendar(
             )
             .clip(RoundedCornerShape(16.dp))
             .fillMaxWidth()
-            .height(300.dp)
+            .height(260.dp)
             .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
     ) {
         Text(
             text = "DAY TO DAY...",
             style = TextStyle(
-                fontSize = 20.sp,
                 shadow = Shadow(
                     color = Color.Gray,
                     offset = Offset(4f, 4f),
                     blurRadius = 8f
                 )
             ),
+            fontSize = MaterialTheme.typography.titleMedium.fontSize,
             modifier = Modifier.padding(top = 15.dp, start = 15.dp)
         )
         ExerciseCalendar(datesWithExercise)
@@ -350,7 +368,7 @@ fun FriendRequest(
                 )
                 .clip(RoundedCornerShape(16.dp))
                 .width(200.dp)
-                .height(200.dp)
+                .height(180.dp)
                 .background(
                     MaterialTheme.colorScheme.secondary,
                     shape = RectangleShape
@@ -365,7 +383,14 @@ fun FriendRequest(
                 Text(
                     text = "MY FRIENDS",
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(15.dp)
+                    modifier = Modifier.fillMaxWidth().padding(15.dp),
+                    style = TextStyle(
+                        shadow = Shadow(
+                            color = Color.Gray,
+                            offset = Offset(4f, 4f),
+                            blurRadius = 8f
+                        )
+                    )
                 )
                 Image(
                     painter = painterResource(id = R.drawable.agregar_usuario),
@@ -413,7 +438,8 @@ fun ToggleSwitch(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
         colors = SwitchDefaults.colors(
             checkedThumbColor = BlueGreen,
             uncheckedThumbColor = Color.Gray
-        )
+        ),
+        modifier = Modifier.size(40.dp)
     )
 }
 
@@ -433,15 +459,22 @@ fun MedalBottom(
                 spotColor = Color.Black
             )
             .clip(RoundedCornerShape(16.dp))
-            .width(200.dp)
-            .height(200.dp)
+            .width(160.dp)
+            .height(180.dp)
             .background(
                 MaterialTheme.colorScheme.secondary,
                 shape = RectangleShape
             )
             .clickable { onClickAction() }
     ) {
-        Text(text = "MY MEDALS",modifier = Modifier.wrapContentSize())
+        Text(text = "MY MEDALS",modifier = Modifier.wrapContentSize(),
+            style = TextStyle(
+                shadow = Shadow(
+                    color = Color.Gray,
+                    offset = Offset(4f, 4f),
+                    blurRadius = 8f
+                )
+            ))
         Icon(imageVector = Icons.Default.Star, contentDescription = "medals",modifier = Modifier.wrapContentSize().size(60.dp))
     }
 }
@@ -474,23 +507,28 @@ fun MonthCalendar(
     // Cabecera para cambiar de mes
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(0.dp),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(onClick = { onMonthChange(month.minusMonths(1)) }) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Mes anterior")
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Mes anterior",
+                modifier = Modifier.size(30.dp))
         }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = month.month.name, style = MaterialTheme.typography.titleMedium)
-            Text(text = month.year.toString(), style = MaterialTheme.typography.titleMedium)
+            Text(text = month.month.name, style = MaterialTheme.typography.titleSmall)
+            Text(text = month.year.toString(), style = MaterialTheme.typography.titleSmall)
         }
         IconButton(onClick = { onMonthChange(month.plusMonths(1)) }) {
-            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Mes siguiente")
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = "Mes siguiente",
+                modifier = Modifier.size(30.dp))
         }
     }
 
@@ -516,7 +554,7 @@ fun MonthCalendar(
             ) {
                 Text(
                     text = "${day + 1}",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.labelMedium,
                     color = if (isExerciseDay) if (darkTheme.value) Color.Black else Color.White else Color.Gray
                 )
             }

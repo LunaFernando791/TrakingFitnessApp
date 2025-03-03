@@ -89,13 +89,13 @@ fun ExperienceBar(
             modifier = Modifier
                 .shadow(
                     8.dp,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(10.dp),
                     ambientColor = Color.Black,
                     spotColor = Color.Black
                 )
-                .clip(RoundedCornerShape(16.dp))
-                .width(50.dp)
-                .height(50.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .width(45.dp)
+                .height(45.dp)
                 .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
         ){
             Column(
@@ -103,8 +103,8 @@ fun ExperienceBar(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "Level")
-                Text(text = userLevel.ifEmpty { "0" })
+                Text(text = "Level", fontSize = 12.sp)
+                Text(text = userLevel.ifEmpty { "0" }, fontSize = 10.sp)
             }
         }
         Column{
@@ -120,7 +120,7 @@ fun ExperienceBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
-                    .height(10.dp)
+                    .height(8.dp)
                     .clip(RoundedCornerShape(40.dp))
                 ,
                 color = if (darkTheme.value) Color.White else MaterialTheme.colorScheme.onSecondaryContainer,
@@ -128,7 +128,10 @@ fun ExperienceBar(
             )
             Text(
                 text = "${percentageProgress}/2000",
-                modifier = Modifier.padding(horizontal = 10.dp)
+                modifier = Modifier.padding(horizontal = 5.dp),
+                style = TextStyle(
+                    fontSize = 12.sp
+                )
             )
         }
     }

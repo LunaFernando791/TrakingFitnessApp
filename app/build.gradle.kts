@@ -82,8 +82,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation ("androidx.constraintlayout:constraintlayout:2.2.0-alpha10")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation (libs.androidx.constraintlayout.v220alpha10)
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0")
     implementation("androidx.compose.material:material-icons-core:1.3.0")
     implementation("androidx.compose.material:material-icons-extended:1.3.0")
 

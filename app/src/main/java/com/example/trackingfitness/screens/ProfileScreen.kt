@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -89,8 +90,9 @@ fun BodyContentProfile(
             navController = navController,
             ruta = "homeScreen",
             modifier = Modifier
-            .padding(end = 275.dp))
+            .padding(end = 250.dp))
         Spacer(modifier = Modifier.height(20.dp))
+        val user by userSessionManager.user.collectAsState()
         LaunchedEffect(true) {
             userSessionManager.fetchImageProfile()
         }
@@ -192,7 +194,7 @@ fun BodyContentProfile(
         ){
             item {
                 Spacer(modifier = Modifier.height(30.dp))
-                ExperienceBar(userSessionManager.getUserSession().userLevel, userSessionManager.getUserSession().progressLevel, modifier = Modifier.padding(horizontal = 15.dp))
+                ExperienceBar(user.userLevel, user.progressLevel, modifier = Modifier.padding(horizontal = 15.dp))
                 DynamicInfoRow(
                     items = listOf(
                         "Name" to userSessionManager.getUserSession().name,
@@ -224,7 +226,7 @@ fun BodyContentProfile(
                 )
                 Row (
                     modifier = Modifier
-                        .padding(horizontal = 50.dp)
+                        .padding(horizontal = 30.dp)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
@@ -233,13 +235,13 @@ fun BodyContentProfile(
                     ) {
                         Text(
                             text = "Email",
-                            fontSize = 20.sp,
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                             modifier = Modifier.padding(top = 10.dp)
                         )
                         Text(
                             text = userSessionManager.getUserSession().email,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp,
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                             modifier = Modifier.padding(top = 10.dp)
                         )
                         Icon(
@@ -262,7 +264,7 @@ fun BodyContentProfile(
                     ) {
                         Text(
                             text = "Password",
-                            fontSize = 20.sp,
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                             modifier = Modifier.padding(top = 10.dp)
                         )
                         Icon(
@@ -298,7 +300,8 @@ fun BodyContentProfile(
                             contentColor = if (darkTheme.value) Color.White else Color.Black
                         )
                     ) {
-                        Text(text = "Edit profile")
+                        Text(text = "Edit profile",
+                            fontSize = MaterialTheme.typography.bodySmall.fontSize)
                     }
                 }
                 Row(
@@ -319,7 +322,8 @@ fun BodyContentProfile(
                             contentColor = Color.White
                         )
                     ) {
-                        Text(text = "Log out")
+                        Text(text = "Log out",
+                            fontSize = MaterialTheme.typography.bodySmall.fontSize)
                     }
                     Button(
                         modifier = Modifier
@@ -333,7 +337,8 @@ fun BodyContentProfile(
                             contentColor = Color.White
                         )
                     ) {
-                        Text(text = "Delete account")
+                        Text(text = "Delete",
+                            fontSize = MaterialTheme.typography.labelSmall.fontSize)
                     }
                 }
             }
@@ -349,7 +354,7 @@ fun DynamicInfoRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 15.dp),
+            .padding(vertical = 10.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -427,13 +432,13 @@ fun DynamicInfoRow(
                 }
                 Text(
                     text = label,
-                    fontSize = 20.sp,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                     modifier = Modifier
                 )
                 Text(
                     text = valueModifier,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(if (label == "Active injuries" || label == "Goal") 5.dp else 0.dp)

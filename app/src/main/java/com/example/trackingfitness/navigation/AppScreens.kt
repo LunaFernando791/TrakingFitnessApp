@@ -13,7 +13,7 @@ sealed class AppScreens(val route: String) {
     data object ExerciseListScreen : AppScreens("exerciseListScreen")
     data object ChangePassScreen : AppScreens("changePassScreen")
     data object ProfileScreen : AppScreens("profileScreen")
-    data object ExerciseCameraScreen : AppScreens("exerciseCameraScreen")
+    data object MyExercisesScreen : AppScreens("myExercisesScreen")
     data object EditPasswordScreen : AppScreens("editPasswordScreen")
     data object EditEmailScreen : AppScreens("editEmailScreen")
     data object EditProfileScreen : AppScreens("editProfileScreen")
@@ -22,6 +22,7 @@ sealed class AppScreens(val route: String) {
     data object FriendProfileScreen : AppScreens("friendProfileScreen/{username}")
     data object MedalsScreen : AppScreens("medalsScreen")
     data object RankingScreen : AppScreens("rankingScreen")
+    data object CameraScreen : AppScreens("cameraScreen/{id}") // Nueva ruta
     data object SettingsScreen : AppScreens("settings_screen") // Nueva ruta
     data object CameraXScreen : AppScreens("camera_screen") // Nueva ruta
 }

@@ -13,8 +13,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.trackingfitness.conection.Exercise
+import com.example.trackingfitness.conection.MyExerciseResponse
 import com.example.trackingfitness.conection.RankingResponse
 import com.example.trackingfitness.conection.RetrofitInstance
+import com.example.trackingfitness.conection.RoutineResponse
 import com.example.trackingfitness.conection.UpdateEmailRequest
 import com.example.trackingfitness.conection.UpdateIconRequest
 import com.example.trackingfitness.conection.UpdatePasswordRequest
@@ -23,9 +26,11 @@ import com.example.trackingfitness.conection.UserService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import okhttp3.RequestBody
 import java.io.InputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import androidx.compose.runtime.State
 
 data class User(
     val token: String,
@@ -44,6 +49,11 @@ data class User(
     var progressLevel: String,
     var userLevel: String,
     var userMedals: List<Int> = emptyList()
+)
+data class ShowExercise(
+    var exercise: Exercise,
+    var sets: Int,
+    var reps: Int
 )
 class UserSessionManager(application: Context) : AndroidViewModel(application as Application) {
     private val apiService: UserService = RetrofitInstance.api
@@ -676,6 +686,108 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                 }
             }catch (e: Exception) {
                 Log.e("GetRanking", "Error: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    private val _exercises = MutableStateFlow<RoutineResponse?>(null)
+    var exercises: StateFlow<RoutineResponse?> = _exercises
+    private val _rutineCreated = MutableStateFlow(false)
+    var rutineCreated: StateFlow<Boolean> = _rutineCreated
+
+
+    fun getExercises(){
+        viewModelScope.launch {
+            try {
+                val response = apiService.createRoutine("Bearer ${getUserSession().token}")
+                Log.d("GetExercises", "Response: ${response.body()?.creada}")
+                if( response.body()?.creada == "Rutina ya creada."){
+                    _rutineCreated.value = true
+                    _exercises.value = null
+                }
+                if (response.isSuccessful) {
+                        val body = response.body()
+                        _exercises.value = body
+
+                } else {
+                    Log.e("GetExercises", "Get exercises failed: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("GetExercises", "Error: ${e.localizedMessage}")
+            }
+        }
+    }
+    fun sendRoutine(requestBody: RequestBody, token: String){
+        viewModelScope.launch {
+            try {
+                val response = apiService.saveRoutine("Bearer $token", requestBody)
+                if (response.isSuccessful) {
+                    Log.d("SubmitRoutine", "Submit routine success: ${response.message()}")
+                } else {
+                    Log.e("SubmitRoutine", "Submit routine failed: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("SubmitRoutine", "Error: ${e.localizedMessage}")
+                Log.e("SubmitRoutine", "Error: ${e.stackTrace}")
+            }
+        }
+    }
+
+    private val _myExercises = MutableStateFlow<MyExerciseResponse?>(null)
+    var myExercises: StateFlow<MyExerciseResponse?> = _myExercises
+
+    fun getMyExercises(){
+        viewModelScope.launch {
+            try {
+                val response = apiService.getMyRoutine("Bearer ${getUserSession().token}")
+                Log.d("GetMyExercises", "Response: ${response.body()}")
+                Log.d("GetMyExercises", "Response body: ${response.body()}")
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    Log.d("GetMyExercises", "My exercises: $body")
+                    _myExercises.value = body
+                    Log.d("GetMyExercises", "My exercises: ${_myExercises.value!!.selectedExercises}")
+                }else{
+                    Log.e("GetMyExercises", "Get my exercises failed: ${response.errorBody()?.string()}")
+                }
+            }catch (e: Exception) {
+                Log.e("GetMyExercises", "Error: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    private val _currentExercise = mutableStateOf(ShowExercise(
+        exercise = Exercise(
+            id = 0,
+            name = "",
+            description = "",
+            video_url = "",
+            image_path = "",
+            experience_level_id = 0,
+            warning= "",
+        ),
+        sets = 0,
+        reps = 0
+    ))
+    val currentExercise: State<ShowExercise> = _currentExercise
+
+    fun showExercise(token: String, exerciseId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = apiService.getMyExercises("Bearer $token", exerciseId)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    Log.d("GetExercise", "Exercise: $body")
+                    if (body != null) {
+                        _currentExercise.value.exercise = body.exercise
+                        _currentExercise.value.sets = body.sets
+                        _currentExercise.value.reps = body.reps
+                    }
+                } else {
+                    Log.e("GetExercise", "Get exercise failed: ${response.errorBody()?.string()}")
+                }
+            }catch (e: Exception) {
+                Log.e("GetExercise", "Error: ${e.localizedMessage}")
             }
         }
     }

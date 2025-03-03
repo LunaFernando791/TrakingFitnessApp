@@ -1,11 +1,15 @@
 package com.example.trackingfitness.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,153 +17,550 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
-import com.example.trackingfitness.R
+import coil.compose.rememberAsyncImagePainter
 import com.example.trackingfitness.activity.BackButton
+import com.example.trackingfitness.conection.Exercise
+import com.example.trackingfitness.conection.Sets
 import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.ui.theme.BlueGreen
+import com.example.trackingfitness.ui.theme.BorderColor
+import com.example.trackingfitness.ui.theme.PositionColor
+import com.example.trackingfitness.viewModel.UserSessionManager
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 
 
 @Composable
 fun ExerciseListScreen(
+    userSession: UserSessionManager,
     navController: NavController
 ) {
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 100.dp)
-            .background(MaterialTheme.colorScheme.background),
-    ) {
-        val (scrollableContent, stickyButton) = createRefs()
-        // LazyColumn directly, no verticalScroll Modifier needed
-        LazyColumn(
-            modifier = Modifier
-                .constrainAs(scrollableContent) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(stickyButton.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
+    val userExercise = userSession.exercises.collectAsState()
+    val availableExercises = remember {
+        mutableStateOf(userExercise.value?.exercises ?: emptyList())
+    }
+    val myExercises = remember {
+        mutableStateOf(userExercise.value?.exercisesList ?: emptyList())
+    }
+    val sets = userExercise.value?.routineSets
+    val selectedSets = remember { mutableStateMapOf<Int, Int>() }
+    val selectedReps = remember { mutableStateMapOf<Int, Int>() }
+
+    LaunchedEffect(Unit) {
+        userSession.getExercises()
+    }
+
+    // Actualizar los estados locales cuando la respuesta cambia
+    LaunchedEffect(userExercise.value) {
+        userExercise.value?.let { response ->
+            availableExercises.value = response.exercises ?: emptyList()
+            myExercises.value = response.exercisesList ?: emptyList()
+
+            response.exercisesList?.forEach { exercise ->
+                selectedSets[exercise.id] = sets?.sets?.firstOrNull() ?: 3 // Valor por defecto
+                selectedReps[exercise.id] = sets?.reps?.firstOrNull() ?: 10
+            }
+        }
+    }
+    val rutineCreated = userSession.rutineCreated.collectAsState()
+        if (!rutineCreated.value) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(15.dp),
+                verticalArrangement = Arrangement.spacedBy(15.dp)
+            )
+            {
+                item {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    BackButton(
+                        navController = navController,
+                        ruta = "homeScreen",
+                        modifier = Modifier.padding(end = 250.dp)
+                    )
+                    userExercise.value?.let {
+                        Text(
+                            text = "Routine: ${it.routineType}",
+                            fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                            style = MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier.padding(10.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Text(
+                        text = "List of Exercises: ",
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.padding(10.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                    )
                 }
-                .padding(20.dp)
+                // Mostrar la lista de ejercicios actuales (tu rutina)
+                if (myExercises.value.isNotEmpty()) {
+                    items(myExercises.value) { exercise ->
+                        ExerciseCard(
+                            exercise = exercise,
+                            sets = sets,
+                            availableExercises = availableExercises.value,
+                            selectedSets = selectedSets[exercise.id] ?: 0,
+                            selectedReps = selectedReps[exercise.id] ?: 0,
+                            onSetsSelected = { newSets -> selectedSets[exercise.id] = newSets },
+                            onRepsSelected = { newReps -> selectedReps[exercise.id] = newReps },
+                            onExerciseSelected = { selected, current ->
+                                swapExercises(current, selected, availableExercises, myExercises)
+                            }
+                        )
+                    }
+                    item{
+                        var isSubmitting by remember { mutableStateOf(false) }
+                        val coroutineScope = rememberCoroutineScope()
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Button(
+                                onClick = {
+                                    isSubmitting = true
+                                    coroutineScope.launch {
+                                        submitRoutine(
+                                            userSession,
+                                            myExercises.value,
+                                            selectedSets,
+                                            selectedReps
+                                        )
+                                        isSubmitting = false
+                                        navController.navigate("myExercisesScreen")
+                                    }
+                                },
+                                enabled = !isSubmitting,
+                                modifier = Modifier
+                                    .width(150.dp)
+                                    .height(50.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (darkTheme.value) Color.White else BlueGreen
+                                )
+                            ) {
+                                if (isSubmitting) {
+                                    CircularProgressIndicator(
+                                        color = Color.White,
+                                        modifier = Modifier.size(30.dp)
+                                    )
+                                } else {
+                                    Text(text = "Submit",
+                                        color = if (darkTheme.value) Color.Black else Color.White)
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    item {
+                        Text(
+                            text = "No exercises added yet",
+                        )
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(50.dp)
+                        )
+                    }
+                }
+            }
+        }else{
+            Text(text = "Rutina ya creada")
+            navController.navigate("myExercisesScreen")
+        }
+
+}
+
+// -------------------
+// TARJETA DE EJERCICIO
+// -------------------
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ExerciseCard(
+    exercise: Exercise,
+    sets: Sets?,
+    availableExercises: List<Exercise>,
+    selectedSets: Int,
+    selectedReps: Int,
+    onSetsSelected: (Int) -> Unit,
+    onRepsSelected: (Int) -> Unit,
+    onExerciseSelected: (selectedExercise: Exercise, currentExercise: Exercise) -> Unit
+) {
+    val isVisible = remember { mutableStateOf(false) }
+    var setsExpanded by remember { mutableStateOf(false) }
+    var repsExpanded by remember { mutableStateOf(false) }
+    val uriHandler = LocalUriHandler.current
+    val setsOptions = sets?.sets ?: emptyList()
+    val repsOptions = sets?.reps ?: emptyList()
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .shadow(
+                10.dp,
+                shape = RoundedCornerShape(30.dp),
+                ambientColor = Color.Black,
+                spotColor = Color.Black
+            )
+            .clip(RoundedCornerShape(30.dp))
+            .background(MaterialTheme.colorScheme.secondary),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            item {
-                BackButton(
-                    navController = navController,
-                    ruta = "homeScreen",
+            val url = "http://192.168.1.7:8000/storage/${exercise.image_path}"
+            Image(
+                modifier = Modifier
+                    .size(150.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .border(
+                        width = 2.dp,
+                        color = MaterialTheme.colorScheme.tertiary,
+                        shape = RoundedCornerShape(20.dp),
+                    ),
+                painter = rememberAsyncImagePainter(url),
+                contentDescription = null,
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(5.dp),
+            ) {
+                Row(
                     modifier = Modifier
-                    .padding(end = 275.dp))
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = if (exercise.name.length > 10) exercise.name.substring(
+                            0,
+                            10
+                        ) + "..." else exercise.name,
+                        modifier = Modifier.padding(start = 20.dp),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Icon(
+                        imageVector = if (isVisible.value) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                        tint = if (darkTheme.value) Color.White else Color.Black,
+                        contentDescription = "toggle details",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(start = 10.dp)
+                            .clickable { isVisible.value = !isVisible.value }
+                    )
+                }
                 Text(
-                    text = "Lista de ejercicios",
-                    fontSize = 35.sp,
-                    style = MaterialTheme.typography.labelLarge,
+                    text = if(exercise.warning.isNullOrEmpty()) "" else exercise.warning.toString(),
+                    modifier = Modifier.padding(end = 20.dp),
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontSize = MaterialTheme.typography.bodySmall.fontSize
+                )
+                Column(
                     modifier = Modifier
-                        .padding(bottom = 20.dp),
-                    color = MaterialTheme.colorScheme.primary,
+                        .fillMaxWidth()
+                        .height(100.dp),
+                ) {
+                    ExposedDropdownMenuBox(
+                        expanded = setsExpanded,
+                        onExpandedChange = { setsExpanded = it }, // Corrección aquí
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(50.dp))
+                            .background(
+                                if (darkTheme.value) Color.White else BorderColor,
+                                shape = RoundedCornerShape(50.dp)
+                            )
+                    ) {
+                        TextField(
+                            value = selectedSets.toString(),
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Sets",
+                                fontSize = 10.sp,
+                                color = if (darkTheme.value) Color.Black else Color.White)},
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = setsExpanded) },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .height(45.dp)
+                                .clip(RoundedCornerShape(50.dp)),
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = if (darkTheme.value) Color.Black else Color.White,
+                                unfocusedTextColor = if (darkTheme.value) Color.Black else Color.White,
+                                focusedContainerColor = if (darkTheme.value) PositionColor else BorderColor,
+                                unfocusedContainerColor = if (darkTheme.value) Color.White else PositionColor,
+                                disabledContainerColor = MaterialTheme.colorScheme.primary,
+                                focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                                unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                                disabledIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                                focusedLabelColor = if (darkTheme.value) Color.Black else Color.White,
+                                unfocusedLabelColor = if (darkTheme.value) Color.Black else Color.White,
+                            ),
+                            textStyle = TextStyle(fontSize = 10.sp),
+                        )
+                        ExposedDropdownMenu(
+                            expanded = setsExpanded,
+                            onDismissRequest = { setsExpanded = false },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .background(if (darkTheme.value) Color.White else BorderColor),
+                        ) {
+                            setsOptions.forEach { option ->
+                                DropdownMenuItem(
+                                    text = { Text(option.toString(),
+                                        color = if (darkTheme.value) Color.Black else Color.White) },
+                                    onClick = {
+                                        onSetsSelected(option)
+                                        setsExpanded = false
+                                    },
+                                    modifier = Modifier
+                                        .background(if (darkTheme.value) Color.White else BorderColor, shape = RoundedCornerShape(50.dp))
+                                        .padding(10.dp)
+                                        .clip(RoundedCornerShape(50.dp))
+                                )
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    // Dropdown para Reps
+                    ExposedDropdownMenuBox(
+                        expanded = repsExpanded,
+                        onExpandedChange = { repsExpanded = it } // Corrección aquí
+                    ) {
+                        TextField(
+                            value = selectedReps.toString(),
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Reps",
+                                fontSize = 10.sp,
+                                color = if (darkTheme.value) Color.Black else Color.White) },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = repsExpanded) },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .height(45.dp)
+                                .clip(RoundedCornerShape(50.dp)),
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = if (darkTheme.value) Color.Black else Color.White,
+                                unfocusedTextColor = if (darkTheme.value) Color.Black else Color.White,
+                                focusedContainerColor = if (darkTheme.value) PositionColor else BorderColor,
+                                unfocusedContainerColor = if (darkTheme.value) Color.White else PositionColor,
+                                disabledContainerColor = MaterialTheme.colorScheme.primary,
+                                focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                                unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                                disabledIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                                focusedLabelColor = if (darkTheme.value) Color.Black else Color.White,
+                                unfocusedLabelColor = if (darkTheme.value) Color.Black else Color.White,
+                            ),
+                            textStyle = TextStyle(fontSize = 10.sp),
+                        )
+                        ExposedDropdownMenu(
+                            expanded = repsExpanded,
+                            onDismissRequest = { repsExpanded = false },
+                            modifier = Modifier
+                                .background(if (darkTheme.value) Color.White else BorderColor)
+                        ) {
+                            repsOptions.forEach { option ->
+                                DropdownMenuItem(
+                                    text = { Text(option.toString(),
+                                        color = if (darkTheme.value) Color.Black else Color.White) },
+                                    onClick = {
+                                        onRepsSelected(option)
+                                        repsExpanded = false
+                                    },
+                                    modifier = Modifier
+                                        .background(if (darkTheme.value) Color.White else BorderColor, shape = RoundedCornerShape(50.dp))
+                                        .padding(10.dp)
+                                        .clip(RoundedCornerShape(50.dp))
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (isVisible.value) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("Description: ") }
+                    append(exercise.description ?: "")
+                }
+            )
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("Watch the video example ") }
+                },
+                modifier = Modifier
+                    .clickable { uriHandler.openUri(exercise.video_url ?: "") }
+                    .clip(RoundedCornerShape(50.dp))
+                    .background(MaterialTheme.colorScheme.secondary)
+                    .padding(5.dp),
+                textAlign = TextAlign.Center
+            )
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("Change your exercise: ") }
+                }
+            )
+            // Mostrar los ejercicios disponibles para cambiar (lista de availableExercises)
+            availableExercises.forEach { ex ->
+                ChangeExerciseCards(
+                    exercise = ex,
+                    onExerciseSelected = { selectedExercise ->
+                        onExerciseSelected(selectedExercise, exercise)
+                    }
                 )
             }
-            // Add your list of exercises
-            items(10) {
-                ExerciseCard(i = it)
-            }
-        }
-        // Sticky button at the bottom
-        Button(
-            onClick = {
-                navController.navigate("exerciseCameraScreen")
-            },
-            modifier = Modifier
-                .width(120.dp)
-                .height(120.dp)
-                .constrainAs(stickyButton) {
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end)
-                }
-                .padding(15.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = if (darkTheme.value) Color.White else BlueGreen,
-            ),
-            border = BorderStroke(
-                width = 2.dp,
-                color = MaterialTheme.colorScheme.tertiary
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Default.PlayArrow,
-                tint = if (darkTheme.value) Color.Black else Color.White,
-                contentDescription = "play icon",
-                modifier = Modifier
-                    .size(50.dp)
-            )
         }
     }
 }
-
-//Preview of the screen Exercises
-@Preview(showBackground = true)
+// ----------------------------
+// COMPONENTE PARA CAMBIAR EJERCICIOS
+// ----------------------------
 @Composable
-fun ExerciseScreenPreview() {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 50.dp),
-        color = Color.White
-    ) {
-        //ExerciseScreen()
-    }
-}
-
-@Composable
-fun ExerciseCard(i: Int) {
-    Box(
+fun ChangeExerciseCards(
+    exercise: Exercise,
+    onExerciseSelected: (Exercise) -> Unit
+) {
+    val url = "http://192.168.1.7:8000/storage/${exercise.image_path}"
+    Row(
         modifier = Modifier
             .border(
-                width = 5.dp,
-                color = MaterialTheme.colorScheme.background,
-                shape = RoundedCornerShape(16.dp)
+                width = 2.dp,
+                color = MaterialTheme.colorScheme.tertiary,
+                shape = RoundedCornerShape(20.dp)
             )
-            .clip(RoundedCornerShape(16.dp)) // Asegura que el contenido quede dentro de la forma redondeada
-            .background(MaterialTheme.colorScheme.secondary)
-            .padding(16.dp)
-    ){
-        Row (
+            .padding(10.dp)
+            .clickable { onExerciseSelected(exercise) },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Image(
             modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-        ){
-            val img = painterResource(R.drawable.playicon)
-            Text(text = "Ejercicio $i",
-                color = MaterialTheme.colorScheme.primary)
-            Text(text = "Descripción",
-                modifier = Modifier
-                    .padding(start = 20.dp),
-                color = MaterialTheme.colorScheme.primary
-            )
-            Image(
-                painter = img,
-                contentDescription = "play",
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .padding(10.dp)
-            )
-        }
+                .size(80.dp)
+                .clip(RoundedCornerShape(20.dp)),
+            painter = rememberAsyncImagePainter(url),
+            contentDescription = null,
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop
+        )
+        Text(
+            text = exercise.name,
+            modifier = Modifier.padding(start = 20.dp),
+            color = MaterialTheme.colorScheme.primary
+        )
     }
+}
+
+// ----------------------------
+// FUNCIÓN QUE REALIZA EL INTERCAMBIO (SWAP) DE EJERCICIOS
+// ----------------------------
+fun swapExercises(
+    currentExercise: Exercise,
+    selectedExercise: Exercise,
+    availableExercises: MutableState<List<Exercise>>,
+    myExercises: MutableState<List<Exercise>>
+) {
+    val availList = availableExercises.value.toMutableList()
+    val myList = myExercises.value.toMutableList()
+    if (availList.contains(selectedExercise) && myList.contains(currentExercise)) {
+        val index = myList.indexOf(currentExercise)
+        // Se remueve el ejercicio seleccionado de la lista de disponibles
+        availList.remove(selectedExercise)
+        // Se remueve el ejercicio actual de tu rutina
+        myList.remove(currentExercise)
+        // Se intercambian: el seleccionado se agrega a tu rutina y el actual se vuelve a agregar a los disponibles
+        myList.add(index,selectedExercise)
+        availList.add(currentExercise)
+        availableExercises.value = availList
+        myExercises.value = myList
+    }
+}
+
+
+fun submitRoutine(
+    userSession: UserSessionManager,
+    myExercises: List<Exercise>,
+    selectedSets: Map<Int, Int>,
+    selectedReps: Map<Int, Int>
+) {
+    val jsonArray = JsonArray()
+
+    myExercises.forEachIndexed { index, exercise ->
+        val order = index + 1
+        val exerciseDetails = JsonObject().apply {
+            addProperty("id", exercise.id)
+            addProperty("sets", selectedSets[exercise.id] ?: 0) // Manejo de nulos
+            addProperty("reps", selectedReps[exercise.id] ?: 0)
+        }
+
+        val exerciseEntry = JsonArray().apply {
+            add(order)
+            add(exerciseDetails)
+        }
+        jsonArray.add(exerciseEntry)
+    }
+
+    val jsonBody = JsonObject().apply {
+        add("selected_exercises", jsonArray)
+    }.toString()
+    val requestBody = jsonBody.toRequestBody("application/json".toMediaTypeOrNull())
+    Log.d("JSON BODY", "JSON BODY: $jsonBody")
+    userSession.sendRoutine(requestBody, userSession.getUserSession().token)
 }

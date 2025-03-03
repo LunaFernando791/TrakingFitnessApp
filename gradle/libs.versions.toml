@@ -2,6 +2,7 @@
 agp = "8.8.1"
 androidxJunit = "1.2.1"
 classes = "1.5.2"
+constraintlayoutVersion = "2.2.0-alpha10"
 converterGson = "2.9.0"
 featherIcons = "4.29.0>"
 kotlin = "1.9.0"
@@ -26,6 +27,7 @@ tasksVision = "0.10.3"
 
 [libraries]
 androidx-classes = { module = "androidx.test:classes", version.ref = "classes" }
+androidx-constraintlayout-v220alpha10 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-junit-v121 = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }

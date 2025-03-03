@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.trackingfitness.screens.CameraScreen
 import com.example.trackingfitness.screens.ChangePassScreen
 import com.example.trackingfitness.screens.EditEmailScreen
 import com.example.trackingfitness.screens.EditPasswordScreen
@@ -32,6 +33,7 @@ import com.example.trackingfitness.screens.ExerciseListScreen
 import com.example.trackingfitness.screens.FriendProfileScreen
 import com.example.trackingfitness.screens.FriendsScreen
 import com.example.trackingfitness.screens.MedalScreen
+import com.example.trackingfitness.screens.MyExercisesScreen
 import com.example.trackingfitness.screens.ProfileScreen
 import com.example.trackingfitness.screens.RankingScreen
 import com.example.trackingfitness.viewModel.FriendsViewModel
@@ -112,7 +114,10 @@ fun AppNavigation(){
             )
         }
         composable(AppScreens.ExerciseListScreen.route) {
-            ExerciseListScreen(navController = navController)
+            ExerciseListScreen(
+                userSession = userSessionManager,
+                navController = navController
+            )
         }
         composable(AppScreens.ChangePassScreen.route) {
             ChangePassScreen(
@@ -126,8 +131,11 @@ fun AppNavigation(){
                 userSession = userSessionManager
             )
         }
-        composable(AppScreens.ExerciseCameraScreen.route) {
-        // TRACKING
+        composable(AppScreens.MyExercisesScreen.route) {
+            MyExercisesScreen(
+                userSessionManager = userSessionManager,
+                navController = navController
+            )
         }
         composable(AppScreens.EditProfileScreen.route) {
             EditProfileScreen(
@@ -179,7 +187,6 @@ fun AppNavigation(){
         composable(AppScreens.MedalsScreen.route) {
             MedalScreen(navController = navController, userSessionManager = userSessionManager)
         }
-
         composable(AppScreens.SettingsScreen.route) {
             val context = LocalContext.current
             LaunchedEffect(Unit) {
@@ -196,6 +203,19 @@ fun AppNavigation(){
         }
         composable(AppScreens.RankingScreen.route) {
             RankingScreen(navController = navController, userSessionManager = userSessionManager)
+        }
+        composable( // --> RUTA PARA LA FUNCIÓN DEL TRACKEO
+            AppScreens.CameraScreen.route,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val idExercise = backStackEntry.arguments?.getInt("id")
+            if (idExercise != null) {
+                CameraScreen(
+                    idExercise = idExercise,
+                    navController = navController,
+                    userSessionManager = userSessionManager
+                )
+            }
         }
     }
 }
