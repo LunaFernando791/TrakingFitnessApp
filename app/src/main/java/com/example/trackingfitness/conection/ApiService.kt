@@ -58,7 +58,6 @@ data class UserTrainingInformation(
     val user_id: Int,
     val routine_type_id: Int,
     val experience_level_id: Int,
-
 )
 
 data class UserRanking(
@@ -95,6 +94,7 @@ data class MyExercise(
 
 data class MyExerciseResponse(
     val selectedExercises: List<MyExercise>,
+    val completed : String,
 )
 data class Sets(
     val name: String,
@@ -245,7 +245,8 @@ data class RoutineResponse(
     val exercises: List<Exercise>,
     val routineSets: Sets,
     val exercisesList: List<Exercise>,
-    val message: String,
+    val created: String,
+    val completed: String,
 )
 
 data class ExerciseResponse(
@@ -413,7 +414,6 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
     suspend fun continueRoutine(
         @Header("Authorization") token: String
     ): Response<MyExerciseResponse>
-
 
 
     @POST("/api/auth/forget-password")

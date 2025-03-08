@@ -113,6 +113,7 @@ fun ExerciseListScreen(
     }
 
     val rutineCreated = userSession.rutineCreated.collectAsState()
+    val rutineCompleted = userSession.rutineCompleted.collectAsState()
     if (!rutineCreated.value) {
         LazyColumn(
             modifier = Modifier
@@ -127,23 +128,34 @@ fun ExerciseListScreen(
                     ruta = "homeScreen",
                     modifier = Modifier.padding(end = 250.dp)
                 )
-                userExercise.value?.let {
+                if (rutineCompleted.value){
                     Text(
-                        text = "Routine: ${it.routineType}",
+                        text = "Routine completed",
                         fontSize = MaterialTheme.typography.headlineSmall.fontSize,
                         style = MaterialTheme.typography.headlineLarge,
                         modifier = Modifier.padding(10.dp),
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold
                     )
+                }else {
+                    userExercise.value?.let {
+                        Text(
+                            text = "Routine: ${it.routineType}",
+                            fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                            style = MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier.padding(10.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Text(
+                        text = "List of Exercises: ",
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.padding(10.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                    )
                 }
-                Text(
-                    text = "List of Exercises: ",
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    style = MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier.padding(10.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                )
             }
             // Mostrar la lista de ejercicios actuales (tu rutina)
             if (myExercises.value.isNotEmpty()) {
@@ -205,18 +217,25 @@ fun ExerciseListScreen(
                 }
             } else {
                 item {
-                    Text(
-                        text = "No exercises added yet",
-                    )
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(50.dp)
-                    )
+                    if(rutineCreated.value) {
+                        Text(
+                            text = "No exercises added yet",
+                        )
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(50.dp)
+                        )
+                    }
+                    if(rutineCompleted.value) {
+                        Text(
+                            text = "Congratulations, you have completed your routine",
+                        )
+                    }
                 }
             }
         }
-    }else{
-        Text(text = "Rutina ya creada")
+    }
+    else{
         navController.navigate("myExercisesScreen")
     }
 

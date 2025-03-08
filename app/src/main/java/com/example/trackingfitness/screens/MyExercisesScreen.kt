@@ -80,7 +80,7 @@ fun ExercisesBodyContent(
     navController: NavController
 ) {
     val myExercisesState by userSessionManager.myExercises.collectAsState()
-
+    val routineCompleted by userSessionManager.routineCompleted.collectAsState()
 
     LaunchedEffect(Unit) {
         userSessionManager.getMyExercises()
@@ -95,35 +95,38 @@ fun ExercisesBodyContent(
     )
 
     {
-
         item {
             Spacer(modifier = Modifier.height(40.dp))
             Text("My Exercises", style = MaterialTheme.typography.headlineMedium)
         }
-        when {
-            // Estado de carga inicial
-            myExercisesState == null -> {
-                item {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(50.dp),
-                        color = MaterialTheme.colorScheme.primary
-                    )
+        if(!routineCompleted) {
+            when {
+                // Estado de carga inicial
+                myExercisesState == null -> {
+                    item {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(50.dp),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+                // Lista vacía
+                myExercisesState?.selectedExercises.isNullOrEmpty() -> {
+                    item {
+                        Text("No exercises added yet")
+                    }
+                }
+                // Datos cargados
+                else -> {
+                    items(myExercisesState!!.selectedExercises) { exercise ->
+                        if (exercise.status != "completado")
+                            ExerciseItem(myExercise = exercise, navController = navController)
+                    }
                 }
             }
-            // Lista vacía
-            myExercisesState?.selectedExercises.isNullOrEmpty() -> {
-
-                item {
-                    Text("No exercises added yet")
-                }
-            }
-            // Datos cargados
-            else -> {
-
-                items(myExercisesState!!.selectedExercises) { exercise ->
-                    if (exercise.status != "completado")
-                        ExerciseItem(myExercise = exercise, navController = navController)
-                }
+        }else{
+            item {
+                Text("Congratulations! You have completed your routine")
             }
         }
     }

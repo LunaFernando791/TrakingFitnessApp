@@ -694,15 +694,20 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     var exercises: StateFlow<RoutineResponse?> = _exercises
     private val _rutineCreated = MutableStateFlow(false)
     var rutineCreated: StateFlow<Boolean> = _rutineCreated
+    private val _rutineCompleted = MutableStateFlow(false)
+    var rutineCompleted: StateFlow<Boolean> = _rutineCompleted
 
 
     fun getExercises(){
         viewModelScope.launch {
             try {
                 val response = apiService.createRoutine("Bearer ${getUserSession().token}")
-                Log.d("GetExercises", "Response: ${response.body()?.message}")
-//                Log.d("prueba2", getUserSession().token)
-                if( response.body()?.message == "The routine has already been created."){
+                if (response.body()?.completed == "Rutina completada."){
+                    Log.d("GetExercises", "Rutina completada")
+                    _rutineCompleted.value = true
+                    _exercises.value = null
+                }
+                if( response.body()?.created == "Rutina ya creada."){
                     _rutineCreated.value = true
                     _exercises.value = null
                 }
@@ -736,18 +741,19 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
 
     private val _myExercises = MutableStateFlow<MyExerciseResponse?>(null)
     var myExercises: StateFlow<MyExerciseResponse?> = _myExercises
+    private val _routineCompleted = MutableStateFlow(false)
+    var routineCompleted: StateFlow<Boolean> = _routineCompleted
 
     fun getMyExercises(){
         viewModelScope.launch {
             try {
                 val response = apiService.getMyRoutine("Bearer ${getUserSession().token}")
-                Log.d("GetMyExercises", "Response: ${response.body()}")
-                Log.d("GetMyExercises", "Response body: ${response.body()}")
                 if (response.isSuccessful) {
                     val body = response.body()
-                    Log.d("GetMyExercises", "My exercises: $body")
                     _myExercises.value = body
-                    Log.d("GetMyExercises", "My exercises: ${_myExercises.value!!.selectedExercises}")
+                    if(body?.completed == "Rutina completada."){
+                        _routineCompleted.value = true
+                    }
                 }else{
                     Log.e("GetMyExercises", "Get my exercises failed: ${response.errorBody()?.string()}")
                 }
@@ -792,6 +798,19 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                 }
             }catch (e: Exception) {
                 Log.e("GetExercise", "Error: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun updateExerciseState(token: String) {
+        viewModelScope.launch {
+            try {
+                val response = apiService.continueRoutine("Bearer $token")
+                if (response.isSuccessful) {
+                    Log.d("UpdateExerciseState", "Update exercise state success: ${response.message()}")
+                }
+            }catch (e: Exception) {
+                Log.e("UpdateExerciseState", "Error: ${e.localizedMessage}")
             }
         }
     }

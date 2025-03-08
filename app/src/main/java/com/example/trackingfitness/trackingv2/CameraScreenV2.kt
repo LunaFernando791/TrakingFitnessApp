@@ -143,6 +143,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             val btnRotateCamera = view.findViewById<Button>(R.id.btnRotateCamera)
             val btnPauseRoutine = view.findViewById<Button>(R.id.btnPauseRoutine)
             val btnNextExercise = view.findViewById<Button>(R.id.btnNextExercise)
+            val token = intent.getStringExtra("USER_TOKEN") ?: ""
 
             // Acciones de los botones mi fercho
             btnSwitchCamera.setOnClickListener {
@@ -164,9 +165,15 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             }
             btnNextExercise.setOnClickListener {
                 // Función para avanzar al siguiente ejercicio
-
+                userSessionManager?.updateExerciseState(token)
+                val intent = Intent().apply {
+                    putExtra("navigateTo", "myExercisesScreen")
+                }
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // 🔥 Borra la pila de actividades
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+                bottomSheetDialog.dismiss()
             }
-
             bottomSheetDialog.show()
         }
     }

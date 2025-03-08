@@ -14,3 +14,64 @@
 .cxx
 local.properties
 *.apk
+# Archivos generados por Gradle
+.gradle/
+.idea/
+build/
+app/build/
+*/build/
+
+# Archivos específicos de Android Studio
+*.iml
+*.ipr
+*.iws
+.DS_Store
+*.swp
+*.swo
+
+# Archivos de configuración local
+local.properties
+
+# Archivos generados por el compilador de Kotlin
+*.kotlin_module
+
+# Archivos de caché y temporales
+*.log
+*.lock
+*.probe
+*.tmp
+*.cache
+
+# Archivos generados por el sistema operativo
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Archivos de salida de compilación
+*.apk
+*.ap_
+*.dex
+*.class
+
+# Archivos de recursos generados
+*.flat
+*.zip
+*.aar
+*.jar
+
+# Archivos de configuración de usuario
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/vcs.xml
+.idea/compiler.xml
+.idea/misc.xml
+.idea/gradle.xml
+.idea/runConfigurations/
+.idea/shelf/
+
+# Archivos de dependencias de Gradle
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
