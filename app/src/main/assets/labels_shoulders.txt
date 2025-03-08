@@ -1,0 +1,4 @@
+lateral_raise_end
+lateral_raise_start
+shoulder_press_end
+shoulder_press_start
