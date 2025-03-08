@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.trackingfitness"
-        minSdk = 31
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -91,18 +91,32 @@ dependencies {
     // TensorFlow Lite
     implementation("org.tensorflow:tensorflow-lite:2.13.0")
 
-    // ML Kit Pose Detection
-    implementation("com.google.mlkit:pose-detection:18.0.0-beta5")
-    implementation("com.google.mlkit:pose-detection-accurate:18.0.0-beta5")
-    implementation("com.google.mlkit:camera:16.0.0-beta3")
+    // Dependencias actuales del tracking
+    val camerax_version = "1.1.0-beta01"
+    implementation("androidx.camera:camera-core:${camerax_version}")
+    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-video:${camerax_version}")
+    implementation("androidx.camera:camera-view:${camerax_version}")
+    implementation("androidx.camera:camera-extensions:${camerax_version}")
 
-    // CameraX
-    implementation("androidx.camera:camera-camera2:1.3.0")
-    implementation("androidx.camera:camera-lifecycle:1.3.0")
-    implementation("androidx.camera:camera-view:1.3.0")
-    implementation("androidx.preference:preference:1.2.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
+
+    implementation("com.google.mediapipe:tasks-vision:0.10.1")
+    implementation("com.google.mediapipe:tasks-core:0.10.1")
+
+    // ML Kit Pose Detection
+//    implementation("com.google.mlkit:pose-detection:18.0.0-beta5")
+//    implementation("com.google.mlkit:pose-detection-accurate:18.0.0-beta5")
+//    implementation("com.google.mlkit:camera:16.0.0-beta3")
+//
+//    // CameraX
+//    implementation("androidx.camera:camera-camera2:1.3.0")
+//    implementation("androidx.camera:camera-lifecycle:1.3.0")
+//    implementation("androidx.camera:camera-view:1.3.0")
+//    implementation("androidx.preference:preference:1.2.1")
 
     //Mediapipe
     // Mediapipe
-    implementation("com.google.mediapipe:tasks-vision:0.10.14")
+//    implementation("com.google.mediapipe:tasks-vision:0.10.14")
 }

@@ -25,32 +25,32 @@ fun CameraScreen(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colors.background)
     ) {
-        CameraScreenBodyContent(
-            idExercise = idExercise,
-            navController = navController,
-            userSessionManager = userSessionManager
-        )
+//        CameraScreenBodyContent(
+//            idExercise = idExercise,
+//            navController = navController,
+//            userSessionManager = userSessionManager
+//        )
     }
 }
 
 // PANTALLA DE LA CÁMARA -- Aquí es donde pondras tu código para la cámara
-@Composable
-fun CameraScreenBodyContent(
-    idExercise: Int,
-    navController: NavController,
-    userSessionManager: UserSessionManager
-){
-    val currentExercise = userSessionManager.currentExercise // ESTA VARIABLE RECUPERA TODA LA INFO DEL EJERCICIO ACTUAL.
-    LaunchedEffect(Unit){
-        userSessionManager.showExercise(userSessionManager.getUserSession().token, idExercise)
-    }
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Name: ${currentExercise.value.exercise.name}") // AQUÍ TE PUSE UN EJEMPLO.
-    }
-}
+//@Composable
+//fun CameraScreenBodyContent(
+//    idExercise: Int,
+//    navController: NavController,
+//    userSessionManager: UserSessionManager
+//){
+//    val currentExercise = userSessionManager.currentExercise // ESTA VARIABLE RECUPERA TODA LA INFO DEL EJERCICIO ACTUAL.
+//    LaunchedEffect(Unit){
+//        userSessionManager.showExercise(userSessionManager.getUserSession().token, idExercise)
+//    }
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text(text = "Name: ${currentExercise.value.exercise.name}") // AQUÍ TE PUSE UN EJEMPLO.
+//    }
+//}
 
 // ASEGURATE DE QUE CUANDO SE CONCLUYA EL EJERCICIO, TE REDIRIJA A ESTA DIRECCIÓN.
 // ----> navController.navigate("myExercisesScreen")

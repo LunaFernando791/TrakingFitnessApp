@@ -700,8 +700,9 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
         viewModelScope.launch {
             try {
                 val response = apiService.createRoutine("Bearer ${getUserSession().token}")
-                Log.d("GetExercises", "Response: ${response.body()?.creada}")
-                if( response.body()?.creada == "Rutina ya creada."){
+                Log.d("GetExercises", "Response: ${response.body()?.message}")
+//                Log.d("prueba2", getUserSession().token)
+                if( response.body()?.message == "The routine has already been created."){
                     _rutineCreated.value = true
                     _exercises.value = null
                 }
@@ -771,7 +772,8 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     ))
     val currentExercise: State<ShowExercise> = _currentExercise
 
-    fun showExercise(token: String, exerciseId: Int) {
+    // Actualicé esta función para poder tomar variables desde archivos XML
+    fun showExercise(token: String, exerciseId: Int, updateUI: (Exercise) -> Unit) {
         viewModelScope.launch {
             try {
                 val response = apiService.getMyExercises("Bearer $token", exerciseId)
@@ -782,6 +784,8 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                         _currentExercise.value.exercise = body.exercise
                         _currentExercise.value.sets = body.sets
                         _currentExercise.value.reps = body.reps
+
+                        updateUI(body.exercise)
                     }
                 } else {
                     Log.e("GetExercise", "Get exercise failed: ${response.errorBody()?.string()}")

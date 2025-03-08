@@ -103,119 +103,122 @@ fun ExerciseListScreen(
             availableExercises.value = response.exercises ?: emptyList()
             myExercises.value = response.exercisesList ?: emptyList()
 
+            Log.d("DEBUG", "Ejercicios obtenidos: ${myExercises.value}") // Muestra ejercicios actualizados
+
             response.exercisesList?.forEach { exercise ->
                 selectedSets[exercise.id] = sets?.sets?.firstOrNull() ?: 3 // Valor por defecto
                 selectedReps[exercise.id] = sets?.reps?.firstOrNull() ?: 10
             }
         }
     }
+
     val rutineCreated = userSession.rutineCreated.collectAsState()
-        if (!rutineCreated.value) {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(15.dp),
-                verticalArrangement = Arrangement.spacedBy(15.dp)
-            )
-            {
-                item {
-                    Spacer(modifier = Modifier.height(20.dp))
-                    BackButton(
-                        navController = navController,
-                        ruta = "homeScreen",
-                        modifier = Modifier.padding(end = 250.dp)
-                    )
-                    userExercise.value?.let {
-                        Text(
-                            text = "Routine: ${it.routineType}",
-                            fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-                            style = MaterialTheme.typography.headlineLarge,
-                            modifier = Modifier.padding(10.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+    if (!rutineCreated.value) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(15.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
+        )
+        {
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
+                BackButton(
+                    navController = navController,
+                    ruta = "homeScreen",
+                    modifier = Modifier.padding(end = 250.dp)
+                )
+                userExercise.value?.let {
                     Text(
-                        text = "List of Exercises: ",
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        text = "Routine: ${it.routineType}",
+                        fontSize = MaterialTheme.typography.headlineSmall.fontSize,
                         style = MaterialTheme.typography.headlineLarge,
                         modifier = Modifier.padding(10.dp),
                         color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
                     )
                 }
-                // Mostrar la lista de ejercicios actuales (tu rutina)
-                if (myExercises.value.isNotEmpty()) {
-                    items(myExercises.value) { exercise ->
-                        ExerciseCard(
-                            exercise = exercise,
-                            sets = sets,
-                            availableExercises = availableExercises.value,
-                            selectedSets = selectedSets[exercise.id] ?: 0,
-                            selectedReps = selectedReps[exercise.id] ?: 0,
-                            onSetsSelected = { newSets -> selectedSets[exercise.id] = newSets },
-                            onRepsSelected = { newReps -> selectedReps[exercise.id] = newReps },
-                            onExerciseSelected = { selected, current ->
-                                swapExercises(current, selected, availableExercises, myExercises)
-                            }
-                        )
-                    }
-                    item{
-                        var isSubmitting by remember { mutableStateOf(false) }
-                        val coroutineScope = rememberCoroutineScope()
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Button(
-                                onClick = {
-                                    isSubmitting = true
-                                    coroutineScope.launch {
-                                        submitRoutine(
-                                            userSession,
-                                            myExercises.value,
-                                            selectedSets,
-                                            selectedReps
-                                        )
-                                        isSubmitting = false
-                                        navController.navigate("myExercisesScreen")
-                                    }
-                                },
-                                enabled = !isSubmitting,
-                                modifier = Modifier
-                                    .width(150.dp)
-                                    .height(50.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = if (darkTheme.value) Color.White else BlueGreen
-                                )
-                            ) {
-                                if (isSubmitting) {
-                                    CircularProgressIndicator(
-                                        color = Color.White,
-                                        modifier = Modifier.size(30.dp)
+                Text(
+                    text = "List of Exercises: ",
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.padding(10.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
+            // Mostrar la lista de ejercicios actuales (tu rutina)
+            if (myExercises.value.isNotEmpty()) {
+                items(myExercises.value) { exercise ->
+                    ExerciseCard(
+                        exercise = exercise,
+                        sets = sets,
+                        availableExercises = availableExercises.value,
+                        selectedSets = selectedSets[exercise.id] ?: 0,
+                        selectedReps = selectedReps[exercise.id] ?: 0,
+                        onSetsSelected = { newSets -> selectedSets[exercise.id] = newSets },
+                        onRepsSelected = { newReps -> selectedReps[exercise.id] = newReps },
+                        onExerciseSelected = { selected, current ->
+                            swapExercises(current, selected, availableExercises, myExercises)
+                        }
+                    )
+                }
+                item{
+                    var isSubmitting by remember { mutableStateOf(false) }
+                    val coroutineScope = rememberCoroutineScope()
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                isSubmitting = true
+                                coroutineScope.launch {
+                                    submitRoutine(
+                                        userSession,
+                                        myExercises.value,
+                                        selectedSets,
+                                        selectedReps
                                     )
-                                } else {
-                                    Text(text = "Submit",
-                                        color = if (darkTheme.value) Color.Black else Color.White)
+                                    isSubmitting = false
+                                    navController.navigate("myExercisesScreen")
                                 }
+                            },
+                            enabled = !isSubmitting,
+                            modifier = Modifier
+                                .width(150.dp)
+                                .height(50.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = if (darkTheme.value) Color.White else BlueGreen
+                            )
+                        ) {
+                            if (isSubmitting) {
+                                CircularProgressIndicator(
+                                    color = Color.White,
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            } else {
+                                Text(text = "Submit",
+                                    color = if (darkTheme.value) Color.Black else Color.White)
                             }
                         }
                     }
-                } else {
-                    item {
-                        Text(
-                            text = "No exercises added yet",
-                        )
-                        CircularProgressIndicator(
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(50.dp)
-                        )
-                    }
+                }
+            } else {
+                item {
+                    Text(
+                        text = "No exercises added yet",
+                    )
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(50.dp)
+                    )
                 }
             }
-        }else{
-            Text(text = "Rutina ya creada")
-            navController.navigate("myExercisesScreen")
         }
+    }else{
+        Text(text = "Rutina ya creada")
+        navController.navigate("myExercisesScreen")
+    }
 
 }
 
@@ -479,7 +482,7 @@ fun ChangeExerciseCards(
     exercise: Exercise,
     onExerciseSelected: (Exercise) -> Unit
 ) {
-    val url = "http://192.168.1.7:8000/storage/${exercise.image_path}"
+    val url = "http://192.168.100.3:8000/storage/${exercise.image_path}"
     Row(
         modifier = Modifier
             .border(

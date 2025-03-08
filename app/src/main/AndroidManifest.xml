@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- <uses-sdk tools:overrideLibrary="           androidx.camera.camera2, androidx.camera.core,           androidx.camera.view, androidx.camera.lifecycle,           com.google.mlkit.vision.segmentation.subject" /> -->
+    <!-- <uses-feature -->
+    <!-- android:name="android.hardware.camera" -->
+    <!-- android:required="false" /> -->
+    <!-- <uses-permission android:name="android.permission.INTERNET" /> &lt;!&ndash; Permisos necesarios &ndash;&gt; -->
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+    <uses-feature android:name="android.hardware.camera.any" />
 
-    <uses-sdk tools:overrideLibrary="           androidx.camera.camera2, androidx.camera.core,           androidx.camera.view, androidx.camera.lifecycle,           com.google.mlkit.vision.segmentation.subject" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- Permisos necesarios -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -23,18 +24,20 @@
         android:theme="@style/Theme.TrackingFitness"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".tracking.activities.CameraXLivePreviewActivity"
+            android:name=".trackingv2.CameraScreenV2"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".tracking.activities.SettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat" />
-
-        <meta-data
-            android:name="androidx.camera.cameraX"
-            android:value="androidx.camera.camera2.Camera2Config" />
-
+        <!-- <activity -->
+        <!-- android:name=".tracking.activities.CameraXLivePreviewActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar"/> -->
+        <!-- <activity -->
+        <!-- android:name=".tracking.activities.SettingsActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:theme="@style/Theme.AppCompat" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="androidx.camera.cameraX" -->
+        <!-- android:value="androidx.camera.camera2.Camera2Config" /> -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -1,15 +1,17 @@
 package com.example.trackingfitness
 
-import android.Manifest
+
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
+import android.app.Activity
+import android.content.Intent
+
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -26,49 +28,27 @@ val customFontFamily = FontFamily(Font(R.font.custom_font))
 var darkTheme = mutableStateOf(false)
 
 class MainActivity : ComponentActivity() {
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 100
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        if (!isCameraPermissionGranted()) {
-            requestCameraPermission()
-        }
 
         setContent {
             MyApp()
         }
     }
 
-    private fun isCameraPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-    private fun requestCameraPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.CAMERA),
-            CAMERA_PERMISSION_REQUEST_CODE
-        )
-    }
+        if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
+            val destination = data?.getStringExtra("navigateTo")
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permiso de cámara concedido", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
+            if (destination == "myExercisesScreen") {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("navigateTo", "myExercisesScreen") // 🔥 Mandamos la navegación
+                startActivity(intent)
+                finish() // 🔥 Evita pantalla en blanco
             }
         }
     }

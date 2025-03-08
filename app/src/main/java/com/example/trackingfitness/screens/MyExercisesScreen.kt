@@ -37,8 +37,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.conection.MyExercise
 import com.example.trackingfitness.darkTheme
+import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.ui.theme.PositionColor
 import com.example.trackingfitness.viewModel.UserSessionManager
 
@@ -51,9 +53,26 @@ fun MyExercisesScreen(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        ExercisesBodyContent(userSessionManager, navController)
+        Column(modifier = Modifier.fillMaxSize()) {
+            // Contenedor para el botón de regreso
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, top = 35.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BackButton(
+                    navController = navController,
+                    ruta = "homeScreen"
+                )
+            }
+
+            // Cuerpo del contenido con la lista de ejercicios
+            ExercisesBodyContent(userSessionManager, navController)
+        }
     }
 }
+
 
 @Composable
 fun ExercisesBodyContent(
@@ -61,6 +80,7 @@ fun ExercisesBodyContent(
     navController: NavController
 ) {
     val myExercisesState by userSessionManager.myExercises.collectAsState()
+
 
     LaunchedEffect(Unit) {
         userSessionManager.getMyExercises()
@@ -71,7 +91,11 @@ fun ExercisesBodyContent(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+
+    )
+
+    {
+
         item {
             Spacer(modifier = Modifier.height(40.dp))
             Text("My Exercises", style = MaterialTheme.typography.headlineMedium)
@@ -88,12 +112,14 @@ fun ExercisesBodyContent(
             }
             // Lista vacía
             myExercisesState?.selectedExercises.isNullOrEmpty() -> {
+
                 item {
                     Text("No exercises added yet")
                 }
             }
             // Datos cargados
             else -> {
+
                 items(myExercisesState!!.selectedExercises) { exercise ->
                     if (exercise.status != "completado")
                         ExerciseItem(myExercise = exercise, navController = navController)
@@ -108,7 +134,8 @@ fun ExerciseItem(
     myExercise: MyExercise,
     navController: NavController
 ){
-    val url = "http://192.168.1.7:8000/storage/${myExercise.image_path}"
+
+    val url = "http://192.168.100.3:8000/storage/${myExercise.image_path}"
     Column(
         modifier = Modifier
 
@@ -183,7 +210,9 @@ fun ExerciseItem(
         }
         Button(
             onClick = {
-                navController.navigate("cameraScreen/${myExercise.exercise_id}")
+//                navController.navigate("cameraScreen/${myExercise.exercise_id}")
+                navController.navigate(AppScreens.CameraScreenV2.route.replace("{id}", myExercise.exercise_id.toString()))
+
             },
             modifier = Modifier
                 .width(120.dp)

@@ -1,6 +1,9 @@
 package com.example.trackingfitness.navigation
 
+import android.app.Activity
 import android.content.Intent
+import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,9 +39,10 @@ import com.example.trackingfitness.screens.MedalScreen
 import com.example.trackingfitness.screens.MyExercisesScreen
 import com.example.trackingfitness.screens.ProfileScreen
 import com.example.trackingfitness.screens.RankingScreen
+import com.example.trackingfitness.trackingv2.CameraScreenV2
 import com.example.trackingfitness.viewModel.FriendsViewModel
-import com.example.trackingfitness.tracking.activities.CameraXLivePreviewActivity
-import com.example.trackingfitness.tracking.activities.SettingsActivity
+//import com.example.trackingfitness.tracking.activities.CameraXLivePreviewActivity
+//import com.example.trackingfitness.tracking.activities.SettingsActivity
 import com.example.trackingfitness.viewModel.ImageViewModel
 import com.example.trackingfitness.viewModel.LoginViewModel
 import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
@@ -56,10 +60,21 @@ fun AppNavigation(){
     val friendsViewModel: FriendsViewModel = viewModel()
     var startDestination by remember { mutableStateOf(AppScreens.StartScreen.route) }
     val userSessionManager = UserSessionManager(LocalContext.current.applicationContext)
-    LaunchedEffect(Unit) {
-        val isLoggedIn = userSessionManager.isUserLoggedIn()
-        startDestination = if (isLoggedIn) AppScreens.PrincipalScreen.route else AppScreens.StartScreen.route
+
+    val context = LocalContext.current
+    val destination = (context as? ComponentActivity)?.intent?.getStringExtra("navigateTo")
+
+    LaunchedEffect(destination) {
+        if (destination == "myExercisesScreen" && navController.currentBackStackEntry?.destination?.route != AppScreens.MyExercisesScreen.route) {
+            navController.navigate(AppScreens.MyExercisesScreen.route) {
+                popUpTo(AppScreens.PrincipalScreen.route) { inclusive = false }
+            }
+        } else {
+            val isLoggedIn = userSessionManager.isUserLoggedIn()
+            startDestination = if (isLoggedIn) AppScreens.PrincipalScreen.route else AppScreens.StartScreen.route
+        }
     }
+
     NavHost(
         navController = navController,
         startDestination = startDestination ) // Ruta de inicio de la app según el estado de inicio de sesión
@@ -187,20 +202,27 @@ fun AppNavigation(){
         composable(AppScreens.MedalsScreen.route) {
             MedalScreen(navController = navController, userSessionManager = userSessionManager)
         }
-        composable(AppScreens.SettingsScreen.route) {
-            val context = LocalContext.current
-            LaunchedEffect(Unit) {
-                val intent = Intent(context, SettingsActivity::class.java)
-                context.startActivity(intent)
+
+        composable(
+            AppScreens.CameraScreenV2.route,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val context = LocalContext.current as Activity
+            val idExercise = backStackEntry.arguments?.getInt("id")
+            val token = userSessionManager.getUserSession().token
+
+            if (idExercise != null) {
+                LaunchedEffect(Unit) {
+                    val intent = Intent(context, CameraScreenV2::class.java).apply {
+                        putExtra("EXERCISE_ID", idExercise)
+                        putExtra("USER_TOKEN", token)
+                    }
+                    context.startActivityForResult(intent, 1001) // 🔥 Esperamos resultado de CameraScreenV2
+                }
             }
         }
-        composable(AppScreens.CameraXScreen.route) {
-            val context = LocalContext.current
-            LaunchedEffect(Unit) {
-                val intent = Intent(context, CameraXLivePreviewActivity::class.java)
-                context.startActivity(intent)
-            }
-        }
+
+
         composable(AppScreens.RankingScreen.route) {
             RankingScreen(navController = navController, userSessionManager = userSessionManager)
         }

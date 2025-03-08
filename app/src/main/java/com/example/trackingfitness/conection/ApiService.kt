@@ -245,7 +245,7 @@ data class RoutineResponse(
     val exercises: List<Exercise>,
     val routineSets: Sets,
     val exercisesList: List<Exercise>,
-    val creada: String,
+    val message: String,
 )
 
 data class ExerciseResponse(
@@ -409,6 +409,10 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
         @Path("id") id: Int
     ): Response<CurrentExerciseResponse>
     //Route to get one exercise in specific
+    @POST("/api/routine/continue")
+    suspend fun continueRoutine(
+        @Header("Authorization") token: String
+    ): Response<MyExerciseResponse>
 
 
 
