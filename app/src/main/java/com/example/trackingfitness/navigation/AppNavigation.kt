@@ -65,8 +65,8 @@ fun AppNavigation(){
     val destination = (context as? ComponentActivity)?.intent?.getStringExtra("navigateTo")
 
     LaunchedEffect(destination) {
-        if (destination == "myExercisesScreen" && navController.currentBackStackEntry?.destination?.route != AppScreens.MyExercisesScreen.route) {
-            navController.navigate(AppScreens.MyExercisesScreen.route) {
+        if (destination == "exerciseListScreen") {
+            navController.navigate(AppScreens.ExerciseListScreen.route) {
                 popUpTo(AppScreens.PrincipalScreen.route) { inclusive = false }
             }
         } else {

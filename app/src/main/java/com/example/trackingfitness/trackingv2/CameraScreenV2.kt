@@ -12,19 +12,19 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ImageProxy
 import androidx.lifecycle.lifecycleScope
-import com.example.trackingfitness.MainActivity
 import com.example.trackingfitness.R
-import com.example.trackingfitness.screens.MyExercisesScreen
 import com.example.trackingfitness.viewModel.UserSessionManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.flow.first
 
 class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListener {
 
@@ -45,6 +45,9 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         }
 
     private val models = ModelConfig.models
+
+    private var totalExercisesCount = 0
+    private var exerciseCounter = 0
 
     private val exerciseTransitions = ExerciseTransitions.exerciseTransitions
     private val unilateralExercises = ExerciseTransitions.unilateralExercises
@@ -68,34 +71,66 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
         userSessionManager = UserSessionManager(applicationContext)
 
-        val idExercise = intent.getIntExtra("EXERCISE_ID", -1) // 🔥 Recibir ID
-//        Log.d("CameraScreenV2", "ID del ejercicio recibido: $idExercise")
-
-        val token = intent.getStringExtra("USER_TOKEN") ?: ""
-//        Log.d("TokenCheck", "Token actual: $token")
-
-        if (token.isNotEmpty()) {
-            userSessionManager?.showExercise(token, idExercise) { exercise ->
-                runOnUiThread {
-                    findViewById<TextView>(R.id.exerciseName).text = "Ejercicio: ${exercise.name}"
-                }
-                Log.d("CameraScreenV2", "Ejercicio recibido y UI actualizada: ${exercise.name}")
-            }
-        } else {
-            Log.e("TokenCheck", "El token está vacío. No se puede hacer la petición.")
-        }
-
         backgroundExecutor = Executors.newSingleThreadExecutor()
         cameraHelper = CameraHelper(this, backgroundExecutor) { image -> detectPose(image) }
 
-        setupUI()
         initializePoseLandmarker()
+        setupUI()
     }
 
+    // EL QUE SIRVE BIEN
     private fun setupUI() {
+        val token = userSessionManager?.getUserSession()?.token ?: ""
+
+        lifecycleScope.launch {
+            userSessionManager?.getMyExercises()
+
+            userSessionManager?.myExercises
+                ?.drop(1)         // Ignora la primera emisión (valor inicial vacío)
+                ?.collect { myExerciseResponse ->
+                    val exercises = myExerciseResponse?.selectedExercises
+
+                    if (totalExercisesCount == 0) {
+                        totalExercisesCount = exercises!!.size
+                        exerciseCounter = exercises.count { it.status == "completado" }
+                        Log.d("CameraScreenV2", "Total ejercicios: $totalExercisesCount")
+                    }
+
+                    val currentExercise = exercises?.firstOrNull { it.status == "actual" }
+
+                    Log.d("cuerpo current", currentExercise.toString())
+                    if (currentExercise != null) {
+                        userSessionManager?.showExercise(token, currentExercise.exercise_id) { exercise ->
+                            runOnUiThread {
+                                findViewById<TextView>(R.id.exerciseName).text = "Ejercicio: ${exercise.name}"
+                                repetitionCount = 0
+                                findViewById<TextView>(R.id.repetitionCount).text = "Reps: 0"
+                                selectedExercise = exercise.name
+                            }
+                            Log.d("CameraScreenV2", "Ejercicio cargado correctamente: ${exercise.name}")
+                        }
+                    } else {
+                        Log.d("CameraScreenV2", "No se encontró ejercicio actual.")
+                        navigateToExerciseListScreen()
+                    }
+                }
+        }
+
         setupExerciseSpinner()
         setupModelSpinner()
         setupDropdownMenu()
+    }
+
+    private fun navigateToExerciseListScreen() {
+        runOnUiThread {
+            Toast.makeText(this@CameraScreenV2, "Rutina completada", Toast.LENGTH_SHORT).show()
+            val intent = Intent().apply {
+                putExtra("navigateTo", "exerciseListScreen")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
     }
 
     private fun setupExerciseSpinner() {
@@ -143,7 +178,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             val btnRotateCamera = view.findViewById<Button>(R.id.btnRotateCamera)
             val btnPauseRoutine = view.findViewById<Button>(R.id.btnPauseRoutine)
             val btnNextExercise = view.findViewById<Button>(R.id.btnNextExercise)
-            val token = intent.getStringExtra("USER_TOKEN") ?: ""
 
             // Acciones de los botones mi fercho
             btnSwitchCamera.setOnClickListener {
@@ -156,24 +190,62 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             }
             btnPauseRoutine.setOnClickListener {
                 val intent = Intent().apply {
-                    putExtra("navigateTo", "myExercisesScreen")
+                    putExtra("navigateTo", "exerciseListScreen")
                 }
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // 🔥 Borra la pila de actividades
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 setResult(Activity.RESULT_OK, intent)
                 finish()
                 bottomSheetDialog.dismiss()
             }
             btnNextExercise.setOnClickListener {
-                // Función para avanzar al siguiente ejercicio
-                userSessionManager?.updateExerciseState(token)
-                val intent = Intent().apply {
-                    putExtra("navigateTo", "myExercisesScreen")
+                val token = userSessionManager?.getUserSession()?.token ?: ""
+
+                lifecycleScope.launch {
+                    userSessionManager?.updateExerciseState(token)
+                    delay(1000)  // pequeño delay para backend
+                    userSessionManager?.getMyExercises() // actualización explícita para forzar emisión nueva
                 }
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // 🔥 Borra la pila de actividades
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+
                 bottomSheetDialog.dismiss()
             }
+            // EL QUE SIRVE BIEN
+//            btnNextExercise.setOnClickListener {
+//                val token = userSessionManager?.getUserSession()?.token ?: ""
+//
+//                lifecycleScope.launch {
+//                    userSessionManager?.updateExerciseState(token)
+//                    delay(1000)  // pequeño delay para asegurar actualización
+//                    userSessionManager?.getMyExercises()
+//
+//                    val exercisesResponse = userSessionManager?.myExercises?.first()
+//                    val nextExercise = exercisesResponse?.selectedExercises
+//                        ?.firstOrNull { it.status == "actual" }
+//
+//                    Log.d("response de next",nextExercise.toString())
+//                    if (nextExercise != null) {
+//                        userSessionManager?.showExercise(token, nextExercise.exercise_id) { exercise ->
+//                            runOnUiThread {
+//                                findViewById<TextView>(R.id.exerciseName).text = "Ejercicio: ${exercise.name}"
+//                                repetitionCount = 0
+//                                findViewById<TextView>(R.id.repetitionCount).text = "Reps: 0"
+//                                selectedExercise = exercise.name
+//                            }
+//                            Log.d("CameraScreenV2", "Ejercicio actualizado correctamente: ${exercise.name}")
+//                        }
+//                    } else {
+//                        // Navega de regreso al completarse todos los ejercicios
+//                        val intent = Intent().apply {
+//                            putExtra("navigateTo", "exerciseListScreen")
+//                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                        }
+//                        setResult(Activity.RESULT_OK, intent)
+//                        finish()
+//                    }
+//                }
+//                bottomSheetDialog.dismiss()
+//            }
+
+
             bottomSheetDialog.show()
         }
     }

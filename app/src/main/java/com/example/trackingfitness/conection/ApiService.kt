@@ -240,6 +240,14 @@ data class AllMedalResponse(
 data class UserMedalsResponse(
     val userMedals: List<Int>,
 )
+//data class RoutineResponse(
+//    val routineType: String,
+//    val exercises: List<Exercise>,
+//    val routineSets: Sets,
+//    val exercisesList: List<Exercise>,
+//    val created: String,
+//    val completed: String,
+//)
 data class RoutineResponse(
     val routineType: String,
     val exercises: List<Exercise>,

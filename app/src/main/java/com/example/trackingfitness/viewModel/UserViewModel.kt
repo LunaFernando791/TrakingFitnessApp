@@ -697,7 +697,6 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
     private val _rutineCompleted = MutableStateFlow(false)
     var rutineCompleted: StateFlow<Boolean> = _rutineCompleted
 
-
     fun getExercises(){
         viewModelScope.launch {
             try {
@@ -712,8 +711,8 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                     _exercises.value = null
                 }
                 if (response.isSuccessful) {
-                        val body = response.body()
-                        _exercises.value = body
+                    val body = response.body()
+                    _exercises.value = body
 
                 } else {
                     Log.e("GetExercises", "Get exercises failed: ${response.errorBody()?.string()}")
@@ -751,7 +750,8 @@ class UserSessionManager(application: Context) : AndroidViewModel(application as
                 if (response.isSuccessful) {
                     val body = response.body()
                     _myExercises.value = body
-                    if(body?.completed == "Rutina completada."){
+                    Log.d("completada",body?.completed.toString())
+                    if(body?.completed == "Rutina compleatada."){
                         _routineCompleted.value = true
                     }
                 }else{

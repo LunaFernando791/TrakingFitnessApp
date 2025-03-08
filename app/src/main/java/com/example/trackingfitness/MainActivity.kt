@@ -44,9 +44,9 @@ class MainActivity : ComponentActivity() {
         if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
             val destination = data?.getStringExtra("navigateTo")
 
-            if (destination == "myExercisesScreen") {
+            if (destination == "exerciseListScreen") {
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("navigateTo", "myExercisesScreen") // 🔥 Mandamos la navegación
+                intent.putExtra("navigateTo", "exerciseListScreen") // 🔥 Mandamos la navegación
                 startActivity(intent)
                 finish() // 🔥 Evita pantalla en blanco
             }
