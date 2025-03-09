@@ -33,8 +33,11 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
     private lateinit var backgroundExecutor: ExecutorService
     private var userSessionManager: UserSessionManager? = null
 
+    private lateinit var poseClassTextView: TextView
+    private lateinit var repCountTextView: TextView
+    private lateinit var setCountTextView: TextView
+
     private var selectedExercise: String = "squats"
-    private var repetitionCount = 0
     private var lastState: String? = null
     private var currentState: String? = null
 
@@ -46,11 +49,14 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
     private val models = ModelConfig.models
 
-    private var totalExercisesCount = 0
-    private var exerciseCounter = 0
-
     private val exerciseTransitions = ExerciseTransitions.exerciseTransitions
     private val unilateralExercises = ExerciseTransitions.unilateralExercises
+
+    private var repetitionCount = 0
+    private var currentSet = 1
+    private val maxSets = 3
+    private val repsPerSet = 3
+    private var restTimerActive = false
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,9 +65,13 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        poseClassTextView = findViewById(R.id.poseClassText)
+        repCountTextView = findViewById(R.id.repetitionCount)
+        setCountTextView = findViewById(R.id.setCount)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(android.view.WindowInsets.Type.statusBars())
-            } else {
+        } else {
             @Suppress("DEPRECATION")
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -86,15 +96,15 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             userSessionManager?.getMyExercises()
 
             userSessionManager?.myExercises
-                ?.drop(1)         // Ignora la primera emisión (valor inicial vacío)
+                ?.drop(1)         // Ignora la primera emisi贸n (valor inicial vac铆o)
                 ?.collect { myExerciseResponse ->
                     val exercises = myExerciseResponse?.selectedExercises
 
-                    if (totalExercisesCount == 0) {
-                        totalExercisesCount = exercises!!.size
-                        exerciseCounter = exercises.count { it.status == "completado" }
-                        Log.d("CameraScreenV2", "Total ejercicios: $totalExercisesCount")
-                    }
+//                    if (totalExercisesCount == 0) {
+//                        totalExercisesCount = exercises!!.size
+//                        exerciseCounter = exercises.count { it.status == "completado" }
+//                        Log.d("CameraScreenV2", "Total ejercicios: $totalExercisesCount")
+//                    }
 
                     val currentExercise = exercises?.firstOrNull { it.status == "actual" }
 
@@ -105,12 +115,13 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                                 findViewById<TextView>(R.id.exerciseName).text = "Ejercicio: ${exercise.name}"
                                 repetitionCount = 0
                                 findViewById<TextView>(R.id.repetitionCount).text = "Reps: 0"
-                                selectedExercise = exercise.name
+//                                selectedExercise = exercise.name
+                                resetPoseLandmarker() // 🔥 Forzar actualización del modelo
                             }
                             Log.d("CameraScreenV2", "Ejercicio cargado correctamente: ${exercise.name}")
                         }
                     } else {
-                        Log.d("CameraScreenV2", "No se encontró ejercicio actual.")
+                        Log.d("CameraScreenV2", "No se encontr贸 ejercicio actual.")
                         navigateToExerciseListScreen()
                     }
                 }
@@ -179,13 +190,17 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             val btnPauseRoutine = view.findViewById<Button>(R.id.btnPauseRoutine)
             val btnNextExercise = view.findViewById<Button>(R.id.btnNextExercise)
 
+            if (currentSet > maxSets) {
+                btnNextExercise.isEnabled = true
+            }
+
             // Acciones de los botones mi fercho
             btnSwitchCamera.setOnClickListener {
                 cameraHelper.toggleCamera()
                 bottomSheetDialog.dismiss()
             }
             btnRotateCamera.setOnClickListener {
-                cameraHelper.rotateCamera(this) // 🔄 Llama la función
+                cameraHelper.rotateCamera(this) // 馃攧 Llama la funci贸n
                 bottomSheetDialog.dismiss()
             }
             btnPauseRoutine.setOnClickListener {
@@ -198,54 +213,22 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                 bottomSheetDialog.dismiss()
             }
             btnNextExercise.setOnClickListener {
-                val token = userSessionManager?.getUserSession()?.token ?: ""
-
-                lifecycleScope.launch {
-                    userSessionManager?.updateExerciseState(token)
-                    delay(1000)  // pequeño delay para backend
-                    userSessionManager?.getMyExercises() // actualización explícita para forzar emisión nueva
-                }
-
-                bottomSheetDialog.dismiss()
-            }
-            // EL QUE SIRVE BIEN
-//            btnNextExercise.setOnClickListener {
 //                val token = userSessionManager?.getUserSession()?.token ?: ""
 //
 //                lifecycleScope.launch {
 //                    userSessionManager?.updateExerciseState(token)
-//                    delay(1000)  // pequeño delay para asegurar actualización
-//                    userSessionManager?.getMyExercises()
-//
-//                    val exercisesResponse = userSessionManager?.myExercises?.first()
-//                    val nextExercise = exercisesResponse?.selectedExercises
-//                        ?.firstOrNull { it.status == "actual" }
-//
-//                    Log.d("response de next",nextExercise.toString())
-//                    if (nextExercise != null) {
-//                        userSessionManager?.showExercise(token, nextExercise.exercise_id) { exercise ->
-//                            runOnUiThread {
-//                                findViewById<TextView>(R.id.exerciseName).text = "Ejercicio: ${exercise.name}"
-//                                repetitionCount = 0
-//                                findViewById<TextView>(R.id.repetitionCount).text = "Reps: 0"
-//                                selectedExercise = exercise.name
-//                            }
-//                            Log.d("CameraScreenV2", "Ejercicio actualizado correctamente: ${exercise.name}")
-//                        }
-//                    } else {
-//                        // Navega de regreso al completarse todos los ejercicios
-//                        val intent = Intent().apply {
-//                            putExtra("navigateTo", "exerciseListScreen")
-//                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                        }
-//                        setResult(Activity.RESULT_OK, intent)
-//                        finish()
-//                    }
+//                    delay(1000)  // peque帽o delay para backend
+//                    userSessionManager?.getMyExercises() // actualizaci贸n expl铆cita para forzar emisi贸n nueva
 //                }
-//                bottomSheetDialog.dismiss()
-//            }
+//
+                currentSet = 0
+                repetitionCount = 0
+                btnNextExercise.isEnabled = false
+                findViewById<TextView>(R.id.setCount).text = "Set: $currentSet/$maxSets"
+                advanceToNextExercise()
+                bottomSheetDialog.dismiss()
 
-
+            }
             bottomSheetDialog.show()
         }
     }
@@ -293,6 +276,25 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         runOnUiThread {
 //            findViewById<TextView>(R.id.inferenceTimeVal).text =
 //                String.format("%d ms", resultBundle.inferenceTime)
+            val overlayView = findViewById<OverlayView>(R.id.overlay)
+
+            if (restTimerActive) {
+                overlayView.clear()
+                poseClassTextView.text = "Descansando..."
+                poseClassTextView.visibility = View.VISIBLE
+                repCountTextView.visibility = View.INVISIBLE
+                setCountTextView.visibility = View.INVISIBLE
+                return@runOnUiThread
+            }
+
+            if (currentSet > maxSets) {
+                overlayView.clear()
+                poseClassTextView.text = "Ejercicio Completado"
+                poseClassTextView.visibility = View.INVISIBLE
+                repCountTextView.visibility = View.INVISIBLE
+                setCountTextView.visibility = View.INVISIBLE
+                return@runOnUiThread
+            }
 
             findViewById<OverlayView>(R.id.overlay).setResults(
                 resultBundle.results.first(),
@@ -301,6 +303,10 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                 resultBundle.inputImageWidth,
                 RunningMode.LIVE_STREAM
             )
+            poseClassTextView.text = "Pose: ${resultBundle.poseClass}"
+            poseClassTextView.visibility = View.VISIBLE
+            repCountTextView.visibility = View.VISIBLE
+            setCountTextView.visibility = View.VISIBLE
 
             val isUnilateral = selectedExercise in unilateralExercises
             val exerciseFilter = exerciseTransitions[selectedExercise]
@@ -327,8 +333,51 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                 }
             }
 
+            if (repetitionCount >= repsPerSet) {
+                onSetCompleted()
+            }
+
             findViewById<TextView>(R.id.repetitionCount).text = "Reps: $repetitionCount"
             findViewById<OverlayView>(R.id.overlay).invalidate()
+        }
+    }
+
+    private fun onSetCompleted() {
+        if (currentSet <= maxSets) {
+            currentSet++
+            repetitionCount = 0
+            findViewById<TextView>(R.id.setCount).text = "Set: $currentSet/$maxSets"
+
+            // Iniciar cronómetro de descanso de 15 segundos
+            restTimerActive = true
+            startRestTimer()
+        }
+    }
+
+    private fun startRestTimer() {
+        lifecycleScope.launch {
+            var secondsRemaining = 5
+            val timerTextView: TextView = findViewById(R.id.timerTextView)
+
+            timerTextView.visibility = View.VISIBLE
+            while (secondsRemaining > 0) {
+                timerTextView.text = "Descanso: $secondsRemaining s"
+                delay(1000)
+                secondsRemaining--
+            }
+
+            timerTextView.visibility = View.GONE
+            restTimerActive = false
+            Toast.makeText(this@CameraScreenV2, "¡Inicia el set $currentSet!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun advanceToNextExercise() {
+        val token = userSessionManager?.getUserSession()?.token ?: ""
+        lifecycleScope.launch {
+            userSessionManager?.updateExerciseState(token)
+            delay(1500)  // Pequeño delay para que el backend procese la actualización
+            userSessionManager?.getMyExercises()
         }
     }
 

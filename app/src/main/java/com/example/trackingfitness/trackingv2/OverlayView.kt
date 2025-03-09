@@ -49,8 +49,6 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         pointPaint.style = Paint.Style.FILL
 
         textPaint.color = Color.GREEN
-//        textPaint.textSize = TEXT_SIZE
-//        textPaint.style = Paint.Style.FILL
         textPaint.textSize = TEXT_SIZE * 1.5f  // Hacerlo más grande
         textPaint.style = Paint.Style.FILL
         textPaint.setShadowLayer(10f, 5f, 5f, Color.BLACK)  // Agregar sombra negra
@@ -80,31 +78,24 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                 }
             }
 
-//            //Display pose class
+            // 🔹 Dibujar una sombra negra detrás del texto (para un mejor efecto de sombreado)
+//            val shadowOffset = 5f
+//            textPaint.color = Color.BLACK
 //            canvas.drawText(
-//                "Pose: $poseClass",
+//                "Ejercicio: $poseClass",
+//                TEXT_POSITION_X + shadowOffset,
+//                TEXT_POSITION_Y + shadowOffset,
+//                textPaint
+//            )
+//
+//            // 🔹 Dibujar el texto principal en color verde
+//            textPaint.color = Color.GREEN
+//            canvas.drawText(
+//                "Ejercicio: $poseClass",
 //                TEXT_POSITION_X,
 //                TEXT_POSITION_Y,
 //                textPaint
 //            )
-            // 🔹 Dibujar una sombra negra detrás del texto (para un mejor efecto de sombreado)
-            val shadowOffset = 5f
-            textPaint.color = Color.BLACK
-            canvas.drawText(
-                "Ejercicio: $poseClass",
-                TEXT_POSITION_X + shadowOffset,
-                TEXT_POSITION_Y + shadowOffset,
-                textPaint
-            )
-
-            // 🔹 Dibujar el texto principal en color verde
-            textPaint.color = Color.GREEN
-            canvas.drawText(
-                "Ejercicio: $poseClass",
-                TEXT_POSITION_X,
-                TEXT_POSITION_Y,
-                textPaint
-            )
         }
     }
 
@@ -134,12 +125,6 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         }
         invalidate()
     }
-
-    fun clearResults() {
-        this.results = null
-        invalidate()
-    }
-
 
     companion object {
         private const val LANDMARK_STROKE_WIDTH = 12F

@@ -41,11 +41,14 @@ id graphic_overlay
 id main
 id modelSpinner
 id overlay
+id poseClassText
 id preview_view
 id repetitionCount
+id setCount
 id settings_button
 id settings_container
 id spinner_exercise
+id timerTextView
 id toggle_orientation_button
 id viewFinder
 layout activity_camera_screen_v2
