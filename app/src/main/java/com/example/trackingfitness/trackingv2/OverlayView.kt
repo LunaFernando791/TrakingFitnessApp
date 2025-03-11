@@ -39,6 +39,12 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         initPaints()
     }
 
+    fun setPausedMode(poseLandmarkerResults: PoseLandmarkerResult) {
+        results = poseLandmarkerResults
+        poseClass = "" // 🔥 No mostrar el nombre de la pose en pausa
+        invalidate()  // Forzar redibujado
+    }
+
     private fun initPaints() {
         linePaint.color = Color.WHITE
         linePaint.strokeWidth = LANDMARK_STROKE_WIDTH

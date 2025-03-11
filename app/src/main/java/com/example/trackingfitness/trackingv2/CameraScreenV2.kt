@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -19,12 +21,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import kotlinx.coroutines.flow.first
+import android.media.MediaPlayer
 
 class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListener {
 
@@ -36,10 +37,14 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
     private lateinit var poseClassTextView: TextView
     private lateinit var repCountTextView: TextView
     private lateinit var setCountTextView: TextView
+    private lateinit var generalTimerTextView: TextView
+    private lateinit var statusTextView: TextView
 
-    private var selectedExercise: String = "squats"
+    private var selectedExercise: String = "wall sit"
     private var lastState: String? = null
     private var currentState: String? = null
+    private var generalTimeMillis: Long = 0
+    private val generalHandler = Handler(Looper.getMainLooper())
 
     private var currentModel: String
         get() = ModelConfig.currentModel
@@ -56,7 +61,24 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
     private var currentSet = 1
     private val maxSets = 3
     private val repsPerSet = 3
-    private var restTimerActive = false
+
+    private var routineStarted = false
+    private var routineEnded = false
+    private var isResting = true
+
+    private var isPaused = false
+    private var pauseStartTime = 0L
+    private val pauseDuration = 3000L
+
+    private var startPoseTime = 0L
+    private var generalTimer: Handler? = null
+
+    private var isometricStartTime: Long = 0L
+    private val isometricHoldDuration = 5000L
+    private var isometricTotalTime: Long = 0L
+
+
+    private var mediaPlayer: MediaPlayer? = null
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +90,16 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         poseClassTextView = findViewById(R.id.poseClassText)
         repCountTextView = findViewById(R.id.repetitionCount)
         setCountTextView = findViewById(R.id.setCount)
+        generalTimerTextView = findViewById(R.id.generalTimer)
+        statusTextView = findViewById(R.id.statusText)
+
+        repCountTextView.visibility = View.INVISIBLE
+        setCountTextView.visibility = View.INVISIBLE
+        statusTextView.visibility = View.VISIBLE
+        generalTimerTextView.visibility = View.INVISIBLE
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.beep)
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(android.view.WindowInsets.Type.statusBars())
@@ -79,6 +111,12 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             )
         }
 
+        if(selectedExercise in ExerciseTransitions.isometricExercises){
+                                    Log.d("Isométrico","el ejercicio es isométrico")
+                                }else{
+                                    Log.d("Isométrico", "No és jaja")
+                                }
+
         userSessionManager = UserSessionManager(applicationContext)
 
         backgroundExecutor = Executors.newSingleThreadExecutor()
@@ -86,6 +124,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
         initializePoseLandmarker()
         setupUI()
+
     }
 
     // EL QUE SIRVE BIEN
@@ -100,12 +139,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                 ?.collect { myExerciseResponse ->
                     val exercises = myExerciseResponse?.selectedExercises
 
-//                    if (totalExercisesCount == 0) {
-//                        totalExercisesCount = exercises!!.size
-//                        exerciseCounter = exercises.count { it.status == "completado" }
-//                        Log.d("CameraScreenV2", "Total ejercicios: $totalExercisesCount")
-//                    }
-
                     val currentExercise = exercises?.firstOrNull { it.status == "actual" }
 
                     Log.d("cuerpo current", currentExercise.toString())
@@ -115,7 +148,12 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                                 findViewById<TextView>(R.id.exerciseName).text = "Ejercicio: ${exercise.name}"
                                 repetitionCount = 0
                                 findViewById<TextView>(R.id.repetitionCount).text = "Reps: 0"
-//                                selectedExercise = exercise.name
+//                                selectedExercise = exercise.name.lowercase()
+//                                if(selectedExercise in ExerciseTransitions.isometricExercises){
+//                                    Log.d("Isométrico","el ejercicio es isométrico")
+//                                }else{
+//                                    Log.d("Isométrico", "No és jaja")
+//                                }
                                 resetPoseLandmarker() // 🔥 Forzar actualización del modelo
                             }
                             Log.d("CameraScreenV2", "Ejercicio cargado correctamente: ${exercise.name}")
@@ -130,6 +168,10 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         setupExerciseSpinner()
         setupModelSpinner()
         setupDropdownMenu()
+
+        if(selectedExercise in ExerciseTransitions.isometricExercises){
+            repCountTextView.text = "Tiempo: 0s"
+        }
     }
 
     private fun navigateToExerciseListScreen() {
@@ -190,8 +232,9 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             val btnPauseRoutine = view.findViewById<Button>(R.id.btnPauseRoutine)
             val btnNextExercise = view.findViewById<Button>(R.id.btnNextExercise)
 
-            if (currentSet > maxSets) {
+            if(currentSet > maxSets){
                 btnNextExercise.isEnabled = true
+                hideCounters()
             }
 
             // Acciones de los botones mi fercho
@@ -200,7 +243,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                 bottomSheetDialog.dismiss()
             }
             btnRotateCamera.setOnClickListener {
-                cameraHelper.rotateCamera(this) // 馃攧 Llama la funci贸n
+                cameraHelper.rotateCamera(this)
                 bottomSheetDialog.dismiss()
             }
             btnPauseRoutine.setOnClickListener {
@@ -213,21 +256,8 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                 bottomSheetDialog.dismiss()
             }
             btnNextExercise.setOnClickListener {
-//                val token = userSessionManager?.getUserSession()?.token ?: ""
-//
-//                lifecycleScope.launch {
-//                    userSessionManager?.updateExerciseState(token)
-//                    delay(1000)  // peque帽o delay para backend
-//                    userSessionManager?.getMyExercises() // actualizaci贸n expl铆cita para forzar emisi贸n nueva
-//                }
-//
-                currentSet = 0
-                repetitionCount = 0
-                btnNextExercise.isEnabled = false
-                findViewById<TextView>(R.id.setCount).text = "Set: $currentSet/$maxSets"
                 advanceToNextExercise()
                 bottomSheetDialog.dismiss()
-
             }
             bottomSheetDialog.show()
         }
@@ -274,102 +304,246 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
     override fun onResults(resultBundle: PoseLandmarkerHelper.ResultBundle) {
         runOnUiThread {
-//            findViewById<TextView>(R.id.inferenceTimeVal).text =
-//                String.format("%d ms", resultBundle.inferenceTime)
             val overlayView = findViewById<OverlayView>(R.id.overlay)
+            val detectedPose = resultBundle.poseClass
+            poseClassTextView.text = detectedPose
 
-            if (restTimerActive) {
-                overlayView.clear()
-                poseClassTextView.text = "Descansando..."
-                poseClassTextView.visibility = View.VISIBLE
-                repCountTextView.visibility = View.INVISIBLE
-                setCountTextView.visibility = View.INVISIBLE
-                return@runOnUiThread
-            }
-
-            if (currentSet > maxSets) {
-                overlayView.clear()
-                poseClassTextView.text = "Ejercicio Completado"
-                poseClassTextView.visibility = View.INVISIBLE
-                repCountTextView.visibility = View.INVISIBLE
-                setCountTextView.visibility = View.INVISIBLE
-                return@runOnUiThread
-            }
-
-            findViewById<OverlayView>(R.id.overlay).setResults(
+            // 🔹 Mostrar landmarks si la rutina está en curso
+            overlayView.setResults(
                 resultBundle.results.first(),
                 resultBundle.poseClass,
                 resultBundle.inputImageHeight,
                 resultBundle.inputImageWidth,
                 RunningMode.LIVE_STREAM
             )
-            poseClassTextView.text = "Pose: ${resultBundle.poseClass}"
-            poseClassTextView.visibility = View.VISIBLE
-            repCountTextView.visibility = View.VISIBLE
-            setCountTextView.visibility = View.VISIBLE
 
-            val isUnilateral = selectedExercise in unilateralExercises
-            val exerciseFilter = exerciseTransitions[selectedExercise]
+            // 🔹 Si la rutina ha finalizado, aplicar `clear()`
+            if (routineEnded) {
+                poseClassTextView.text = "¡Ejercicio completado!"
+                hideCounters()
+                overlayView.clear()
+                return@runOnUiThread
+            }
 
-            // Solo evaluar la variante si el ejercicio seleccionado es "diamond_pushups"
-//            if (selectedExercise in listOf("diamond_pushups", "pushups", "wide_pushups")) {
-//                val pushupType = poseLandmarkerHelper.classifyPushupType(resultBundle.landmarksList)
-//                findViewById<TextView>(R.id.exerciseType).text = "Variante: $pushupType"
-//            }
+            // 🔹 Rutina aún no ha empezado: Validar "x_pose"
+            if (!routineStarted) {
+                if (detectedPose == "x_pose") {
+                    if (startPoseTime == 0L) {
+                        startPoseTime = System.currentTimeMillis()
+                    }
 
-            if (exerciseFilter != null && resultBundle.poseClass in exerciseFilter.values) {
-                lastState = currentState
-                currentState = resultBundle.poseClass
+                    val elapsedTime = System.currentTimeMillis() - startPoseTime
 
-                if (isUnilateral) {
-                    if ((lastState == exerciseFilter["left_end"] && currentState == exerciseFilter["start"]) ||
-                        (lastState == exerciseFilter["right_end"] && currentState == exerciseFilter["start"])) {
-                        repetitionCount++
+                    statusTextView.text = "Iniciando en: ${3 - elapsedTime / 1000} s"
+
+                    if (elapsedTime >= 3000) {
+                        isResting = false
+                        routineStarted = true
+//                        startGeneralTimer()
+                        showCounters()
+                        statusTextView.text = "Ejercicio iniciado!"
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            statusTextView.visibility = View.INVISIBLE
+                        }, 1000)
                     }
                 } else {
-                    if (lastState == exerciseFilter["end"] && currentState == exerciseFilter["start"]) {
-                        repetitionCount++
-                    }
+                    startPoseTime = 0L
+                    statusTextView.text = "Mantén 'x_pose' para comenzar"
                 }
+                return@runOnUiThread
             }
 
-            if (repetitionCount >= repsPerSet) {
-                onSetCompleted()
+            // 🔹 Si está en descanso, aplicar `setPausedMode()`
+            if (isResting) {
+                overlayView.clear()
+                hideCounters()
+                return@runOnUiThread
+            } else{
+                showCounters()
             }
+
+            // 🔹 Manejo de pausa/reanudación con "x_pose"
+//            if (detectedPose == "x_pose" && !isResting) {
+//                if (pauseStartTime == 0L) {
+//                    pauseStartTime = System.currentTimeMillis()
+//                }
+//
+//                val elapsedTime = System.currentTimeMillis() - pauseStartTime
+//                val remainingTime = (pauseDuration - elapsedTime) / 1000
+//
+//                if (isPaused) {
+//                    statusTextView.text = "Reanudando en: $remainingTime s"
+//                } else {
+//                    statusTextView.text = "Pausando en: $remainingTime s"
+//                }
+//                statusTextView.visibility = View.VISIBLE
+//
+//                if (elapsedTime >= pauseDuration) {
+//                    isPaused = !isPaused
+//                    pauseStartTime = 0L
+//
+//                    if (isPaused) {
+//                        statusTextView.text = "Rutina en pausa"
+//                    } else {
+//                        statusTextView.text = "Rutina reanudada"
+//                        Handler(Looper.getMainLooper()).postDelayed({
+//                            statusTextView.visibility = View.INVISIBLE
+//                        }, 1000)
+//                    }
+//                }
+//                return@runOnUiThread
+//            } else {
+//                pauseStartTime = 0L
+//                statusTextView.visibility = View.INVISIBLE
+//            }
+//
+//
+//            if (isPaused) {
+//                overlayView.setPausedMode(resultBundle.results.first())
+//                poseClassTextView.text = "PAUSADO"
+//                return@runOnUiThread
+//            }
+
+            if (selectedExercise in ExerciseTransitions.isometricExercises) {
+                handleIsometricExercise(detectedPose)
+                return@runOnUiThread
+            }
+            handleRepetitiveExercise(detectedPose)
 
             findViewById<TextView>(R.id.repetitionCount).text = "Reps: $repetitionCount"
             findViewById<OverlayView>(R.id.overlay).invalidate()
         }
     }
 
-    private fun onSetCompleted() {
-        if (currentSet <= maxSets) {
-            currentSet++
-            repetitionCount = 0
-            findViewById<TextView>(R.id.setCount).text = "Set: $currentSet/$maxSets"
+    private fun handleRepetitiveExercise(detectedPose: String) {
+        val exerciseFilter = exerciseTransitions[selectedExercise]
 
-            // Iniciar cronómetro de descanso de 15 segundos
-            restTimerActive = true
-            startRestTimer()
+        if (exerciseFilter != null && detectedPose in exerciseFilter.values) {
+            lastState = currentState
+            currentState = detectedPose
+
+            val isUnilateral = selectedExercise in unilateralExercises
+            val isValidTransition = if (isUnilateral) {
+                (lastState == exerciseFilter["left_end"] && currentState == exerciseFilter["start"]) ||
+                        (lastState == exerciseFilter["right_end"] && currentState == exerciseFilter["start"])
+            } else {
+                lastState == exerciseFilter["end"] && currentState == exerciseFilter["start"]
+            }
+
+            if (isValidTransition) {
+                mediaPlayer?.start() // 🔊 Sonido de repetición
+                repetitionCount++
+                repCountTextView.text = "Reps: $repetitionCount / $repsPerSet"
+
+                if (repetitionCount >= repsPerSet) {
+                    repetitionCount = 0
+                    currentSet++
+
+                    if (currentSet > maxSets) {
+                        routineEnded = true
+                        statusTextView.text = "¡Ejercicio terminado!"
+                    } else {
+                        setCountTextView.text = "Set: $currentSet / $maxSets"
+                        startRestPeriod()
+                    }
+                }
+            }
         }
     }
 
-    private fun startRestTimer() {
-        lifecycleScope.launch {
-            var secondsRemaining = 5
-            val timerTextView: TextView = findViewById(R.id.timerTextView)
+    private fun handleIsometricExercise(detectedPose: String) {
+        val exerciseFilter = ExerciseTransitions.exerciseTransitions[selectedExercise]
+        val isometricPose = exerciseFilter?.get("position") ?: selectedExercise
 
-            timerTextView.visibility = View.VISIBLE
-            while (secondsRemaining > 0) {
-                timerTextView.text = "Descanso: $secondsRemaining s"
-                delay(1000)
-                secondsRemaining--
+        if (!routineStarted || routineEnded || isPaused || isResting) {
+            return
+        }
+
+        if (detectedPose == isometricPose) {
+            if (isometricStartTime == 0L) {
+                isometricStartTime = System.currentTimeMillis()
             }
 
-            timerTextView.visibility = View.GONE
-            restTimerActive = false
-            Toast.makeText(this@CameraScreenV2, "¡Inicia el set $currentSet!", Toast.LENGTH_SHORT).show()
+            val elapsedTime = (System.currentTimeMillis() - isometricStartTime) / 1000
+            isometricTotalTime += 1 // Acumular tiempo total en segundos
+
+            repCountTextView.visibility = View.VISIBLE
+            repCountTextView.text = "Tiempo: $elapsedTime s"
+
+            // **✅ Cuando llegue a 5 segundos, completar el set y pausar el conteo**
+            if (elapsedTime >= isometricHoldDuration / 1000) {
+                mediaPlayer?.start() // 🔊 Sonido indicando que el set se completó
+                currentSet++
+
+                setCountTextView.text = "Set: $currentSet / $maxSets"
+
+                isometricStartTime = 0L
+
+                if (currentSet > maxSets) {
+                    routineEnded = true
+                    statusTextView.text = "¡Rutina terminada!"
+                    isometricTotalTime = 0L
+                } else {
+                    repCountTextView.text = "Tiempo: 0 s"
+                    isometricTotalTime = 0L
+                    isResting = true
+                    startRestPeriod()
+                }
+            } else {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    handleIsometricExercise(detectedPose)
+                }, 1000)
+            }
+        } else {
+            isometricStartTime = 0L
         }
+    }
+
+    private fun startGeneralTimer() {
+        if (generalTimer != null) return // 🔥 Evita crear múltiples instancias
+
+        generalTimer = Handler(Looper.getMainLooper())
+
+        generalTimer?.post(object : Runnable {
+            override fun run() {
+                if (!routineEnded) { // 🔥 Permitir que el cronómetro se reanude correctamente
+                    if (!isPaused) {
+                        generalTimeMillis += 1000
+                        val minutes = (generalTimeMillis / 1000) / 60
+                        val seconds = (generalTimeMillis / 1000) % 60
+                        generalTimerTextView.text = String.format("%02d:%02d", minutes, seconds)
+                    }
+                    generalTimer?.postDelayed(this, 1000) // 🔥 Sigue actualizando el cronómetro
+                }
+            }
+        })
+    }
+
+    private fun startRestPeriod() {
+        isResting = true
+        val timerTextView = findViewById<TextView>(R.id.timerTextView)
+
+        timerTextView.visibility = View.VISIBLE
+        statusTextView.text = "Descanso..."
+
+        val restDuration = 5 // 🔥 Duración en segundos
+        val restHandler = Handler(Looper.getMainLooper())
+
+        var remainingTime = restDuration
+
+        restHandler.post(object : Runnable {
+            override fun run() {
+                if (remainingTime > 0) {
+                    timerTextView.text = "Descanso: $remainingTime s"
+                    remainingTime--
+                    restHandler.postDelayed(this, 1000)
+                } else {
+                    isResting = false
+                    timerTextView.visibility = View.GONE
+                    setCountTextView.text = "Set: $currentSet/$maxSets"
+                }
+            }
+        })
     }
 
     private fun advanceToNextExercise() {
@@ -379,7 +553,29 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             delay(1500)  // Pequeño delay para que el backend procese la actualización
             userSessionManager?.getMyExercises()
         }
+        resetExerciseState()
     }
+
+    private fun resetExerciseState() {
+        // 🔄 Reiniciar variables
+        repetitionCount = 0
+        currentSet = 1
+        routineStarted = false
+        routineEnded = false
+        isResting = false
+        startPoseTime = 0L
+
+
+        // 🔄 Resetear UI
+        repCountTextView.text = "Reps: 0/$repsPerSet"
+        setCountTextView.text = "Set: $currentSet/$maxSets"
+
+        statusTextView.text = "Mantén 'x_pose' para comenzar"
+        statusTextView.visibility = View.VISIBLE
+
+        resetPoseLandmarker()
+    }
+
 
     private fun resetPoseLandmarker() {
         backgroundExecutor.execute {
@@ -395,6 +591,9 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         backgroundExecutor.execute { poseLandmarkerHelper.clearPoseLandmarker() }
         backgroundExecutor.shutdown()
         backgroundExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
+        generalHandler.removeCallbacksAndMessages(null) // Detener el cronómetro al cerrar la actividad
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 
     override fun onError(error: String, errorCode: Int) {
@@ -405,6 +604,18 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
     fun filterTrainedExercises(exercisesFromDB: List<String>): List<String> {
         return exercisesFromDB.filter { ModelConfig.isExerciseTrained(it) }
+    }
+
+    private fun showCounters() {
+        repCountTextView.visibility = View.VISIBLE
+        setCountTextView.visibility = View.VISIBLE
+
+    }
+
+    private fun hideCounters() {
+        repCountTextView.visibility = View.INVISIBLE
+        setCountTextView.visibility = View.INVISIBLE
+
     }
 
 }

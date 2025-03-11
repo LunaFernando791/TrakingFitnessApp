@@ -8,7 +8,7 @@ object ModelConfig {
 //    val models = listOf("legs", "crunches", "curl-bicep", "dead-rows", "v-ups", "flexibility", "glute-bridge", "hip-thrust", "bw-skullcrusher")
 
     private val modelFiles = mapOf(
-        "legs" to "pose_classification_model_legs-mejorado.tflite",
+        "legs" to "pose_classification_model_legs-mejorado2.tflite",
         "shoulders" to "pose_classification_model_shoulders2.tflite",
         "chest" to "pose_classification_model_chest.tflite",
         "dips" to "pose_classification_model_bench-dips.tflite",
@@ -24,7 +24,7 @@ object ModelConfig {
     )
 
     private val labelFiles = mapOf(
-        "legs" to "labels_legs2.txt",
+        "legs" to "labels_legs.txt",
         "shoulders" to "labels_shoulders.txt",
         "chest" to "labels_chest.txt",
         "dips" to "labels_bench-dips.txt",
@@ -40,7 +40,7 @@ object ModelConfig {
     )
 
     private val exercisesByModel = mapOf(
-        "legs" to listOf("squats", "lunges", "deadlifts"),
+        "legs" to listOf("squats", "lunges", "deadlifts", "wall-sit"),
         "shoulders" to listOf("shoulder_press", "lateral_raise"),
 //        "chest" to listOf("shoulder_taps", "pushups", "diamond_pushups", "wide_pushups"),
         "chest" to listOf("shoulder_taps", "pushups"),

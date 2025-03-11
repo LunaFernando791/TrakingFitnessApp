@@ -37,6 +37,7 @@ id exerciseName
 id exerciseSpinner
 id fabMenu
 id facing_switch
+id generalTimer
 id graphic_overlay
 id main
 id modelSpinner
@@ -48,6 +49,7 @@ id setCount
 id settings_button
 id settings_container
 id spinner_exercise
+id statusText
 id timerTextView
 id toggle_orientation_button
 id viewFinder
@@ -57,6 +59,7 @@ layout activity_settings
 layout bottom_sheet_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
+raw beep
 string app_name
 string menu_item_settings
 string pref_category_key_camera

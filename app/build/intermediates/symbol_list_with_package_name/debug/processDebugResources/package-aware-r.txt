@@ -3382,6 +3382,7 @@ id forever
 id fragment_container_view_tag
 id frost
 id fullscreen_header
+id generalTimer
 id ghost_view
 id ghost_view_holder
 id gone
@@ -3624,6 +3625,7 @@ id startToEnd
 id startVertical
 id staticLayout
 id staticPostLayout
+id statusText
 id stop
 id stretch
 id submenuarrow
@@ -3907,6 +3909,7 @@ layout support_simple_spinner_dropdown_item
 mipmap ic_launcher
 mipmap ic_launcher_round
 plurals mtrl_badge_content_description
+raw beep
 raw keep_arcore
 raw sceneform_camera_material
 raw sceneform_default_light_probe
