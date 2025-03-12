@@ -42,6 +42,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.conection.RankingResponse
+import com.example.trackingfitness.conection.RetrofitInstance.BASE_URL
 import com.example.trackingfitness.viewModel.UserSessionManager
 
 @Composable
@@ -155,7 +156,7 @@ fun RankingList(ranking: RankingResponse) {
                     Text(text = "You: ")
                 }
                 Text(text = posicion.toString())
-                val url = "http://192.168.1.7:8000" + user.icon_url
+                val url = BASE_URL + user.icon_url
                 Log.d("URL", url)
                 Image(
                     modifier = Modifier

@@ -51,7 +51,10 @@ import com.example.trackingfitness.viewModel.UserSessionManager
 
 // Navegación de la app
 @Composable
-fun AppNavigation(){
+fun AppNavigation(
+    darkTheme: Boolean?,
+    onDarkThemeChange: (Boolean) -> Unit
+){
     val navController = rememberNavController()
     val registerViewModel: RegisterViewModel = viewModel()
     val loginViewModel: LoginViewModel = viewModel()
@@ -81,11 +84,16 @@ fun AppNavigation(){
     {
         composable(AppScreens.StartScreen.route)
         {
-            StartScreen(navController)
+            StartScreen(
+                navController,
+                onDarkThemeChange = onDarkThemeChange,
+                darkTheme = darkTheme
+            )
         }
         composable(AppScreens.RegisterOneScreen.route) {
             RegisterOneScreen(
                 navController = navController,
+                darkTheme = darkTheme,
                 viewModel = registerViewModel
             )
         }
@@ -108,11 +116,13 @@ fun AppNavigation(){
             )
         }
         composable(AppScreens.LoginScreen.route) {
-            LoginScreen(navController = navController, loginViewModel = loginViewModel)
+            LoginScreen(navController = navController,
+                loginViewModel = loginViewModel)
         }
         composable(AppScreens.RecoverPasswordScreen.route) {
             RecoverPasswordScreen(
                 navController = navController,
+                darkTheme = darkTheme,
                 recoverPasswordViewModel = recoverPasswordViewModel)
         }
         composable(AppScreens.OTPScreen.route) {
@@ -124,6 +134,8 @@ fun AppNavigation(){
         composable(AppScreens.PrincipalScreen.route) {
             PrincipalScreen(
                 navController = navController,
+                onDarkThemeChange = onDarkThemeChange,
+                darkTheme = darkTheme,
                 userSession = userSessionManager,
                 friendsViewModel = friendsViewModel
             )
@@ -131,24 +143,28 @@ fun AppNavigation(){
         composable(AppScreens.ExerciseListScreen.route) {
             ExerciseListScreen(
                 userSession = userSessionManager,
+                darkTheme = darkTheme,
                 navController = navController
             )
         }
         composable(AppScreens.ChangePassScreen.route) {
             ChangePassScreen(
                 navController = navController,
+                darkTheme = darkTheme,
                 recoverPasswordViewModel = recoverPasswordViewModel
             )
         }
         composable(AppScreens.ProfileScreen.route) {
             ProfileScreen(
                 navController = navController,
+                darkTheme = darkTheme,
                 userSession = userSessionManager
             )
         }
         composable(AppScreens.MyExercisesScreen.route) {
             MyExercisesScreen(
                 userSessionManager = userSessionManager,
+                darkTheme = darkTheme,
                 navController = navController
             )
         }
@@ -161,12 +177,14 @@ fun AppNavigation(){
         composable(AppScreens.EditEmailScreen.route) {
             EditEmailScreen(
                 navController = navController,
+                darkTheme = darkTheme,
                 userSession = userSessionManager
             )
         }
         composable(AppScreens.EditPasswordScreen.route) {
             EditPasswordScreen(
                 navController = navController,
+                darkTheme = darkTheme,
                 userSession = userSessionManager
             )
         }
@@ -180,6 +198,7 @@ fun AppNavigation(){
         composable(AppScreens.FriendsScreen.route) {
             FriendsScreen(
                 navController = navController,
+                darkTheme = darkTheme,
                 userSession = userSessionManager,
                 friendsViewModel = friendsViewModel
             )
@@ -193,6 +212,7 @@ fun AppNavigation(){
             if (friendUsername != null) {
                 FriendProfileScreen(
                     friendUsername = friendUsername,
+                    darkTheme = darkTheme,
                     navController = navController,
                     userSession = userSessionManager,
                     friendsViewModel = friendsViewModel
@@ -200,7 +220,7 @@ fun AppNavigation(){
             }
         }
         composable(AppScreens.MedalsScreen.route) {
-            MedalScreen(navController = navController, userSessionManager = userSessionManager)
+            MedalScreen(navController = navController,userSessionManager = userSessionManager)
         }
 
         composable(
@@ -217,14 +237,14 @@ fun AppNavigation(){
                         putExtra("EXERCISE_ID", idExercise)
                         putExtra("USER_TOKEN", token)
                     }
-                    context.startActivityForResult(intent, 1001) // 🔥 Esperamos resultado de CameraScreenV2
+                    context.startActivityForResult(intent, 1001)
                 }
             }
         }
 
 
         composable(AppScreens.RankingScreen.route) {
-            RankingScreen(navController = navController, userSessionManager = userSessionManager)
+            RankingScreen(navController = navController,userSessionManager = userSessionManager)
         }
         composable( // --> RUTA PARA LA FUNCIÓN DEL TRACKEO
             AppScreens.CameraScreen.route,

@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.RetrofitInstance
+import com.example.trackingfitness.conection.RetrofitInstance.BASE_URL
 import com.example.trackingfitness.conection.UserService
 import kotlinx.coroutines.launch
 
@@ -24,9 +24,9 @@ data class Medal(
     }
     fun showMedal(): String {
         return if (unLocked) {
-            "http://192.168.1.7:8000/storage/$image_path"
+            "${BASE_URL}storage/$image_path"
         } else {
-            "http://192.168.1.7:8000/storage/medals/locked.png"
+            "${BASE_URL}storage/medals/locked.png"
         }
     }
 }

@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.trackingfitness.activity.BackButton
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.viewModel.UserSessionManager
 
 
 @Composable
 fun EditPasswordScreen(
     navController: NavController,
+    darkTheme: Boolean?,
     userSession: UserSessionManager
 ) {
     Surface (
@@ -38,6 +38,7 @@ fun EditPasswordScreen(
     ){
         BodyScreen(
             navController,
+            darkTheme,
             userSession
         )
     }
@@ -46,6 +47,7 @@ fun EditPasswordScreen(
 @Composable
 fun BodyScreen(
     navController: NavController,
+    darkTheme: Boolean?,
     userSession: UserSessionManager
 ) {
     Column (
@@ -121,7 +123,7 @@ fun BodyScreen(
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = if (darkTheme.value) Color.White else Color.Black
+                contentColor = if (darkTheme==true) Color.White else Color.Black
             )
         ) {
             Text("Actualizar")

@@ -4,7 +4,7 @@
             "outputFile": "com.example.trackingfitness.app-mergeDebugResources-76:/values-el/values-el.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\0a646fb2fe63a0250588f7c00709f20d\\transformed\\appcompat-1.7.0\\res\\values-el\\values-el.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\8.10.2\\transforms\\0a646fb2fe63a0250588f7c00709f20d\\transformed\\appcompat-1.7.0\\res\\values-el\\values-el.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -21,24 +21,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\2c01a00c7232ab7951b325c45cef6ce8\\transformed\\ui-release\\res\\values-el\\values-el.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\8.10.2\\transforms\\4a24e9ab71ebaae3eb48ea95c8d06edf\\transformed\\core-1.15.0\\res\\values-el\\values.xml",
                     "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,204,290,391,496,588,669,763,852,942,1023,1105,1180,1255,1333,1408,1487,1557",
-                        "endColumns": "98,85,100,104,91,80,93,88,89,80,81,74,74,77,74,78,69,122",
-                        "endOffsets": "199,285,386,491,583,664,758,847,937,1018,1100,1175,1250,1328,1403,1482,1552,1675"
+                        "startLines": "4,5,6,7,8",
+                        "startColumns": "0,0,0,0,0",
+                        "startOffsets": "190,236,287,411,541",
+                        "endColumns": "45,50,123,129,85",
+                        "endOffsets": "235,286,410,540,626"
                     },
                     "to": {
-                        "startLines": "53,54,55,56,57,62,63,179,180,182,183,187,189,190,191,193,194,195",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "5040,5139,5225,5326,5431,5834,5915,17192,17281,17462,17543,17874,18030,18105,18183,18359,18438,18508",
-                        "endColumns": "98,85,100,104,91,80,93,88,89,80,81,74,74,77,74,78,69,122",
-                        "endOffsets": "5134,5220,5321,5426,5518,5910,6004,17276,17366,17538,17620,17944,18100,18178,18253,18433,18503,18626"
+                        "startLines": "6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "320,370,425,553,687",
+                        "endColumns": "49,54,127,133,89",
+                        "endOffsets": "365,420,548,682,772"
                     }
                 },
                 {
-                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\bf8f87917f8fd18ac3c7b97618560c78\\transformed\\material3-release\\res\\values-el\\values-el.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\8.10.2\\transforms\\bf8f87917f8fd18ac3c7b97618560c78\\transformed\\material3-release\\res\\values-el\\values-el.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -55,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\e636a9890ebae1dedf5415ad0fd9e883\\transformed\\foundation-release\\res\\values-el\\values-el.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\8.10.2\\transforms\\e636a9890ebae1dedf5415ad0fd9e883\\transformed\\foundation-release\\res\\values-el\\values-el.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
@@ -72,7 +72,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\905ddbd7f5043f3bd757d5edd5d0a244\\transformed\\material-1.12.0\\res\\values-el\\values-el.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\8.10.2\\transforms\\905ddbd7f5043f3bd757d5edd5d0a244\\transformed\\material-1.12.0\\res\\values-el\\values-el.xml",
                     "from": {
                         "startLines": "2,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -91,24 +91,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\4a24e9ab71ebaae3eb48ea95c8d06edf\\transformed\\core-1.15.0\\res\\values-el\\values.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\8.10.2\\transforms\\2c01a00c7232ab7951b325c45cef6ce8\\transformed\\ui-release\\res\\values-el\\values-el.xml",
                     "from": {
-                        "startLines": "4,5,6,7,8",
-                        "startColumns": "0,0,0,0,0",
-                        "startOffsets": "190,236,287,411,541",
-                        "endColumns": "45,50,123,129,85",
-                        "endOffsets": "235,286,410,540,626"
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,204,290,391,496,588,669,763,852,942,1023,1105,1180,1255,1333,1408,1487,1557",
+                        "endColumns": "98,85,100,104,91,80,93,88,89,80,81,74,74,77,74,78,69,122",
+                        "endOffsets": "199,285,386,491,583,664,758,847,937,1018,1100,1175,1250,1328,1403,1482,1552,1675"
                     },
                     "to": {
-                        "startLines": "6,7,8,9,10",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "320,370,425,553,687",
-                        "endColumns": "49,54,127,133,89",
-                        "endOffsets": "365,420,548,682,772"
+                        "startLines": "53,54,55,56,57,62,63,179,180,182,183,187,189,190,191,193,194,195",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "5040,5139,5225,5326,5431,5834,5915,17192,17281,17462,17543,17874,18030,18105,18183,18359,18438,18508",
+                        "endColumns": "98,85,100,104,91,80,93,88,89,80,81,74,74,77,74,78,69,122",
+                        "endOffsets": "5134,5220,5321,5426,5518,5910,6004,17276,17366,17538,17620,17944,18100,18178,18253,18433,18503,18626"
                     }
                 },
                 {
-                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\2a25ba6d1c0978a55cae01ecbf4f5993\\transformed\\core-1.13.1\\res\\values-el\\values-el.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\8.10.2\\transforms\\2a25ba6d1c0978a55cae01ecbf4f5993\\transformed\\core-1.13.1\\res\\values-el\\values-el.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

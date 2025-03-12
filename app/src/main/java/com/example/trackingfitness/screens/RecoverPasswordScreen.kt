@@ -34,18 +34,26 @@ import androidx.navigation.NavController
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.activity.ErrorMessages
 import com.example.trackingfitness.customFontFamily
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
 
 @Composable
-fun RecoverPasswordScreen(navController: NavController, recoverPasswordViewModel: RecoverPasswordViewModel){
-    ContainerContent(recoverPasswordViewModel, navController)
+fun RecoverPasswordScreen(
+    navController: NavController,
+    darkTheme: Boolean?,
+    recoverPasswordViewModel: RecoverPasswordViewModel){
+    ContainerContent(
+        recoverPasswordViewModel,
+        darkTheme = darkTheme,
+        navController)
 }
 
 
 @Composable
-fun ContainerContent(viewModel: RecoverPasswordViewModel, navController: NavController){
+fun ContainerContent(
+    viewModel: RecoverPasswordViewModel,
+    darkTheme: Boolean?,
+    navController: NavController){
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +76,7 @@ fun ContainerContent(viewModel: RecoverPasswordViewModel, navController: NavCont
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "Add your email and we will send you a code to reset your password",
-            color = if (darkTheme.value) Color.White else Color.Black,
+            color = if (darkTheme==true) Color.White else Color.Black,
         )
         Spacer(modifier = Modifier.height(20.dp))
         CustomTextField(

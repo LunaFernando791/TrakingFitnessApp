@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,22 +29,30 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.trackingfitness.R
 import com.example.trackingfitness.customFontFamily
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.navigation.AppScreens
 
 
 @Composable//VISTA DE INICIO PARA INICIAR SESIÓN O REGISTRARTE
-fun StartScreen(navController: NavHostController) {
+fun StartScreen(
+    navController: NavHostController,
+    darkTheme: Boolean?,
+    onDarkThemeChange: (Boolean) -> Unit) {
     BackHandler {
     }
-    BodyContent(navController = navController)
+    BodyContent(
+        navController = navController,
+        darkTheme = darkTheme,
+        onDarkThemeChange = onDarkThemeChange)
 }
 
 @Composable
-fun BodyContent(navController: NavHostController){
+fun BodyContent(
+    navController: NavHostController,
+    darkTheme: Boolean?,
+    onDarkThemeChange: (Boolean) -> Unit){
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(if (darkTheme.value) R.drawable.fondodark else R.drawable.fondoblanco2),
+            painter = painterResource(if (darkTheme == true) R.drawable.fondodark else R.drawable.fondoblanco2),
             contentDescription = "Fondo",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
@@ -135,9 +144,9 @@ fun BodyContent(navController: NavHostController){
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     ToggleSwitch(
-                        isChecked = darkTheme.value,
+                        isChecked = darkTheme?:isSystemInDarkTheme(),
                         onCheckedChange = { isChecked ->
-                            darkTheme.value = isChecked
+                            onDarkThemeChange(isChecked)
                         }
                     )
                 }

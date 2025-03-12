@@ -1,6 +1,5 @@
 package com.example.trackingfitness.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,8 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,7 +36,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.conection.MyExercise
-import com.example.trackingfitness.darkTheme
+import com.example.trackingfitness.conection.RetrofitInstance.BASE_URL
 import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.ui.theme.PositionColor
 import com.example.trackingfitness.viewModel.UserSessionManager
@@ -47,6 +44,7 @@ import com.example.trackingfitness.viewModel.UserSessionManager
 @Composable
 fun MyExercisesScreen(
     userSessionManager: UserSessionManager,
+    darkTheme: Boolean?,
     navController: NavController
 ) {
     Surface(
@@ -68,7 +66,8 @@ fun MyExercisesScreen(
             }
 
             // Cuerpo del contenido con la lista de ejercicios
-            ExercisesBodyContent(userSessionManager, navController)
+            ExercisesBodyContent(userSessionManager,
+                darkTheme,navController)
         }
     }
 }
@@ -77,6 +76,7 @@ fun MyExercisesScreen(
 @Composable
 fun ExercisesBodyContent(
     userSessionManager: UserSessionManager,
+    darkTheme: Boolean?,
     navController: NavController
 ) {
     val myExercisesState by userSessionManager.myExercises.collectAsState()
@@ -120,7 +120,9 @@ fun ExercisesBodyContent(
                 else -> {
                     items(myExercisesState!!.selectedExercises) { exercise ->
                         if (exercise.status != "completado")
-                            ExerciseItem(myExercise = exercise, navController = navController)
+                            ExerciseItem(myExercise = exercise,
+                                darkTheme = darkTheme,
+                                navController = navController)
                     }
                 }
             }
@@ -135,10 +137,11 @@ fun ExercisesBodyContent(
 @Composable
 fun ExerciseItem(
     myExercise: MyExercise,
+    darkTheme: Boolean?,
     navController: NavController
 ){
 
-    val url = "http://192.168.100.3:8000/storage/${myExercise.image_path}"
+    val url = "${BASE_URL}storage/${myExercise.image_path}"
     Column(
         modifier = Modifier
 
@@ -226,7 +229,7 @@ fun ExerciseItem(
         ) {
             Text(
                 text = if (myExercise.status == "actual") "Start" else "Block",
-                color = if (darkTheme.value) Color.White else Color.Black,
+                color = if (darkTheme==true) Color.White else Color.Black,
                 fontSize = MaterialTheme.typography.bodySmall.fontSize,
                 fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
             )

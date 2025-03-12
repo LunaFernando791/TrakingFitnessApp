@@ -30,9 +30,15 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun TrackingFitnessTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    forceDarkTheme: Boolean? = null,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = when
+    {
+        forceDarkTheme == true -> DarkColorScheme
+        forceDarkTheme == false -> LightColorScheme
+        else -> if (darkTheme) DarkColorScheme else LightColorScheme
+    }
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

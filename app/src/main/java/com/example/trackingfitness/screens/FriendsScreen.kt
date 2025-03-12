@@ -1,10 +1,7 @@
 package com.example.trackingfitness.screens
-
-
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +20,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.TextFieldDefaults.indicatorLine
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Surface
@@ -33,7 +29,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.autoSaver
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,10 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.trackingfitness.activity.BackButton
-import com.example.trackingfitness.darkTheme
-import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.ui.theme.BlueGreen
-import com.example.trackingfitness.ui.theme.TextColor
 import com.example.trackingfitness.viewModel.FriendInformation
 import com.example.trackingfitness.viewModel.FriendRequest
 import com.example.trackingfitness.viewModel.FriendsViewModel
@@ -69,6 +60,7 @@ import com.example.trackingfitness.viewModel.UserSessionManager
 @Composable
 fun FriendsScreen(
     navController: NavController,
+    darkTheme:  Boolean?,
     userSession: UserSessionManager,
     friendsViewModel: FriendsViewModel
 ){
@@ -76,6 +68,7 @@ fun FriendsScreen(
 
         FriendsBodyContent(
             userSessionManager = userSession,
+            darkTheme = darkTheme,
             navController = navController,
             friendsViewModel = friendsViewModel
         )
@@ -85,6 +78,7 @@ fun FriendsScreen(
 @Composable
 fun FriendsBodyContent(
     userSessionManager: UserSessionManager,
+    darkTheme: Boolean?,
     navController: NavController,
     friendsViewModel: FriendsViewModel
 ){
@@ -94,7 +88,7 @@ fun FriendsBodyContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(if (darkTheme.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(40.dp))
@@ -107,7 +101,7 @@ fun FriendsBodyContent(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(if (darkTheme.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background),
+                .background(MaterialTheme.colorScheme.background),
         ) {
             item {
                 val userFriends = friendsViewModel.user
@@ -161,7 +155,7 @@ fun FriendsBodyContent(
                         }
                         else -> { // Cuando hay amigos disponibles
                             val friendsList = userFriends.value.friends.values.toList()
-                            SearchableFriendList(friendsList, true,navController, friendsViewModel,"")
+                            SearchableFriendList(friendsList, darkTheme,true,navController, friendsViewModel,"")
                         }
                     }
                     Text(
@@ -183,6 +177,7 @@ fun FriendsBodyContent(
                             val usersAvailables = userFriends.value.availableUsers?.values?.toList()
                             if (usersAvailables != null) {
                                 SearchableFriendList(usersAvailables,
+                                    darkTheme,
                                     false ,
                                     navController,
                                     friendsViewModel,
@@ -305,6 +300,7 @@ fun FriendRequestCard(
 @Composable
 fun SearchableFriendList(
     friends: List<FriendInformation>,
+    darkTheme: Boolean?,
     areFriends: Boolean,
     navController: NavController,
     friendsViewModel: FriendsViewModel,
@@ -326,15 +322,15 @@ fun SearchableFriendList(
                 Icon(
                     Icons.Default.Search,
                     contentDescription = null,
-                    tint = if (darkTheme.value) MaterialTheme.colorScheme.primary else BlueGreen) },
+                    tint = if (darkTheme==true) MaterialTheme.colorScheme.primary else BlueGreen) },
             modifier = Modifier
                 .fillMaxWidth(),
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = MaterialTheme.colorScheme.background,
                 focusedContainerColor = MaterialTheme.colorScheme.background,
                 focusedLabelColor = MaterialTheme.colorScheme.primary,
-                focusedIndicatorColor = if (darkTheme.value) MaterialTheme.colorScheme.primary else BlueGreen,
-                unfocusedIndicatorColor = if (darkTheme.value) MaterialTheme.colorScheme.primary else BlueGreen,
+                focusedIndicatorColor = if (darkTheme==true) MaterialTheme.colorScheme.primary else BlueGreen,
+                unfocusedIndicatorColor = if (darkTheme==true) MaterialTheme.colorScheme.primary else BlueGreen,
             ),
             textStyle = TextStyle(
                 color = MaterialTheme.colorScheme.primary,
@@ -431,7 +427,7 @@ fun FriendProfileCard(
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = 10.sp,
                     textAlign = TextAlign.Center,
-                    color = if (darkTheme.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background
                 )
             }
         }

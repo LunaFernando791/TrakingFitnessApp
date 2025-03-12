@@ -1,0 +1,6 @@
+deadlift_end
+lunge_left_down
+lunge_right_down
+squats_end
+start
+x_pose

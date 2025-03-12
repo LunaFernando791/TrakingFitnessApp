@@ -64,8 +64,8 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.conection.Exercise
+import com.example.trackingfitness.conection.RetrofitInstance.BASE_URL
 import com.example.trackingfitness.conection.Sets
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.ui.theme.BlueGreen
 import com.example.trackingfitness.ui.theme.BorderColor
 import com.example.trackingfitness.ui.theme.PositionColor
@@ -80,6 +80,7 @@ import com.google.gson.JsonObject
 @Composable
 fun ExerciseListScreen(
     userSession: UserSessionManager,
+    darkTheme: Boolean?,
     navController: NavController
 ) {
     val userExercise = userSession.exercises.collectAsState()
@@ -168,6 +169,7 @@ fun ExerciseListScreen(
                         selectedReps = selectedReps[exercise.id] ?: 0,
                         onSetsSelected = { newSets -> selectedSets[exercise.id] = newSets },
                         onRepsSelected = { newReps -> selectedReps[exercise.id] = newReps },
+                        darkTheme = darkTheme,
                         onExerciseSelected = { selected, current ->
                             swapExercises(current, selected, availableExercises, myExercises)
                         }
@@ -200,7 +202,7 @@ fun ExerciseListScreen(
                                 .width(150.dp)
                                 .height(50.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = if (darkTheme.value) Color.White else BlueGreen
+                                containerColor = if (darkTheme==true) Color.White else BlueGreen
                             )
                         ) {
                             if (isSubmitting) {
@@ -210,7 +212,7 @@ fun ExerciseListScreen(
                                 )
                             } else {
                                 Text(text = "Submit",
-                                    color = if (darkTheme.value) Color.Black else Color.White)
+                                    color = if (darkTheme==true) Color.Black else Color.White)
                             }
                         }
                     }
@@ -248,6 +250,7 @@ fun ExerciseListScreen(
 @Composable
 fun ExerciseCard(
     exercise: Exercise,
+    darkTheme: Boolean?,
     sets: Sets?,
     availableExercises: List<Exercise>,
     selectedSets: Int,
@@ -282,7 +285,7 @@ fun ExerciseCard(
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val url = "http://192.168.1.7:8000/storage/${exercise.image_path}"
+            val url = "${BASE_URL}storage/${exercise.image_path}"
             Image(
                 modifier = Modifier
                     .size(150.dp)
@@ -317,7 +320,7 @@ fun ExerciseCard(
                     )
                     Icon(
                         imageVector = if (isVisible.value) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        tint = if (darkTheme.value) Color.White else Color.Black,
+                        tint = if (darkTheme==true) Color.White else Color.Black,
                         contentDescription = "toggle details",
                         modifier = Modifier
                             .size(40.dp)
@@ -343,7 +346,7 @@ fun ExerciseCard(
                         modifier = Modifier
                             .clip(RoundedCornerShape(50.dp))
                             .background(
-                                if (darkTheme.value) Color.White else BorderColor,
+                                if (darkTheme==true) Color.White else BorderColor,
                                 shape = RoundedCornerShape(50.dp)
                             )
                     ) {
@@ -353,23 +356,23 @@ fun ExerciseCard(
                             readOnly = true,
                             label = { Text("Sets",
                                 fontSize = 10.sp,
-                                color = if (darkTheme.value) Color.Black else Color.White)},
+                                color = if (darkTheme==true) Color.Black else Color.White)},
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = setsExpanded) },
                             modifier = Modifier
                                 .menuAnchor()
                                 .height(45.dp)
                                 .clip(RoundedCornerShape(50.dp)),
                             colors = TextFieldDefaults.colors(
-                                focusedTextColor = if (darkTheme.value) Color.Black else Color.White,
-                                unfocusedTextColor = if (darkTheme.value) Color.Black else Color.White,
-                                focusedContainerColor = if (darkTheme.value) PositionColor else BorderColor,
-                                unfocusedContainerColor = if (darkTheme.value) Color.White else PositionColor,
+                                focusedTextColor = if (darkTheme==true) Color.Black else Color.White,
+                                unfocusedTextColor = if (darkTheme==true) Color.Black else Color.White,
+                                focusedContainerColor = if (darkTheme==true) PositionColor else BorderColor,
+                                unfocusedContainerColor = if (darkTheme==true) Color.White else PositionColor,
                                 disabledContainerColor = MaterialTheme.colorScheme.primary,
                                 focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                                 unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                                 disabledIndicatorColor = MaterialTheme.colorScheme.tertiary,
-                                focusedLabelColor = if (darkTheme.value) Color.Black else Color.White,
-                                unfocusedLabelColor = if (darkTheme.value) Color.Black else Color.White,
+                                focusedLabelColor = if (darkTheme==true) Color.Black else Color.White,
+                                unfocusedLabelColor = if (darkTheme==true) Color.Black else Color.White,
                             ),
                             textStyle = TextStyle(fontSize = 10.sp),
                         )
@@ -378,18 +381,18 @@ fun ExerciseCard(
                             onDismissRequest = { setsExpanded = false },
                             modifier = Modifier
                                 .menuAnchor()
-                                .background(if (darkTheme.value) Color.White else BorderColor),
+                                .background(if (darkTheme==true) Color.White else BorderColor),
                         ) {
                             setsOptions.forEach { option ->
                                 DropdownMenuItem(
                                     text = { Text(option.toString(),
-                                        color = if (darkTheme.value) Color.Black else Color.White) },
+                                        color = if (darkTheme==true) Color.Black else Color.White) },
                                     onClick = {
                                         onSetsSelected(option)
                                         setsExpanded = false
                                     },
                                     modifier = Modifier
-                                        .background(if (darkTheme.value) Color.White else BorderColor, shape = RoundedCornerShape(50.dp))
+                                        .background(if (darkTheme==true) Color.White else BorderColor, shape = RoundedCornerShape(50.dp))
                                         .padding(10.dp)
                                         .clip(RoundedCornerShape(50.dp))
                                 )
@@ -408,23 +411,23 @@ fun ExerciseCard(
                             readOnly = true,
                             label = { Text("Reps",
                                 fontSize = 10.sp,
-                                color = if (darkTheme.value) Color.Black else Color.White) },
+                                color = if (darkTheme==true) Color.Black else Color.White) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = repsExpanded) },
                             modifier = Modifier
                                 .menuAnchor()
                                 .height(45.dp)
                                 .clip(RoundedCornerShape(50.dp)),
                             colors = TextFieldDefaults.colors(
-                                focusedTextColor = if (darkTheme.value) Color.Black else Color.White,
-                                unfocusedTextColor = if (darkTheme.value) Color.Black else Color.White,
-                                focusedContainerColor = if (darkTheme.value) PositionColor else BorderColor,
-                                unfocusedContainerColor = if (darkTheme.value) Color.White else PositionColor,
+                                focusedTextColor = if (darkTheme==true) Color.Black else Color.White,
+                                unfocusedTextColor = if (darkTheme==true) Color.Black else Color.White,
+                                focusedContainerColor = if (darkTheme==true) PositionColor else BorderColor,
+                                unfocusedContainerColor = if (darkTheme==true) Color.White else PositionColor,
                                 disabledContainerColor = MaterialTheme.colorScheme.primary,
                                 focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                                 unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                                 disabledIndicatorColor = MaterialTheme.colorScheme.tertiary,
-                                focusedLabelColor = if (darkTheme.value) Color.Black else Color.White,
-                                unfocusedLabelColor = if (darkTheme.value) Color.Black else Color.White,
+                                focusedLabelColor = if (darkTheme==true) Color.Black else Color.White,
+                                unfocusedLabelColor = if (darkTheme==true) Color.Black else Color.White,
                             ),
                             textStyle = TextStyle(fontSize = 10.sp),
                         )
@@ -432,18 +435,18 @@ fun ExerciseCard(
                             expanded = repsExpanded,
                             onDismissRequest = { repsExpanded = false },
                             modifier = Modifier
-                                .background(if (darkTheme.value) Color.White else BorderColor)
+                                .background(if (darkTheme==true) Color.White else BorderColor)
                         ) {
                             repsOptions.forEach { option ->
                                 DropdownMenuItem(
                                     text = { Text(option.toString(),
-                                        color = if (darkTheme.value) Color.Black else Color.White) },
+                                        color = if (darkTheme==true) Color.Black else Color.White) },
                                     onClick = {
                                         onRepsSelected(option)
                                         repsExpanded = false
                                     },
                                     modifier = Modifier
-                                        .background(if (darkTheme.value) Color.White else BorderColor, shape = RoundedCornerShape(50.dp))
+                                        .background(if (darkTheme==true) Color.White else BorderColor, shape = RoundedCornerShape(50.dp))
                                         .padding(10.dp)
                                         .clip(RoundedCornerShape(50.dp))
                                 )
@@ -501,7 +504,7 @@ fun ChangeExerciseCards(
     exercise: Exercise,
     onExerciseSelected: (Exercise) -> Unit
 ) {
-    val url = "http://192.168.100.3:8000/storage/${exercise.image_path}"
+    val url = "${BASE_URL}storage/${exercise.image_path}"
     Row(
         modifier = Modifier
             .border(

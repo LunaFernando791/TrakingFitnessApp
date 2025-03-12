@@ -3,6 +3,7 @@ package com.example.trackingfitness.viewModel
 import android.util.Log
 import android.util.Patterns
 import androidx.annotation.OptIn
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -16,8 +17,8 @@ import androidx.media3.common.util.UnstableApi
 import com.example.trackingfitness.conection.RetrofitInstance
 import com.example.trackingfitness.conection.User
 import com.example.trackingfitness.conection.UserService
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.ui.theme.BlueGreen
+import com.example.trackingfitness.ui.theme.PositionColor
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -39,12 +40,12 @@ class RegisterViewModel : ViewModel() {
     var routineType by mutableStateOf("")
     var injuriesList by mutableStateOf(listOf<Int>())
         private set
-
+    var isDark by mutableStateOf(false)
 
     // VARIABLES PARA EL PROGRESO DE LA BARRA
     var progress by mutableFloatStateOf(0.0f)
         private set
-    private val _progressColor = mutableStateOf(if (darkTheme.value) Color.White else BlueGreen)
+    private val _progressColor = mutableStateOf(PositionColor)
     val progressColor: State<Color> get() = _progressColor
     private val _trackColor = mutableStateOf(Color.Gray)
     val trackColor: State<Color> get() = _trackColor

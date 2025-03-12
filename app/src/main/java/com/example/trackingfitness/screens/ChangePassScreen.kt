@@ -31,16 +31,19 @@ import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
 @Composable
 fun ChangePassScreen(
     navController: NavController,
+    darkTheme: Boolean?,
     recoverPasswordViewModel: RecoverPasswordViewModel
 ){
     Surface {
-        BodyContent(navController, recoverPasswordViewModel)
+        BodyContent(navController,
+            darkTheme = darkTheme,recoverPasswordViewModel)
     }
 }
 
 @Composable
 fun BodyContent(
     navController: NavController,
+    darkTheme: Boolean?,
     viewModel: RecoverPasswordViewModel
 ){
     Column(

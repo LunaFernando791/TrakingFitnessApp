@@ -1,17 +1,16 @@
 package com.example.trackingfitness.screens
 
-import android.os.Handler
-import android.os.Looper
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -61,7 +60,6 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.trackingfitness.R
 import com.example.trackingfitness.activity.ExperienceBar
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.ui.theme.BlueGreen
 import com.example.trackingfitness.viewModel.FriendsViewModel
 import com.example.trackingfitness.viewModel.UserSessionManager
@@ -72,6 +70,8 @@ import java.time.YearMonth
 @Composable
 fun PrincipalScreen(
     navController: NavController,
+    onDarkThemeChange: (Boolean) -> Unit,
+    darkTheme: Boolean?,
     userSession: UserSessionManager,
     friendsViewModel: FriendsViewModel
 ){
@@ -81,6 +81,8 @@ fun PrincipalScreen(
     ){
         BodyContent(
             navController,
+            onDarkThemeChange,
+            darkTheme,
             userSession,
             friendsViewModel
         )
@@ -90,6 +92,8 @@ fun PrincipalScreen(
 @Composable
 fun BodyContent(
     navController: NavController,
+    onDarkThemeChange: (Boolean) -> Unit,
+    darkTheme: Boolean?,
     userSessionManager: UserSessionManager,
     friendsViewModel: FriendsViewModel
 ){
@@ -128,13 +132,13 @@ fun BodyContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ToggleSwitch(
-                    isChecked = darkTheme.value,
+                    isChecked = darkTheme?: isSystemInDarkTheme(),
                     onCheckedChange = { isChecked ->
-                        darkTheme.value = isChecked
+                        onDarkThemeChange(isChecked)
                     }
                 )
                 Text(
-                    text = if (darkTheme.value) "Dark mode" else "Light mode",
+                    text = if (darkTheme==true) "Dark mode" else "Light mode",
                     style = TextStyle(
                         fontSize = 10.sp,
                     )
@@ -142,12 +146,13 @@ fun BodyContent(
             }
         }
         ExperienceBar(
+            darkTheme,
             user.userLevel.ifEmpty { "0" },
             user.progressLevel.ifEmpty { "0" },
             modifier = Modifier.padding(0.dp)
         )
         TopMenu(userSessionManager, navController)
-        MyCalendar(datesWithExercise)
+        MyCalendar(datesWithExercise, darkTheme)
         Row(
             modifier = Modifier
                 .padding(top = 15.dp),
@@ -312,7 +317,8 @@ fun TopMenu(
 // Calendario de los días donde se realizó la rutina
 @Composable
 fun MyCalendar(
-    datesWithExercise: List<LocalDate>
+    datesWithExercise: List<LocalDate>,
+    darkTheme: Boolean?
 ) {
     Column( // CALENDAR TO SHOW THE DAY TO DAY PROGRESS
         modifier = Modifier
@@ -339,7 +345,7 @@ fun MyCalendar(
             fontSize = MaterialTheme.typography.titleMedium.fontSize,
             modifier = Modifier.padding(top = 15.dp, start = 15.dp)
         )
-        ExerciseCalendar(datesWithExercise)
+        ExerciseCalendar(datesWithExercise, darkTheme)
     }
 }
 
@@ -480,7 +486,8 @@ fun MedalBottom(
 }
 
 @Composable
-fun ExerciseCalendar(datesWithExercise: List<LocalDate>) {
+fun ExerciseCalendar(datesWithExercise: List<LocalDate>,
+                     darkTheme: Boolean?) {
     val currentMonth = remember { mutableStateOf(YearMonth.now()) }
 
     Column(
@@ -492,6 +499,7 @@ fun ExerciseCalendar(datesWithExercise: List<LocalDate>) {
         // Calendario mensual
         MonthCalendar(
             month = currentMonth.value,
+            darkTheme = darkTheme,
             onMonthChange = { newMonth -> currentMonth.value = newMonth },
             datesWithExercise = datesWithExercise
         )
@@ -501,6 +509,7 @@ fun ExerciseCalendar(datesWithExercise: List<LocalDate>) {
 @Composable
 fun MonthCalendar(
     month: YearMonth,
+    darkTheme: Boolean?,
     onMonthChange: (YearMonth) -> Unit,
     datesWithExercise: List<LocalDate>
 ) {
@@ -547,7 +556,7 @@ fun MonthCalendar(
                     .aspectRatio(1f) // Cuadrado perfecto
                     .clip(RoundedCornerShape(16.dp))
                     .background(
-                        if (isExerciseDay) if (darkTheme.value) Color.White else MaterialTheme.colorScheme.onSecondaryContainer else Color.Transparent,
+                        if (isExerciseDay) if (darkTheme == true) Color.White else MaterialTheme.colorScheme.onSecondaryContainer else Color.Transparent,
                     )
                     .padding(5.dp),
                 contentAlignment = Alignment.TopCenter,
@@ -555,7 +564,7 @@ fun MonthCalendar(
                 Text(
                     text = "${day + 1}",
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (isExerciseDay) if (darkTheme.value) Color.Black else Color.White else Color.Gray
+                    color = if (isExerciseDay) if (darkTheme == true) Color.Black else Color.White else Color.Gray
                 )
             }
         }

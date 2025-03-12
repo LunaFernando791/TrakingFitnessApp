@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,9 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -46,7 +42,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.activity.ExperienceBar
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.viewModel.FriendsViewModel
 import com.example.trackingfitness.viewModel.Medal
 import com.example.trackingfitness.viewModel.MedalViewModel
@@ -55,6 +50,7 @@ import com.example.trackingfitness.viewModel.UserSessionManager
 @Composable
 fun FriendProfileScreen(
     friendUsername: String,
+    darkTheme: Boolean?,
     navController: NavController,
     userSession: UserSessionManager,
     friendsViewModel: FriendsViewModel
@@ -62,6 +58,7 @@ fun FriendProfileScreen(
     Surface {
         FriendProfileBodyContent(
             friendUsername = friendUsername,
+            darkTheme = darkTheme,
             userSessionManager = userSession,
             navController = navController,
             friendsViewModel = friendsViewModel
@@ -72,6 +69,7 @@ fun FriendProfileScreen(
 @Composable
 fun FriendProfileBodyContent(
     friendUsername: String,
+    darkTheme: Boolean?,
     userSessionManager: UserSessionManager,
     navController: NavController,
     friendsViewModel: FriendsViewModel
@@ -89,7 +87,7 @@ fun FriendProfileBodyContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(if (darkTheme.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(40.dp))
@@ -137,6 +135,7 @@ fun FriendProfileBodyContent(
                 )
                 Spacer(modifier = Modifier.height(40.dp))
                 ExperienceBar(
+                    darkTheme,
                     if(friendProfile.value.userLevel=="") "0" else friendProfile.value.userLevel,
                     if(friendProfile.value.experience_level=="") "0" else friendProfile.value.experience_level,
                     modifier = Modifier.padding(horizontal = 15.dp)
@@ -160,7 +159,7 @@ fun FriendProfileBodyContent(
                     )
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                MyCalendar(friendProfile.value.exercise_dates?: emptyList())
+                MyCalendar(friendProfile.value.exercise_dates?: emptyList(), darkTheme)
                 Spacer(modifier = Modifier.height(10.dp))
                 medalList.value.forEach(
                     fun(medal){

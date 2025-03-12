@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -57,7 +58,7 @@ fun RegisterFourScreen(navController: NavController, viewModel: RegisterViewMode
             )
             Spacer(modifier = Modifier.height(15.dp))
             Text(
-                text= "Personaliza tu experiencia.",
+                text= "Select your experience.",
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = MaterialTheme.typography.titleMedium.fontSize,
                 modifier = Modifier
@@ -77,11 +78,10 @@ fun RegisterFourScreen(navController: NavController, viewModel: RegisterViewMode
                 errorMessage = viewModel.routineTypeError
             )
             Text(
-                text= "¿Tienes lesiones?.",
+                text= "¿Do you have injuries?.",
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = MaterialTheme.typography.titleMedium.fontSize,
                 modifier = Modifier
-                    .padding(10.dp)
             )
             InjurySelectionScreen(viewModel)
         },
@@ -108,29 +108,50 @@ fun InjurySelectionScreen(viewModel: RegisterViewModel) {
     Column(
         modifier = Modifier.padding(10.dp)
     ) {
-        injuries.forEach { (id, name) ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+        Row {
+            // Primera columna
+            Column(
+                modifier = Modifier.weight(1f)
             ) {
-                Checkbox(
-                    checked = selectedInjuries.contains(id),
-                    onCheckedChange = { isChecked ->
-                        if (isChecked) {
-                            selectedInjuries.add(id) // Agregar el ID a la lista
-                        } else {
-                            selectedInjuries.remove(id) // Remover el ID de la lista
-                        }
-                        viewModel.updateInjuries(selectedInjuries)
-                    }
-                )
-                Text(
-                    text = name,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
+                injuries.take((injuries.size + 1) / 2).forEach { (id, name) ->
+                    InjuryCheckbox(id, name, selectedInjuries, viewModel)
+                }
+            }
+
+            // Segunda columna
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                injuries.drop((injuries.size + 1) / 2).forEach { (id, name) ->
+                    InjuryCheckbox(id, name, selectedInjuries, viewModel)
+                }
             }
         }
+    }
+}
+
+@Composable
+fun InjuryCheckbox(id: Int, name: String, selectedInjuries: MutableList<Int>, viewModel: RegisterViewModel) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        Checkbox(
+            checked = selectedInjuries.contains(id),
+            onCheckedChange = { isChecked ->
+                if (isChecked) {
+                    selectedInjuries.add(id) // Agregar el ID a la lista
+                } else {
+                    selectedInjuries.remove(id) // Remover el ID de la lista
+                }
+                viewModel.updateInjuries(selectedInjuries as SnapshotStateList<Int>)
+            }
+        )
+        Text(
+            text = name,
+            modifier = Modifier.padding(start = 8.dp)
+        )
     }
 }

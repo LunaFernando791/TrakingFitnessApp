@@ -4,7 +4,7 @@
             "outputFile": "com.example.trackingfitness.app-mergeDebugResources-76:/values-ldrtl-v17/values-ldrtl-v17.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\reson\\.gradle\\caches\\8.10.2\\transforms\\905ddbd7f5043f3bd757d5edd5d0a244\\transformed\\material-1.12.0\\res\\values-ldrtl-v17\\values-ldrtl-v17.xml",
+                    "source": "C:\\Users\\garci\\.gradle\\caches\\8.10.2\\transforms\\905ddbd7f5043f3bd757d5edd5d0a244\\transformed\\material-1.12.0\\res\\values-ldrtl-v17\\values-ldrtl-v17.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

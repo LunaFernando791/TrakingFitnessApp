@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
 import com.example.trackingfitness.R
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.ui.theme.BlueGreen
 import com.example.trackingfitness.viewModel.UserSessionManager
 
@@ -77,6 +76,7 @@ fun BackButton(navController: NavController,ruta: String, modifier: Modifier = M
 
 @Composable
 fun ExperienceBar(
+    darkTheme: Boolean?,
     userLevel: String,
     percentageProgress: String,
     modifier: Modifier = Modifier
@@ -123,7 +123,7 @@ fun ExperienceBar(
                     .height(8.dp)
                     .clip(RoundedCornerShape(40.dp))
                 ,
-                color = if (darkTheme.value) Color.White else MaterialTheme.colorScheme.onSecondaryContainer,
+                color = if (darkTheme==true) Color.White else MaterialTheme.colorScheme.onSecondaryContainer,
                 trackColor = MaterialTheme.colorScheme.secondary,
             )
             Text(

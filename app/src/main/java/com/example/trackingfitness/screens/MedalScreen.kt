@@ -48,7 +48,7 @@ fun MedalScreen(
     userSessionManager: UserSessionManager
 ) {
     Surface {
-        BodyMedalContainer(userSessionManager, navController)
+        BodyMedalContainer(userSessionManager,navController)
     }
 }
 @SuppressLint("StateFlowValueCalledInComposition")

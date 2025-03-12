@@ -47,12 +47,12 @@ import androidx.navigation.NavController
 import com.example.trackingfitness.R
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.activity.ExperienceBar
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.viewModel.UserSessionManager
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
+    darkTheme: Boolean?,
     userSession: UserSessionManager
 ){
     userSession.getUserInformation()
@@ -62,13 +62,14 @@ fun ProfileScreen(
             .background(MaterialTheme.colorScheme.background),
     ){
         Image(
-            painter = painterResource(if (darkTheme.value) R.drawable.fondodark else R.drawable.fondoblanco2),
+            painter = painterResource(if (darkTheme==true) R.drawable.fondodark else R.drawable.fondoblanco2),
             contentDescription = "Logo FitnessTracking",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
         BodyContentProfile(
             userSession,
+            darkTheme,
             navController
         )
     }
@@ -77,6 +78,7 @@ fun ProfileScreen(
 @Composable
 fun BodyContentProfile(
     userSessionManager: UserSessionManager,
+    darkTheme: Boolean?,
     navController: NavController
 ){
     Column(
@@ -194,7 +196,7 @@ fun BodyContentProfile(
         ){
             item {
                 Spacer(modifier = Modifier.height(30.dp))
-                ExperienceBar(user.userLevel, user.progressLevel, modifier = Modifier.padding(horizontal = 15.dp))
+                ExperienceBar(darkTheme,user.userLevel, user.progressLevel, modifier = Modifier.padding(horizontal = 15.dp))
                 DynamicInfoRow(
                     items = listOf(
                         "Name" to userSessionManager.getUserSession().name,
@@ -297,7 +299,7 @@ fun BodyContentProfile(
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.background,
-                            contentColor = if (darkTheme.value) Color.White else Color.Black
+                            contentColor = if (darkTheme==true) Color.White else Color.Black
                         )
                     ) {
                         Text(text = "Edit profile",

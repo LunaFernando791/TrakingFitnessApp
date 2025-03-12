@@ -22,13 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.trackingfitness.activity.BackButton
-import com.example.trackingfitness.darkTheme
 import com.example.trackingfitness.viewModel.UserSessionManager
 
 
 @Composable
 fun EditEmailScreen(
     navController: NavController,
+    darkTheme: Boolean?,
     userSession: UserSessionManager
 ) {
     Surface (
@@ -39,6 +39,7 @@ fun EditEmailScreen(
     ){
         BodyScreenContent(
             navController,
+            darkTheme = darkTheme,
             userSession
         )
     }
@@ -47,6 +48,7 @@ fun EditEmailScreen(
 @Composable
 fun BodyScreenContent(
     navController: NavController,
+    darkTheme: Boolean?,
     userSession: UserSessionManager
     ) {
     Column (
@@ -102,7 +104,7 @@ fun BodyScreenContent(
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = if (darkTheme.value) Color.White else Color.Black
+                contentColor = if (darkTheme == true) Color.White else Color.Black
             )
         ) {
             Text("Actualizar")

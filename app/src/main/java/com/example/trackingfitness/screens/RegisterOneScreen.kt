@@ -16,7 +16,8 @@ import com.example.trackingfitness.navigation.AppScreens
 import com.example.trackingfitness.viewModel.RegisterViewModel
 
 @Composable
-fun RegisterOneScreen(navController: NavController, viewModel: RegisterViewModel){
+fun RegisterOneScreen(navController: NavController,
+                      darkTheme: Boolean?,viewModel: RegisterViewModel){
     RegisterForm(
         viewModel = viewModel, content = {
             CustomTextField(
