@@ -1,46 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@android:color/white">
+    android:fillViewport="true"
+    android:background="#2A3A4D">
 
-    <GridLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:rowCount="2"
-        android:padding="8dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <Button
-            android:id="@+id/btnSwitchCamera"
-            android:layout_width="0dp"
+        <!-- Nombre del ejercicio -->
+        <TextView
+            android:id="@+id/exerciseTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="Switch Camera" />
+            android:text="Nombre del ejercicio"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:layout_marginBottom="5dp" />
 
-        <Button
-            android:id="@+id/btnRotateCamera"
-            android:layout_width="0dp"
+        <!-- Descripción del ejercicio -->
+        <TextView
+            android:id="@+id/exerciseDescription"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="Descripción del ejercicio"
+            android:gravity="top|start"
+            android:padding="12dp"
+            android:background="@drawable/rounded_button_imagebuttom"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Cuadrícula de botones -->
+        <GridLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="Rotate Camera" />
+            android:columnCount="2"
+            android:rowCount="2"
+            android:padding="8dp"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true">
 
-        <Button
-            android:id="@+id/btnPauseRoutine"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="Regresar" />
+            <ImageButton
+                android:id="@+id/btnSwitchCamera"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_columnWeight="1"
+                android:scaleType="centerInside"
+                android:background="@drawable/rounded_button_imagebuttom"
+                android:src="@drawable/cambiardecamara"
+                android:contentDescription="Cambiar cámara" />
 
-        <Button
-            android:id="@+id/btnNextExercise"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="Next Exercise"
-            />
-    </GridLayout>
+            <ImageButton
+                android:id="@+id/btnRotateCamera"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/rounded_button_imagebuttom"
+                android:src="@drawable/girarpantalla"
+                android:scaleType="centerInside"
+                android:contentDescription="Rotar cámara" />
 
-</LinearLayout>
+            <ImageButton
+                android:id="@+id/btnPauseRoutine"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/rounded_button_imagebuttom"
+                android:src="@drawable/flecha"
+                android:scaleType="centerInside"
+                android:contentDescription="Regresar" />
+
+            <ImageButton
+                android:id="@+id/btnNextExercise"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/rounded_button_imagebuttom"
+                android:src="@drawable/proximo"
+                android:scaleType="centerInside"
+                android:contentDescription="Siguiente ejercicio" />
+        </GridLayout>
+    </LinearLayout>
+</ScrollView>

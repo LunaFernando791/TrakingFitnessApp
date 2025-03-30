@@ -14,156 +14,201 @@
         android:layout_height="match_parent"
         app:scaleType="fillStart" />
 
-    <!-- Vista de superposición para los landmarks -->
+    <!-- Overlay de landmarks -->
     <com.example.trackingfitness.trackingv2.OverlayView
         android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
-    <!-- Spinner para seleccionar el ejercicio -->
-    <Spinner
-        android:id="@+id/exerciseSpinner"
+    <!-- Nombre del ejercicio (arriba centrado) -->
+    <TextView
+        android:id="@+id/exerciseName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
+        android:text="Ejercicio: Sentadilla"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:padding="8dp"
+        android:background="@drawable/rounded_button_imagebuttom"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="16dp" />
 
-    <!-- Spinner para seleccionar el modelo -->
-    <Spinner
-        android:id="@+id/modelSpinner"
+    <!-- PoseClass (estado) abajo del nombre -->
+    <TextView
+        android:id="@+id/poseClassText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
+        android:text="Estado: start"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:padding="8dp"
+        android:background="@drawable/rounded_button_imagebuttom"
+        app:layout_constraintTop_toBottomOf="@id/exerciseName"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/exerciseSpinner" />
+        android:layout_marginTop="8dp" />
 
-    <!-- Texto para mostrar el cronómetro de descanso entre sets -->
+    <!-- Reps (abajo izquierda) -->
+    <TextView
+        android:id="@+id/repetitionCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_button_setsreps"
+        android:padding="8dp"
+        android:text="Reps:"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/setCount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Sets (abajo izquierda) -->
+    <TextView
+        android:id="@+id/setCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_button_setsreps"
+        android:padding="8dp"
+        android:text="Set: 1/3"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/timerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/black"
-        android:padding="8dp"
         android:text="Descanso: 15 s"
         android:textColor="@android:color/white"
-        android:textSize="24sp"
+        android:textSize="18sp"
+        android:background="@drawable/rounded_button_descs"
+        android:padding="8dp"
+        android:layout_marginBottom="12dp"
         android:visibility="gone"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toTopOf="@id/exerciseName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintBottom_toTopOf="@id/repetitionCount"
 
-    <!-- Botón flotante para abrir el menú -->
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- FAB (abajo derecha) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_more"
-        android:layout_margin="16dp"
+        android:layout_margin="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Texto para el cronómetro general -->
+    <!-- Spinners (arriba derecha uno debajo de otro) -->
+    <Spinner
+        android:id="@+id/exerciseSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusText" />
+
+    <Spinner
+        android:id="@+id/modelSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exerciseSpinner" />
+
+    <!-- Cronómetro (si lo necesitas) -->
     <TextView
         android:id="@+id/generalTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/black"
-        android:gravity="center"
         android:padding="8dp"
         android:text="00:00"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/poseClassText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="44dp"
-        android:background="@android:color/black"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="PoseClass"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/exerciseSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:id="@+id/repetitionCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:background="@android:color/black"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="Reps: 1/5"
-        android:textColor="@android:color/white"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/modelSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/poseClassText" />
-
-
-    <TextView
-        android:id="@+id/setCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
-        android:layout_marginStart="40dp"
-        android:background="@android:color/black"
-        android:padding="8dp"
-        android:text="Set 1/3"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/fabMenu"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseName" />
-
-    <TextView
-        android:id="@+id/exerciseName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="5dp"
-        android:background="@android:color/black"
-        android:padding="8dp"
-        android:text="Nombre del Ejercicio"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/fabMenu"
-        app:layout_constraintEnd_toStartOf="@+id/fabMenu"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/repetitionCount"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Texto de estado (opcional) -->
     <TextView
         android:id="@+id/statusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/black"
-        android:padding="8dp"
         android:text="Esperando acción..."
         android:textColor="@android:color/white"
-        android:layout_marginStart="44dp"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:background="@drawable/rounded_button_descs"
+        android:padding="8dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/poseClassText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/repetitionCount" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp" />
 
+    <!-- 🔥 Overlay reutilizable para estados importantes (x_pose, descanso, etc.) -->
+    <FrameLayout
+        android:id="@+id/stateOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#AA000000"
+        android:visibility="gone">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stateOverlayLayout"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_overlay_setcompleted"
+            android:padding="24dp"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <!-- Texto: Set completado -->
+            <TextView
+                android:id="@+id/stateOverlayText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#404040"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Cronómetro en tiempo real -->
+            <TextView
+                android:id="@+id/overlayTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#404040"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Botón: Saltar cronómetro -->
+            <Button
+                android:id="@+id/skipTimerButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/rounded_button_setsreps"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textAllCaps="false"
+                android:elevation="4dp" />
+        </LinearLayout>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

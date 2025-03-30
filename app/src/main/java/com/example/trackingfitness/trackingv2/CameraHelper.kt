@@ -115,7 +115,7 @@ class CameraHelper(
         }
         activity.requestedOrientation = newOrientation
 
-        bindCameraUseCases()
+//        bindCameraUseCases()
     }
 
     companion object {
