@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.trackingfitness.LockOrientationInThisScreen
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.viewModel.MedalViewModel
 import com.example.trackingfitness.viewModel.UserSessionManager
@@ -47,6 +48,7 @@ fun MedalScreen(
     navController: NavController,
     userSessionManager: UserSessionManager
 ) {
+    LockOrientationInThisScreen()
     Surface {
         BodyMedalContainer(userSessionManager,navController)
     }

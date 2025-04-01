@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.example.trackingfitness.LockOrientationInThisScreen
 import com.example.trackingfitness.R
 import com.example.trackingfitness.activity.ExperienceBar
 import com.example.trackingfitness.ui.theme.BlueGreen
@@ -75,6 +76,7 @@ fun PrincipalScreen(
     userSession: UserSessionManager,
     friendsViewModel: FriendsViewModel
 ){
+    LockOrientationInThisScreen()
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -108,6 +110,7 @@ fun BodyContent(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .padding(15.dp)
+            .fillMaxSize(),
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Row (
@@ -151,15 +154,15 @@ fun BodyContent(
             user.progressLevel.ifEmpty { "0" },
             modifier = Modifier.padding(0.dp)
         )
-        TopMenu(userSessionManager, navController)
+        TopMenu(userSessionManager, navController, darkTheme)
         MyCalendar(datesWithExercise, darkTheme)
         Row(
             modifier = Modifier
                 .padding(top = 15.dp),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            MedalBottom {navController.navigate("medalsScreen")}
-            FriendRequest(friendsViewModel){navController.navigate("friendsScreen")}
+            MedalBottom(darkTheme) {navController.navigate("medalsScreen")}
+            FriendRequest(friendsViewModel, darkTheme){navController.navigate("friendsScreen")}
         }
     }
 }
@@ -168,7 +171,8 @@ fun BodyContent(
 @Composable
 fun TopMenu(
     userSessionManager: UserSessionManager,
-    navController: NavController
+    navController: NavController,
+    darkTheme: Boolean?
 ) {
     Row {
         Box( // Botón para iniciar la rutina
@@ -248,19 +252,26 @@ fun TopMenu(
                     .height(70.dp)
                     .background(MaterialTheme.colorScheme.secondary, shape = RectangleShape)
                     .clickable { navController.navigate("rankingScreen") },
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = "profile Details",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .padding(start = 30.dp, end = 10.dp)
-                )
+                if(darkTheme==true){
+                    Image(
+                        painter = painterResource(id = R.drawable.rankingdark),
+                        contentDescription = "profile Details",
+                        modifier = Modifier
+                            .size(40.dp),
+                    )
+                }else{
+                    Image(
+                        painter = painterResource(id = R.drawable.rankingm),
+                        contentDescription = "profile Details",
+                        modifier = Modifier
+                            .size(40.dp),
+                    )
+                }
                 Text(
-                    text = "Monthly Ranking",
+                    text = "Ranking",
                     fontSize = MaterialTheme.typography.titleMedium.fontSize,
                     style = TextStyle(
                         shadow = Shadow(
@@ -268,7 +279,9 @@ fun TopMenu(
                             offset = Offset(4f, 4f),
                             blurRadius = 8f
                         )
-                    )
+                    ),
+                    modifier = Modifier
+                        .padding(start = 5.dp)
                 )
             }
             Row(
@@ -289,13 +302,21 @@ fun TopMenu(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    tint = MaterialTheme.colorScheme.primary,
-                    contentDescription = "profile Details",
-                    modifier = Modifier
-                        .size(40.dp)
-                )
+                if(darkTheme==true) {
+                    Image(
+                        painter = painterResource(id = R.drawable.usuario__1_),
+                        contentDescription = "profile Details",
+                        modifier = Modifier
+                            .size(35.dp),
+                    )
+                }else{
+                    Image(
+                        painter = painterResource(id = R.drawable.usuario),
+                        contentDescription = "profile Details",
+                        modifier = Modifier
+                            .size(35.dp),
+                    )
+                }
                 Text(
                     text = "Profile",
                     fontSize = MaterialTheme.typography.titleMedium.fontSize,
@@ -352,6 +373,7 @@ fun MyCalendar(
 @Composable
 fun FriendRequest(
     friendsViewModel: FriendsViewModel,
+    darkTheme: Boolean?,
     onClickAction: () -> Unit
 ) {
     // Contenedor padre que permite que el contador rojo flote
@@ -398,16 +420,25 @@ fun FriendRequest(
                         )
                     )
                 )
-                Image(
-                    painter = painterResource(id = R.drawable.agregar_usuario),
-                    contentDescription = "agregar usuario",
-                    modifier = Modifier
-                        .size(60.dp)
-                        .wrapContentSize(),
-                    colorFilter = ColorFilter.tint(
-                        MaterialTheme.colorScheme.primary
+                if(darkTheme==true){
+                    Image(
+                        painter = painterResource(id = R.drawable.avatar_de_usuario__1_),
+                        contentDescription = "agregar usuario",
+                        modifier = Modifier
+                            .size(70.dp)
+                            .wrapContentSize(),
+                        colorFilter = ColorFilter.tint(
+                            MaterialTheme.colorScheme.primary
+                        )
                     )
-                )
+                }else{
+                    Image(
+                        painter = painterResource(id = R.drawable.avatar_de_usuario),
+                        contentDescription = "agregar usuario",
+                        modifier = Modifier
+                            .size(70.dp)
+                    )
+                }
             }
         }
 
@@ -451,6 +482,7 @@ fun ToggleSwitch(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
 
 @Composable
 fun MedalBottom(
+    darkTheme: Boolean?,
     onClickAction: () -> Unit
 ){
     Column(
@@ -480,8 +512,27 @@ fun MedalBottom(
                     offset = Offset(4f, 4f),
                     blurRadius = 8f
                 )
-            ))
-        Icon(imageVector = Icons.Default.Star, contentDescription = "medals",modifier = Modifier.wrapContentSize().size(60.dp))
+            )
+        )
+        if(darkTheme==true){
+            Image(
+                painter = painterResource(id = R.drawable.component_7),
+                contentDescription = "medals",
+                modifier = Modifier
+                    .size(80.dp)
+                    .wrapContentSize()
+                    .padding(top = 10.dp),
+            )
+        }else{
+            Image(
+                painter = painterResource(id = R.drawable.component_5),
+                contentDescription = "medals",
+                modifier = Modifier
+                    .size(80.dp)
+                    .wrapContentSize()
+                    .padding(top = 10.dp),
+            )
+        }
     }
 }
 

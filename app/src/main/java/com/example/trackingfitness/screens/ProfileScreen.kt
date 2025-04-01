@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.trackingfitness.LockOrientationInThisScreen
 import com.example.trackingfitness.R
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.activity.ExperienceBar
@@ -55,6 +56,7 @@ fun ProfileScreen(
     darkTheme: Boolean?,
     userSession: UserSessionManager
 ){
+    LockOrientationInThisScreen()
     userSession.getUserInformation()
     Surface (
         modifier = Modifier

@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.trackingfitness.LockOrientationInThisScreen
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.conection.RankingResponse
 import com.example.trackingfitness.conection.RetrofitInstance.BASE_URL
@@ -50,6 +51,7 @@ fun RankingScreen(
     navController: NavController,
     userSessionManager: UserSessionManager,
 ){
+    LockOrientationInThisScreen()
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +75,8 @@ fun RankingBodyContent(
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .padding(15.dp),
+            .padding(15.dp)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(

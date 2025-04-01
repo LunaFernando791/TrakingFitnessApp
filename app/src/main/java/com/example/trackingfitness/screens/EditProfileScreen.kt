@@ -85,7 +85,7 @@ fun BodyProfile(
             Text(
                 modifier = Modifier
                     .padding(horizontal = 15.dp),
-                text = "Actualiza tu información",
+                text = "Update your profile",
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.primary
@@ -94,7 +94,7 @@ fun BodyProfile(
                 modifier = Modifier
                     .padding(horizontal = 15.dp),
                 fontSize = 15.sp,
-                text = "Actualiza tu perfil, mantenlo al día, para poder ver tu progreso",
+                text = "Update your profile to see the changes",
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -102,7 +102,7 @@ fun BodyProfile(
             CustomTextField(
                 value = name.value,
                 onValueChange = { name.value = it },
-                label = "Nombre",
+                label = "Name",
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
@@ -114,7 +114,7 @@ fun BodyProfile(
             CustomTextField(
                 value = lastname.value,
                 onValueChange = { lastname.value = it },
-                label = "Apellido",
+                label = "Lastname",
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
@@ -126,7 +126,7 @@ fun BodyProfile(
             CustomTextField(
                 value = age.value,
                 onValueChange = { age.value = it },
-                label = "Edad",
+                label = "Age",
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -138,7 +138,7 @@ fun BodyProfile(
             CustomTextField(
                 value = height.value,
                 onValueChange = { height.value = it },
-                label = "Altura",
+                label = "Height",
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -150,7 +150,7 @@ fun BodyProfile(
             CustomTextField(
                 value = weight.value,
                 onValueChange = { weight.value = it },
-                label = "Peso",
+                label = "Weight",
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -161,13 +161,13 @@ fun BodyProfile(
             Spacer(modifier = Modifier.height(15.dp))
             CustomTextFieldMenu(
                 value = when (gender.value) {
-                    "1" -> "Masculino"
-                    "2" -> "Femenino"
+                    "1" -> "Male"
+                    "2" -> "Female"
                     else -> "Other"
                 },
-                onValueChange = { gender.value = if (it == "Masculino") "1" else "2" },
-                label = "Género",
-                options = listOf("Masculino", "Femenino"),
+                onValueChange = { gender.value = if (it == "Male") "1" else "2" },
+                label = "Gender",
+                options = listOf("Male", "Female"),
                 isError = userSession.obtenerGenderError() != null,
                 errorMessage = userSession.obtenerGenderError()
             )
@@ -175,7 +175,7 @@ fun BodyProfile(
             CustomTextField(
                 value = username.value,
                 onValueChange = { username.value = it },
-                label = "Nombre de usuario",
+                label = "Username",
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
@@ -186,14 +186,14 @@ fun BodyProfile(
             Spacer(modifier = Modifier.height(15.dp))
             CustomTextFieldMenu(
                 value = when (experienceLevel.value) {
-                    "1" -> "Principiante"
-                    "2" -> "Intermedio"
-                    "3" -> "Avanzado"
+                    "1" -> "Beginner"
+                    "2" -> "Intermediate"
+                    "3" -> "Expert"
                     else -> "Other"
                 },
-                onValueChange = { experienceLevel.value = if (it == "Principiante") "1" else if (it == "Intermedio") "2" else if (it == "Avanzado") "3" else "0"},
-                label = "Nivel de experiencia",
-                options = listOf("Principiante", "Intermedio", "Avanzado"),
+                onValueChange = { experienceLevel.value = if (it == "Beginner") "1" else if (it == "Intermediate") "2" else if (it == "Expert") "3" else "0"},
+                label = "Experience level",
+                options = listOf("Beginner", "Intermediate", "Expert"),
                 isError = userSession.obtenerExperienceLevelError() != null,
                 errorMessage = userSession.obtenerExperienceLevelError()
             )
@@ -227,7 +227,7 @@ fun BodyProfile(
                 modifier = Modifier.fillMaxSize()
             ){
                 Text(
-                    text = "Guardar cambios",
+                    text = "Save changes",
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxSize()
                 )

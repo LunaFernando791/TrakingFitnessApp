@@ -1,5 +1,4 @@
 package com.example.trackingfitness.screens
-
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -44,7 +43,6 @@ fun StartScreen(
         darkTheme = darkTheme,
         onDarkThemeChange = onDarkThemeChange)
 }
-
 @Composable
 fun BodyContent(
     navController: NavHostController,
@@ -90,7 +88,7 @@ fun BodyContent(
                         .align(Alignment.Center)
                 ) {
                     Text(
-                        text = "TRACKING FITNESS",
+                        text = "FITNESS TRACKING",
                         fontSize = 25.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         color = MaterialTheme.colorScheme.primary,
@@ -107,7 +105,7 @@ fun BodyContent(
                             .clickable { navController.navigate(AppScreens.RegisterOneScreen.route) },
                         ) {
                         Text(
-                            text = "REGISTRARSE",
+                            text = "SIG IN",
                             fontSize = 20.sp,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
@@ -134,7 +132,7 @@ fun BodyContent(
                             .clickable { navController.navigate(AppScreens.LoginScreen.route) }
                     ) {
                         Text(
-                            text = "INICIAR SESIÓN",
+                            text = "LOG IN",
                             fontSize = 20.sp,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,

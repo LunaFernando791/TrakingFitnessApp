@@ -4,15 +4,13 @@ package com.example.trackingfitness
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-
+import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
-
+import androidx.compose.runtime.DisposableEffect
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
-
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -23,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import com.example.trackingfitness.navigation.AppNavigation
@@ -35,7 +34,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
                 MyApp()
         }
@@ -43,16 +41,28 @@ class MainActivity : ComponentActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
             val destination = data?.getStringExtra("navigateTo")
-
             if (destination == "exerciseListScreen") {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("navigateTo", "exerciseListScreen") // 🔥 Mandamos la navegación
                 startActivity(intent)
                 finish() // 🔥 Evita pantalla en blanco
             }
+        }
+    }
+}
+@Composable
+fun LockOrientationInThisScreen() {
+    val context = LocalContext.current
+    val activity = context as Activity
+
+    DisposableEffect(Unit) {
+        val originalOrientation = activity.requestedOrientation
+        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT // 🔥 Bloquear en vertical
+
+        onDispose {
+            activity.requestedOrientation = originalOrientation // Restaura al salir
         }
     }
 }

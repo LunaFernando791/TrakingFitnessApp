@@ -50,6 +50,7 @@
         <activity
             android:name="com.example.trackingfitness.trackingv2.CameraScreenV2"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <!-- <activity -->
         <!-- android:name=".tracking.activities.CameraXLivePreviewActivity" -->

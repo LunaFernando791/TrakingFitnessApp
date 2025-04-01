@@ -106,7 +106,7 @@ fun BodyContent(
             ), modifier = Modifier
                 .width(200.dp)
         ) {
-            Text("Enviar")
+            Text("Submit")
         }
 
     }

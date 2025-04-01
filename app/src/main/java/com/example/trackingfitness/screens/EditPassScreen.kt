@@ -64,7 +64,7 @@ fun BodyScreen(
             .padding(end = 275.dp))
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "Actualiza tu contraseña",
+            text = "Update your password",
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary
@@ -73,7 +73,7 @@ fun BodyScreen(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
             fontSize = 15.sp,
-            text = "Actualiza tu contraseña y luego inicia sesión de nuevo para comprobarlo.",
+            text = "Update your password and then login again to verify the change",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -81,7 +81,7 @@ fun BodyScreen(
         CustomTextField(
             value = userSession.oldPassword,
             onValueChange = { userSession.changeOldPasswordValue(it) },
-            label = "Anterior contraseña",
+            label = "Current password",
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
             ),
@@ -92,7 +92,7 @@ fun BodyScreen(
         CustomTextField(
             value = userSession.newPassword,
             onValueChange = { userSession.changeNewPasswordValue(it) },
-            label = "Nueva contraseña",
+            label = "New password",
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
             ),
@@ -103,7 +103,7 @@ fun BodyScreen(
         CustomTextField(
             value = userSession.passwordConfirmation,
             onValueChange = { userSession.changePasswordConfirmationValue(it) },
-            label = "Confirmar contraseña",
+            label = "Confirm password",
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
             ),
@@ -126,7 +126,7 @@ fun BodyScreen(
                 contentColor = if (darkTheme==true) Color.White else Color.Black
             )
         ) {
-            Text("Actualizar")
+            Text("Update")
         }
     }
 }

@@ -67,7 +67,7 @@ fun BodyScreenContent(
         Text(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            text = "Actualiza tu correo electrónico",
+            text = "Update your email",
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary
@@ -76,7 +76,7 @@ fun BodyScreenContent(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
             fontSize = 15.sp,
-            text = "Ingresa tu correo y luego verifícalo para volver a iniciar sesión",
+            text = "Put your email and then verify it",
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -84,7 +84,7 @@ fun BodyScreenContent(
         CustomTextField(
             value = userSession.email,
             onValueChange = { userSession.changeEmailValue(it) },
-            label = "Nuevo correo electrónico",
+            label = "New Email",
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
             ),
@@ -107,7 +107,7 @@ fun BodyScreenContent(
                 contentColor = if (darkTheme == true) Color.White else Color.Black
             )
         ) {
-            Text("Actualizar")
+            Text("Update")
         }
     }
 }

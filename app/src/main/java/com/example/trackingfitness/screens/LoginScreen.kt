@@ -97,7 +97,7 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.height(15.dp))
         Text(
-                text = "¿Olvidaste tu contraseña?, click here",
+                text = "¿Forgot your password?, click here",
                 color = MaterialTheme.colorScheme.primary,
                 textDecoration = TextDecoration.Underline,
                 fontSize = 18.sp,

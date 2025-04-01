@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:2:1-54:12
-INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:2:1-54:12
-INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:2:1-54:12
-INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:2:1-54:12
+ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:2:1-56:12
+INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:2:1-56:12
+INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:2:1-56:12
+INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:2:1-56:12
 MERGED from [io.coil-kt:coil-compose:2.4.0] C:\Users\garci\.gradle\caches\8.10.2\transforms\227a47cc3854c70dc43f5ba3b659ec24\transformed\coil-compose-2.4.0\AndroidManifest.xml:2:1-7:12
 MERGED from [io.coil-kt:coil-compose-base:2.4.0] C:\Users\garci\.gradle\caches\8.10.2\transforms\140c49636dcbef13020736a9daa3ed87\transformed\coil-compose-base-2.4.0\AndroidManifest.xml:2:1-7:12
 MERGED from [io.coil-kt:coil:2.4.0] C:\Users\garci\.gradle\caches\8.10.2\transforms\0ae2c1916de8ab8e663e4e34abc8c4c3\transformed\coil-2.4.0\AndroidManifest.xml:2:1-7:12
@@ -131,8 +131,8 @@ ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\An
 	android:name
 		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:13:22-68
 application
-ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:15:5-52:19
-INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:15:5-52:19
+ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:15:5-54:19
+INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:15:5-54:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\garci\.gradle\caches\8.10.2\transforms\905ddbd7f5043f3bd757d5edd5d0a244\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\garci\.gradle\caches\8.10.2\transforms\905ddbd7f5043f3bd757d5edd5d0a244\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.0] C:\Users\garci\.gradle\caches\8.10.2\transforms\f9f570b5094250bde869558101f0eb6c\transformed\constraintlayout-2.2.0\AndroidManifest.xml:7:5-20
@@ -194,7 +194,9 @@ MERGED from [org.tensorflow:tensorflow-lite-api:2.13.0] C:\Users\garci\.gradle\c
 	android:usesCleartextTraffic
 		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:25:9-44
 activity#com.example.trackingfitness.trackingv2.CameraScreenV2
-ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:26:9-29:58
+ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:26:9-31:15
+	android:screenOrientation
+		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:30:13-49
 	android:exported
 		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:28:13-37
 	android:theme
@@ -202,25 +204,25 @@ ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\An
 	android:name
 		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:27:13-54
 activity#com.example.trackingfitness.MainActivity
-ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:41:9-51:20
+ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:43:9-53:20
 	android:label
-		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:44:13-45
+		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:46:13-45
 	android:exported
-		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:43:13-36
+		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:45:13-36
 	android:theme
-		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:45:13-57
+		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:47:13-57
 	android:name
-		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:42:13-41
+		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:44:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:46:13-50:29
+ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:48:13-52:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:47:17-69
+ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:49:17-69
 	android:name
-		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:47:25-66
+		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:49:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:49:17-77
+ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:51:17-77
 	android:name
-		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:49:27-74
+		ADDED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml:51:27-74
 uses-sdk
 INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\garci\AndroidStudioProjects\TrackingFitness3\app\src\main\AndroidManifest.xml

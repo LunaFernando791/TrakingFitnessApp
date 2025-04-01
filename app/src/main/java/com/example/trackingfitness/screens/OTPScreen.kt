@@ -94,7 +94,7 @@ fun BodyContentTwo(viewModel: RecoverPasswordViewModel, navController: NavContro
                     .width(200.dp)
                     .padding(top = 100.dp)
             ) {
-                Text("Enviar")
+                Text("Submit")
             }
         }
     }

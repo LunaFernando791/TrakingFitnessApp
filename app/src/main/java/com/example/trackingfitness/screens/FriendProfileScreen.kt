@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.trackingfitness.LockOrientationInThisScreen
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.activity.ExperienceBar
 import com.example.trackingfitness.viewModel.FriendsViewModel
@@ -55,6 +56,7 @@ fun FriendProfileScreen(
     userSession: UserSessionManager,
     friendsViewModel: FriendsViewModel
 ){
+    LockOrientationInThisScreen()
     Surface {
         FriendProfileBodyContent(
             friendUsername = friendUsername,
@@ -192,7 +194,7 @@ fun MedalList(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Medallas",
+            text = "Medals",
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,

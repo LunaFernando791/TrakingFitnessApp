@@ -1,5 +1,7 @@
 package com.example.trackingfitness.screens
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,9 +33,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.trackingfitness.LockOrientationInThisScreen
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.conection.MyExercise
 import com.example.trackingfitness.conection.RetrofitInstance.BASE_URL
@@ -45,8 +49,10 @@ import com.example.trackingfitness.viewModel.UserSessionManager
 fun MyExercisesScreen(
     userSessionManager: UserSessionManager,
     darkTheme: Boolean?,
-    navController: NavController
+    navController: NavController,
+    context: Context
 ) {
+    LockOrientationInThisScreen()
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -67,7 +73,8 @@ fun MyExercisesScreen(
 
             // Cuerpo del contenido con la lista de ejercicios
             ExercisesBodyContent(userSessionManager,
-                darkTheme,navController)
+                darkTheme,navController,
+                context)
         }
     }
 }
@@ -77,7 +84,8 @@ fun MyExercisesScreen(
 fun ExercisesBodyContent(
     userSessionManager: UserSessionManager,
     darkTheme: Boolean?,
-    navController: NavController
+    navController: NavController,
+    context: Context
 ) {
     val myExercisesState by userSessionManager.myExercises.collectAsState()
     val routineCompleted by userSessionManager.routineCompleted.collectAsState()
@@ -122,7 +130,8 @@ fun ExercisesBodyContent(
                         if (exercise.status != "completado")
                             ExerciseItem(myExercise = exercise,
                                 darkTheme = darkTheme,
-                                navController = navController)
+                                navController = navController,
+                                context = context)
                     }
                 }
             }
@@ -138,7 +147,8 @@ fun ExercisesBodyContent(
 fun ExerciseItem(
     myExercise: MyExercise,
     darkTheme: Boolean?,
-    navController: NavController
+    navController: NavController,
+    context: Context
 ){
 
     val url = "${BASE_URL}storage/${myExercise.image_path}"
@@ -217,8 +227,14 @@ fun ExerciseItem(
         Button(
             onClick = {
 //                navController.navigate("cameraScreen/${myExercise.exercise_id}")
-                navController.navigate(AppScreens.CameraScreenV2.route.replace("{id}", myExercise.exercise_id.toString()))
-
+                if (myExercise.status == "actual")
+                    navController.navigate(AppScreens.CameraScreenV2.route.replace("{id}", myExercise.exercise_id.toString()))
+                else
+                    Toast.makeText(
+                        context,
+                        "This exercise haven't been unlocked yet.",
+                        Toast.LENGTH_SHORT
+                    ).show()
             },
             modifier = Modifier
                 .width(120.dp)

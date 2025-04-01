@@ -84,7 +84,7 @@ fun BodyContentEditProfileIcon(
             modifier = Modifier
             .padding(end = 275.dp))
         Spacer(modifier = Modifier.height(20.dp))
-        Text(text = "Edita tú ícono actual")
+        Text(text = "Update your profile picture")
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -111,7 +111,7 @@ fun BodyContentEditProfileIcon(
                 if (profileImage != null) {
                     Image(
                         bitmap = profileImage!!.asImageBitmap(),
-                        contentDescription = "Imagen de perfil",
+                        contentDescription = "Profile Image",
                         modifier = Modifier
                             .size(200.dp)
                             .clip(RoundedCornerShape(100.dp)),
@@ -119,7 +119,7 @@ fun BodyContentEditProfileIcon(
                     )
                 } else {
                     Text(
-                        text = "Cargando imagen...",
+                        text = "Load image...",
                         modifier = Modifier.align(Alignment.Center),
                         textAlign = TextAlign.Center
                     )
@@ -130,7 +130,7 @@ fun BodyContentEditProfileIcon(
         LaunchedEffect(Unit) {
             imageViewModel.fetchImages()
         }
-        Text(text = "Íconos disponibles")
+        Text(text = "Available icons")
         LazyVerticalGrid(
             columns = GridCells.Fixed(3), // Definir 3 columnas
             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -220,7 +220,7 @@ fun FullScreenOverlay(
                     navController.navigate("profileScreen")
                 }
             ) {
-                Text(text = "Confirmar cambio de ícono")
+                Text(text = "Submit")
             }
         }
     }

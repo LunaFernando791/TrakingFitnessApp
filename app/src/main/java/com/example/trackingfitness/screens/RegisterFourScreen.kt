@@ -51,7 +51,7 @@ fun RegisterFourScreen(navController: NavController, viewModel: RegisterViewMode
                 value = viewModel.experienceLevel,
                 onValueChange = { viewModel.updateExperienceLevel(it) },
                 label = "Experience Level",
-                options = listOf("Principiante", "Intermedio", "Avanzado"),
+                options = listOf("Beginner", "Intermediate", "Expert"),
                 placeholder = "Select an option",
                 isError = viewModel.experienceLevelError != null,
                 errorMessage = viewModel.experienceLevelError

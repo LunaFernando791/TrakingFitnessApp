@@ -4,16 +4,8 @@
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\font\\custom_font.xml"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_edit_button.png.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\edit_button.png"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-xhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-xhdpi\\ic_launcher.webp"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_ic_launcher_foreground.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\ic_launcher_foreground.xml"
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_flecha.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\flecha.png"
     },
     {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
@@ -28,12 +20,8 @@
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\agregar_usuario.xml"
     },
     {
-        "merged": "com.example.trackingfitness.app-debug-78:/xml_network_security_config.xml.flat",
-        "source": "com.example.trackingfitness.app-main-80:/xml/network_security_config.xml"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_friend.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\friend.xml"
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_component_5.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\component_5.png"
     },
     {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_testimage.webp.flat",
@@ -48,52 +36,28 @@
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\edit_button_dark.png"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\layout_bottom_sheet_menu.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\layout\\bottom_sheet_menu.xml"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-xxhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-xxhdpi\\ic_launcher.webp"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-xxxhdpi\\ic_launcher.webp"
-    },
-    {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\xml_network_security_config.xml.flat",
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\xml\\network_security_config.xml"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_ftlogo.png.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\ftlogo.png"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\layout_activity_settings.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\layout\\activity_settings.xml"
     },
     {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\layout_activity_camera_xlive_preview.xml.flat",
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\layout\\activity_camera_xlive_preview.xml"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-hdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-hdpi\\ic_launcher.webp"
-    },
-    {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_fondodark.png.flat",
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\fondodark.png"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\xml_preference_live_preview_quickstart.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\xml\\preference_live_preview_quickstart.xml"
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_rounded_button_descs.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\rounded_button_descs.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_avatar_de_usuario__1_.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\avatar_de_usuario__1_.png"
     },
     {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_home.png.flat",
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\home.png"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\raw_beep.mp3.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\raw\\beep.mp3"
     },
     {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-mdpi_ic_launcher.webp.flat",
@@ -104,8 +68,128 @@
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\xml\\data_extraction_rules.xml"
     },
     {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_component_6.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\component_6.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_ranking.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\ranking.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_rounded_button_imagebuttom.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\rounded_button_imagebuttom.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_proximo.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\proximo.png"
+    },
+    {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\xml_backup_rules.xml.flat",
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_playicon.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\playicon.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_cambiardecamara.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\cambiardecamara.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_rankingdark.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\rankingdark.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\layout_activity_camera_screen_v2.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\layout\\activity_camera_screen_v2.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_mancuerna.jpeg.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\mancuerna.jpeg"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_edit_button.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\edit_button.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_friend.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\friend.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\layout_bottom_sheet_menu.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\layout\\bottom_sheet_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_girarpantalla.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\girarpantalla.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_rounded_overlay_setcompleted.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\rounded_overlay_setcompleted.xml"
+    },
+    {
+        "merged": "com.example.trackingfitness.app-debug-78:/drawable_usuario.png.flat",
+        "source": "com.example.trackingfitness.app-main-80:/drawable/usuario.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_avatar_de_usuario.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\avatar_de_usuario.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_rounded_button_setsreps.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\rounded_button_setsreps.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_ftlogo.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\ftlogo.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_component_7.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\component_7.png"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\layout_activity_settings.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\layout\\activity_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\xml_preference_live_preview_quickstart.xml.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\xml\\preference_live_preview_quickstart.xml"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\raw_beep.mp3.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\raw\\beep.mp3"
+    },
+    {
+        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_rankingm.png.flat",
+        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\rankingm.png"
     },
     {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_profileconfigicon.png.flat",
@@ -116,20 +200,12 @@
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\calorias.png"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_playicon.png.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\playicon.png"
-    },
-    {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_ic_launcher_background.xml.flat",
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\ic_launcher_background.xml"
     },
     {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\font_my_custom_font.ttf.flat",
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\font\\my_custom_font.ttf"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-xxhdpi\\ic_launcher_round.webp"
     },
     {
         "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-anydpi_ic_launcher.xml.flat",
@@ -148,15 +224,7 @@
         "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-mdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\layout_activity_camera_screen_v2.xml.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\layout\\activity_camera_screen_v2.xml"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\drawable_mancuerna.jpeg.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\drawable\\mancuerna.jpeg"
-    },
-    {
-        "merged": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-debug-78:\\mipmap-hdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\garci\\.gradle\\daemon\\8.10.2\\com.example.trackingfitness.app-main-80:\\mipmap-hdpi\\ic_launcher_round.webp"
+        "merged": "com.example.trackingfitness.app-debug-78:/drawable_usuario__1_.png.flat",
+        "source": "com.example.trackingfitness.app-main-80:/drawable/usuario__1_.png"
     }
 ]

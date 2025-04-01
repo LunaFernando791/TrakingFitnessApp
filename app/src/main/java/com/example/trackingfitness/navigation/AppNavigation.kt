@@ -165,7 +165,8 @@ fun AppNavigation(
             MyExercisesScreen(
                 userSessionManager = userSessionManager,
                 darkTheme = darkTheme,
-                navController = navController
+                navController = navController,
+                context = context
             )
         }
         composable(AppScreens.EditProfileScreen.route) {

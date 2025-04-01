@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.trackingfitness.LockOrientationInThisScreen
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.ui.theme.BlueGreen
 import com.example.trackingfitness.viewModel.FriendInformation
@@ -64,6 +65,7 @@ fun FriendsScreen(
     userSession: UserSessionManager,
     friendsViewModel: FriendsViewModel
 ){
+    LockOrientationInThisScreen()
     Surface {
 
         FriendsBodyContent(

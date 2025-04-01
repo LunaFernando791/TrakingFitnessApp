@@ -1,5 +1,6 @@
 package com.example.trackingfitness.screens
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -45,6 +46,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,6 +64,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.trackingfitness.LockOrientationInThisScreen
 import com.example.trackingfitness.activity.BackButton
 import com.example.trackingfitness.conection.Exercise
 import com.example.trackingfitness.conection.RetrofitInstance.BASE_URL
@@ -83,6 +86,7 @@ fun ExerciseListScreen(
     darkTheme: Boolean?,
     navController: NavController
 ) {
+    LockOrientationInThisScreen()
     val userExercise = userSession.exercises.collectAsState()
     val availableExercises = remember {
         mutableStateOf(userExercise.value?.exercises ?: emptyList())
@@ -103,9 +107,6 @@ fun ExerciseListScreen(
         userExercise.value?.let { response ->
             availableExercises.value = response.exercises ?: emptyList()
             myExercises.value = response.exercisesList ?: emptyList()
-
-            Log.d("DEBUG", "Ejercicios obtenidos: ${myExercises.value}") // Muestra ejercicios actualizados
-
             response.exercisesList?.forEach { exercise ->
                 selectedSets[exercise.id] = sets?.sets?.firstOrNull() ?: 3 // Valor por defecto
                 selectedReps[exercise.id] = sets?.reps?.firstOrNull() ?: 10
@@ -171,7 +172,7 @@ fun ExerciseListScreen(
                         onRepsSelected = { newReps -> selectedReps[exercise.id] = newReps },
                         darkTheme = darkTheme,
                         onExerciseSelected = { selected, current ->
-                            swapExercises(current, selected, availableExercises, myExercises)
+                            swapExercises(current, selected, availableExercises, myExercises, selectedSets, selectedReps)
                         }
                     )
                 }
@@ -540,21 +541,44 @@ fun swapExercises(
     currentExercise: Exercise,
     selectedExercise: Exercise,
     availableExercises: MutableState<List<Exercise>>,
-    myExercises: MutableState<List<Exercise>>
+    myExercises: MutableState<List<Exercise>>,
+    selectedSets: SnapshotStateMap<Int, Int>,
+    selectedReps: SnapshotStateMap<Int, Int>
 ) {
     val availList = availableExercises.value.toMutableList()
     val myList = myExercises.value.toMutableList()
+
     if (availList.contains(selectedExercise) && myList.contains(currentExercise)) {
         val index = myList.indexOf(currentExercise)
-        // Se remueve el ejercicio seleccionado de la lista de disponibles
+
+        // Guardar sets y reps del ejercicio actual
+        val currentSets = selectedSets[currentExercise.id] ?: 0
+        val currentReps = selectedReps[currentExercise.id] ?: 0
+
+        // Remover el ejercicio seleccionado de la lista de disponibles
         availList.remove(selectedExercise)
-        // Se remueve el ejercicio actual de tu rutina
+        // Remover el ejercicio actual de tu rutina
         myList.remove(currentExercise)
-        // Se intercambian: el seleccionado se agrega a tu rutina y el actual se vuelve a agregar a los disponibles
-        myList.add(index,selectedExercise)
+
+        // Intercambiar: el seleccionado se agrega a tu rutina y el actual se vuelve a agregar a disponibles
+        myList.add(index, selectedExercise)
         availList.add(currentExercise)
+
+        // Mantener los sets y reps para el nuevo ejercicio
+        val newSets = selectedSets.toMutableMap().apply {
+            this[selectedExercise.id] = currentSets
+            remove(currentExercise.id) // Eliminar el antiguo
+        }
+        val newReps = selectedReps.toMutableMap().apply {
+            this[selectedExercise.id] = currentReps
+            remove(currentExercise.id)
+        }
+
+        // Actualizar listas y mapas
         availableExercises.value = availList
         myExercises.value = myList
+        selectedSets.putAll(newSets)
+        selectedReps.putAll(newReps)
     }
 }
 
