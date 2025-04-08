@@ -1,4 +1,6 @@
+archer-pushup-left_end
+archer-pushup-right_end
 pushups_down
 pushups_up
-shoulder_tap_left
-shoulder_tap_right
+wall-pushup_end
+wall-pushup_start

@@ -105,7 +105,7 @@ fun BodyContent(
                             .clickable { navController.navigate(AppScreens.RegisterOneScreen.route) },
                         ) {
                         Text(
-                            text = "SIG IN",
+                            text = "SIGN IN",
                             fontSize = 20.sp,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold,
@@ -115,7 +115,7 @@ fun BodyContent(
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     Text(
-                        text = "O",
+                        text = "OR",
                         fontSize = 25.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         color = MaterialTheme.colorScheme.primary,

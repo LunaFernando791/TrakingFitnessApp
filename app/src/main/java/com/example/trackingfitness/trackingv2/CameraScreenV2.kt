@@ -151,7 +151,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                     if (currentExercise != null) {
                         userSessionManager?.showExercise(token, currentExercise.exercise_id) { exercise ->
                             runOnUiThread {
-                                findViewById<TextView>(R.id.exerciseName).text = "Ejercicio: ${exercise.name}"
+                                findViewById<TextView>(R.id.exerciseName).text = "${exercise.name}"
                                 repetitionCount = 0
                                 findViewById<TextView>(R.id.repetitionCount).text = "Reps: 0/$repsPerSet"
 //                                selectedExercise = exercise.name.lowercase()
@@ -292,10 +292,21 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         poseLandmarkerHelper = PoseLandmarkerHelper(
             context = this,
             runningMode = RunningMode.LIVE_STREAM,
+            currentModel = PoseLandmarkerHelper.MODEL_POSE_LANDMARKER_FULL,
             modelFile = modelFile,
             labelFile = labelFile,
-            poseLandmarkerHelperListener = this
+            poseLandmarkerHelperListener = this,
+            routineStarted = routineStarted
         )
+//        poseLandmarkerHelper = PoseLandmarkerHelper(
+//            context = this,
+//            runningMode = RunningMode.LIVE_STREAM,
+//            currentModel = PoseLandmarkerHelper.MODEL_POSE_LANDMARKER_FULL,
+//            modelFile = modelFile,
+//            labelFile = labelFile,
+//            poseLandmarkerHelperListener = this,
+//
+//        )
     }
 
     private fun detectPose(imageProxy: ImageProxy) {
@@ -312,6 +323,14 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
     override fun onResults(resultBundle: PoseLandmarkerHelper.ResultBundle) {
         runOnUiThread {
+
+            poseLandmarkerHelper.routineStarted = routineStarted
+
+            if (resultBundle.results.isEmpty()) {
+                findViewById<OverlayView>(R.id.overlay).clearResults()
+                return@runOnUiThread
+            }
+
             val poseClass = resultBundle.poseClass
             val overlayView = findViewById<OverlayView>(R.id.overlay)
 
@@ -322,7 +341,8 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                 poseClass,
                 resultBundle.inputImageHeight,
                 resultBundle.inputImageWidth,
-                RunningMode.LIVE_STREAM
+                RunningMode.LIVE_STREAM,
+                selectedExercise
             )
 
             if (routineEnded) {
@@ -353,54 +373,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             overlayView.invalidate()
         }
     }
-
-//    override fun onResults(resultBundle: PoseLandmarkerHelper.ResultBundle) {
-//        runOnUiThread {
-//            val overlayView = findViewById<OverlayView>(R.id.overlay)
-//
-//            poseClassTextView.text = resultBundle.poseClass
-//
-//            // 🔹 Mostrar landmarks si la rutina está en curso
-//            overlayView.setResults(
-//                resultBundle.results.first(),
-//                resultBundle.poseClass,
-//                resultBundle.inputImageHeight,
-//                resultBundle.inputImageWidth,
-//                RunningMode.LIVE_STREAM
-//            )
-//
-//            // 🔹 Si la rutina ha finalizado, aplicar `clear()`
-//            if (routineEnded) {
-//                showOverlayMessage("final", 15)
-//                hideCounters()
-//                overlayView.clear()
-//                return@runOnUiThread
-//            }
-//
-//            // 🔹 Rutina aún no ha empezado: Validar "x_pose"
-//            if (!routineStarted) {
-//                handlePreRoutine(resultBundle.poseClass)
-//                return@runOnUiThread
-//            }
-//
-//            if (isResting) {
-//                overlayView.clear()
-//                hideCounters()
-//                return@runOnUiThread
-//            } else{
-//                showCounters()
-//            }
-//
-//            if (selectedExercise in ExerciseTransitions.isometricExercises) {
-//                handleIsometricExercise(resultBundle.poseClass)
-//                return@runOnUiThread
-//            }else{
-//                handleRepetitiveExercise(resultBundle.poseClass)
-//            }
-//
-//            findViewById<OverlayView>(R.id.overlay).invalidate()
-//        }
-//    }
 
     private fun handlePreRoutine(poseClass: String) {
         if (poseClass == "x_pose") {

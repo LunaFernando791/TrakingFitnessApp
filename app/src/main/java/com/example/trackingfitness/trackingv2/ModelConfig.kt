@@ -3,65 +3,68 @@ package com.example.trackingfitness.trackingv2
 object ModelConfig {
     var currentModel: String = "legs"
 
-    val models = listOf("legs", "shoulders", "chest", "dips")
-//    val models = listOf("legs", "shoulders", "chest", "dips", "leg-raises")
-//    val models = listOf("legs", "crunches", "curl-bicep", "dead-rows", "v-ups", "flexibility", "glute-bridge", "hip-thrust", "bw-skullcrusher")
+    val models = listOf("legs", "tricep", "back",
+        "abs", "biceps",
+        "core","flexibility", "glutes",
+        "harmstring", "hip-abductor","shoulders",
+      )
+
+//    val models = listOf("back","legs", "biceps",
+//        "glutes",
+//        "hip-abductor","shoulders",
+//        "tricep")
 
     private val modelFiles = mapOf(
-        "legs" to "pose_classification_model_legs-mejorado2.tflite",
-        "shoulders" to "pose_classification_model_shoulders2.tflite",
+        "abs" to "pose_classification_model_abs.tflite",
+        "back" to "pose_classification_model_back.tflite",
+        "biceps" to "pose_classification_model_biceps.tflite",
         "chest" to "pose_classification_model_chest.tflite",
-        "dips" to "pose_classification_model_bench-dips.tflite",
-//        "leg-raises" to "pose_classification_model_leg-raises.tflite",
-//        "crunches" to "pose_classification_model_crunches.tflite",
-//        "curl-bicep" to "pose_classification_model_biceps.tflite",
-//        "dead-rows" to "pose_classification_model_dead-rows2.tflite",
-//        "v-ups" to "pose_classification_model_v-ups.tflite",
-//        "flexibility" to "pose_classification_model_flexibility.tflite",
-//        "glute-bridge" to "pose_classification_model_glute-bridge.tflite",
-//        "hip-thrust" to "pose_classification_model_hip-thrust.tflite",
-//        "bw-skullcrusher" to "pose_classification_model_bw-skullcrusher.tflite"
+        "core" to "pose_classification_model_core.tflite",
+        "flexibility" to "pose_classification_model_flexibility.tflite",
+        "glutes" to "pose_classification_model_glutes.tflite",
+        "harmstring" to "pose_classification_model_harmstring.tflite",
+        "hip-abductor" to "pose_classification_model_hip-abductor.tflite",
+        "legs" to "pose_classification_model_legs.tflite",
+        "shoulders" to "pose_classification_model_shoulder-nopress.tflite",
+        "tricep" to "pose_classification_model_tricep.tflite",
     )
 
     private val labelFiles = mapOf(
-        "legs" to "labels_legs.txt",
-        "shoulders" to "labels_shoulders.txt",
+        "abs" to "labels_abs.txt",
+        "back" to "labels_back.txt",
+        "biceps" to "labels_biceps.txt",
         "chest" to "labels_chest.txt",
-        "dips" to "labels_bench-dips.txt",
-//        "leg-raises" to "labels_legs-raises.txt",
-//        "crunches" to "labels_crunches.txt",
-//        "curl-bicep" to "labels_biceps.txt",
-//        "dead-rows" to "labels_dead-rows.txt",
-//        "v-ups" to "labels_v-ups.txt",
-//        "flexibility" to "labels_flexibility.txt",
-//        "glute-bridge" to "labels_glute-bridge.txt",
-//        "hip-thrust" to "labels_hip-thrust.txt",
-//        "bw-skullcrusher" to "labels_bw-skullcrusher.txt"
+        "core" to "labels_core.txt",
+        "flexibility" to "labels_flexibility.txt",
+        "glutes" to "labels_glutes.txt",
+        "harmstring" to "labels_harmstring.txt",
+        "hip-abductor" to "labels_hip-abductor.txt",
+        "legs" to "labels_legs.txt",
+        "shoulders" to "labels_shoulder-nopress.txt",
+        "tricep" to "labels_tricep.txt",
     )
 
     private val exercisesByModel = mapOf(
+        "abs" to listOf("crunches", "leg-raises", "v-ups"),
+        "back" to listOf("dead-row"),
+        "biceps" to listOf("bicep-curl", "concentration-curl",),
+        "chest" to listOf("push-ups", "archer-push-ups", "shoulder-taps"),
+        "core" to listOf("plank_downward", "russian-twists"),
+        "flexibility" to listOf("cobra-stretch"),
+        "glutes" to listOf("glute-bridge", "hip-thrust", "good-morning"),
+        "harmstring" to listOf("nordic-curl", "towel-harmstring"),
+        "hip-abductor" to listOf("stand-hip-abductor", "lateral-leg-raises"),
         "legs" to listOf("squats", "lunges", "deadlifts", "wall-sit"),
-        "shoulders" to listOf("shoulder_press", "lateral_raise"),
-//        "chest" to listOf("shoulder_taps", "pushups", "diamond_pushups", "wide_pushups"),
-        "chest" to listOf("shoulder_taps", "pushups"),
-        "dips" to listOf("bench_dips"),
-//        "leg-raises" to listOf("leg_raises"),
-//        "crunches" to listOf("crunches"),
-//        "curl-bicep" to listOf("curl_bicep"),
-//        "dead-rows" to listOf("dead_rows"),
-//        "v-ups" to listOf("v_ups"),
-//        "flexibility" to listOf("cobra_stretch"),
-//        "glute-bridge" to listOf("glute_bridge"),
-//        "hip-thrust" to listOf("hip_thrust"),
-//        "bw-skullcrusher" to listOf("bw_skullcrusher")
+        "shoulders" to listOf("lateral-raise", "pike-pushup", "rear-delt-fly", "snow-angels"),
+        "tricep" to listOf("bench-dip","overhead-extension", "reverse-plank-dip", "tricep-kickback", "tricep-extension-floor", "wall-tricep-extension")
     )
 
     fun getModelFile(): String {
-        return modelFiles[currentModel] ?: "pose_classification_model_legs-mejorado.tflite"
+        return modelFiles[currentModel] ?: "pose_classification_model_legs.tflite"
     }
 
     fun getLabelFile(): String {
-        return labelFiles[currentModel] ?: "labels_legs2.txt"
+        return labelFiles[currentModel] ?: "labels_legs.txt"
     }
 
     fun getExercisesForModel(): List<String> {

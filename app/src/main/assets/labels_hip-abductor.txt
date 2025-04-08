@@ -1,0 +1,6 @@
+lateral_leg_raise_start
+lateral_legraise_left_end
+lateral_legraise_right_end
+stand-hipabduction_left_end
+stand-hipabduction_right_end
+stand-hipabduction_start

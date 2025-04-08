@@ -1,0 +1,12 @@
+bench_dip_end
+bench_dip_start
+overhead-extension_end
+overhead-extension_start
+reverse-plank-dip_end
+reverse-plank-dip_start
+tricep-kickback_end
+tricep-kickback_start
+tricep_extension_floor_end
+tricep_extension_floor_start
+wall-tricep-extension_end
+wall-tricep-extension_start

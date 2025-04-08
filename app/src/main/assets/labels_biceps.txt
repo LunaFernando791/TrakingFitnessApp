@@ -1,0 +1,5 @@
+bicep_curl_end
+bicep_curl_start
+concentration-curl_left_end
+concentration-curl_right_end
+concentration-curl_start

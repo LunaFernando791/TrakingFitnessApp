@@ -1,0 +1,6 @@
+crunch_end
+crunch_start
+leg_raise_end
+leg_raise_start
+v_up_end
+v_up_start

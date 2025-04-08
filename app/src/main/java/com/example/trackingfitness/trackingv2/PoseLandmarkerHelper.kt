@@ -4,8 +4,6 @@ package com.example.trackingfitness.trackingv2
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.media.MediaMetadataRetriever
-import android.net.Uri
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.VisibleForTesting
@@ -23,7 +21,18 @@ import java.nio.ByteOrder
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+//class PoseLandmarkerHelper(
+//    var minPoseDetectionConfidence: Float = DEFAULT_POSE_DETECTION_CONFIDENCE,
+//    var minPoseTrackingConfidence: Float = DEFAULT_POSE_TRACKING_CONFIDENCE,
+//    var minPosePresenceConfidence: Float = DEFAULT_POSE_PRESENCE_CONFIDENCE,
+//    var currentModel: Int = MODEL_POSE_LANDMARKER_HEAVY,
+//    var currentDelegate: Int = DELEGATE_GPU,
+//    var runningMode: RunningMode = RunningMode.LIVE_STREAM,
+//    val context: Context,
+//    val modelFile: String = "pose_classification_model_legs.tflite",
 
+//    val poseLandmarkerHelperListener: LandmarkerListener? = null,
+//)
 class PoseLandmarkerHelper(
     var minPoseDetectionConfidence: Float = DEFAULT_POSE_DETECTION_CONFIDENCE,
     var minPoseTrackingConfidence: Float = DEFAULT_POSE_TRACKING_CONFIDENCE,
@@ -32,9 +41,10 @@ class PoseLandmarkerHelper(
     var currentDelegate: Int = DELEGATE_GPU,
     var runningMode: RunningMode = RunningMode.LIVE_STREAM,
     val context: Context,
-    val modelFile: String = "pose_classification_model_legs6.tflite",
-    val labelFile: String = "labels_legs2.txt",
-    val poseLandmarkerHelperListener: LandmarkerListener? = null
+    val modelFile: String = "pose_classification_model_legs.tflite",
+    val labelFile: String = "labels_legs.txt",
+    val poseLandmarkerHelperListener: LandmarkerListener? = null,
+    var routineStarted: Boolean = false
 ) {
 
     private var poseLandmarker: PoseLandmarker? = null
@@ -185,6 +195,20 @@ class PoseLandmarkerHelper(
         result: PoseLandmarkerResult,
         input: MPImage
     ) {
+        if (shouldSkipFrame(result)) {
+            poseLandmarkerHelperListener?.onResults(
+                ResultBundle(
+                    results = emptyList(),
+                    poseClass = "",
+                    inferenceTime = 0L,
+                    inputImageHeight = input.height,
+                    inputImageWidth = input.width,
+                    landmarksList = emptyList(),
+                )
+            )
+            return
+        }
+
         val landmarks = result.landmarks().firstOrNull()?.map {
             listOf(it.x(), it.y(), it.z())
         }?.flatten()?.toFloatArray()
@@ -196,15 +220,23 @@ class PoseLandmarkerHelper(
 
             val smoothedConfidences = emaSmoother.getSmoothedResult(rawPredictions)
 
-            val smoothedClassIdx = smoothedConfidences.maxByOrNull { it.value }?.key ?: 0
-            val smoothedPoseClass = getPoseLabel(smoothedClassIdx) // Convertir índice a etiqueta
+//            val smoothedClassIdx = smoothedConfidences.maxByOrNull { it.value }?.key ?: 0
+//            val smoothedPoseClass = getPoseLabel(smoothedClassIdx) // Convertir índice a etiqueta
 
             val landmarksList = normalizedLandmarks.toList().chunked(3).map { it.toFloatArray() }
+
+            val poseClassFinal = if (!routineStarted && isXPose(landmarksList)) {
+                "x_pose"
+            } else {
+                val smoothedClassIdx = smoothedConfidences.maxByOrNull { it.value }?.key ?: 0
+                getPoseLabel(smoothedClassIdx)
+            }
 
             poseLandmarkerHelperListener?.onResults(
                 ResultBundle(
                     listOf(result),
-                    smoothedPoseClass, // 🔥 Ahora usamos la predicción suavizada
+//                    smoothedPoseClass, // 🔥 Ahora usamos la predicción suavizada
+                    poseClassFinal,
                     SystemClock.uptimeMillis() - result.timestampMs(),
                     input.height,
                     input.width,
@@ -212,6 +244,30 @@ class PoseLandmarkerHelper(
                 )
             )
         }
+    }
+
+    private fun shouldSkipFrame(result: PoseLandmarkerResult): Boolean {
+        val poseLandmarks = result.landmarks().firstOrNull() ?: return true
+
+        // Umbral dinámico según el modelo activo
+        val isChestModel = ModelConfig.currentModel == "chest"
+        val shoulderThreshold = if (isChestModel) 0.5f else 0.22f
+
+        val leftShoulder = poseLandmarks.getOrNull(11)
+        val rightShoulder = poseLandmarks.getOrNull(12)
+        if (leftShoulder != null && rightShoulder != null) {
+            val shoulderDist = kotlin.math.abs(leftShoulder.x() - rightShoulder.x())
+            if (shoulderDist > shoulderThreshold) return true
+        }
+
+        // Verificar si hay landmarks fuera del frame (x/y no están en [0, 1])
+        val outOfBounds = poseLandmarks.count {
+            it.x() !in 0f..1f || it.y() !in 0f..1f
+        }
+        val ratioOutOfBounds = outOfBounds.toFloat() / poseLandmarks.size
+        if (ratioOutOfBounds > 0.2f) return true  // si más del 20% están fuera
+
+        return false
     }
 
     private fun normalizeLandmarks(landmarks: FloatArray): FloatArray {
@@ -279,23 +335,26 @@ class PoseLandmarkerHelper(
         )
     }
 
-    fun classifyPushupType(landmarks: List<FloatArray>): String {
-        val leftWrist = landmarks.getOrNull(15) ?: return "unknown"
-        val rightWrist = landmarks.getOrNull(16) ?: return "unknown"
+    fun isXPose(landmarks: List<FloatArray>): Boolean {
+        val leftWrist = landmarks.getOrNull(15) ?: return false
+        val rightWrist = landmarks.getOrNull(16) ?: return false
+        val leftShoulder = landmarks.getOrNull(11) ?: return false
+        val rightShoulder = landmarks.getOrNull(12) ?: return false
 
-        val wristDistance = sqrt(
-            (leftWrist[0] - rightWrist[0]).pow(2) +
-                    (leftWrist[1] - rightWrist[1]).pow(2) +
-                    (leftWrist[2] - rightWrist[2]).pow(2)
-        )
+        val rightToLeftShoulder = distance2D(rightWrist, leftShoulder)
+        val leftToRightShoulder = distance2D(leftWrist, rightShoulder)
 
-        return when {
-            wristDistance < 0.20 -> "diamond_pushups"
-            wristDistance in 0.20..0.60 -> "regular_pushups"
-            else -> "wide_pushups"
-        }
+        val handsCrossedAndClose = rightToLeftShoulder < 0.075f && leftToRightShoulder < 0.075f
+
+        val avgShoulderY = (leftShoulder[1] + rightShoulder[1]) / 2
+        val handsAtChestLevel = leftWrist[1] < avgShoulderY + 0.2f && rightWrist[1] < avgShoulderY + 0.2f
+
+        return handsCrossedAndClose && handsAtChestLevel
     }
 
+    private fun distance2D(a: FloatArray, b: FloatArray): Float {
+        return sqrt((a[0] - b[0]).pow(2) + (a[1] - b[1]).pow(2))
+    }
 
     companion object {
         const val TAG = "PoseLandmarkerHelper"
