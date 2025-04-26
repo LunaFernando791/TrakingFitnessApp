@@ -120,9 +120,9 @@ class RegisterViewModel : ViewModel() {
     }
     fun updateExperienceLevel(experienceLevel: String) {
         this.experienceLevel = when(experienceLevel) {
-            "Principiante" -> "1"
-            "Intermedio" -> "2"
-            "Avanzado" -> "3"
+            "Beginner" -> "1"
+            "Intermediate" -> "2"
+            "Expert" -> "3"
             else -> ""
         }
     }
@@ -148,39 +148,39 @@ class RegisterViewModel : ViewModel() {
 
     private fun validateName(): String? {
             return when {
-                name.isEmpty() -> "Este campo no puede estar vacío"
-                name.length < 3 -> "El nombre debe contener al menos 3 caracteres"
-                !name.all { it.isLetter() } -> "El nombre debe contener solo letras"
+                name.isEmpty() -> "This field cannot be empty"
+                name.length < 3 -> "The name must contain at least 3 characters"
+                !name.all { it.isLetter() } -> "The name must contain only letters"
                 else -> null
             }
         }
 
     private fun validateLastName(): String?{
         return when{
-            lastname.isEmpty() -> "Este campo no puede estar vacío"
-            lastname.length < 3 -> "El apellido debe contener al menos 3 caracteres"
-            !lastname.all { it.isLetter() } -> "El apellido debe contener solo letras"
+            lastname.isEmpty() -> "This field cannot be empty"
+            lastname.length < 3 -> "The last name must contain at least 3 characters"
+            !lastname.all { it.isLetter() } -> "The last name must contain only letters"
             else-> null
         }
     }
     private fun validateAge():String?{
         return when{
-            age.isEmpty() -> "Este campo no puede estar vacío"
-            !age.all { it.isDigit() } -> "La edad debe contener solo números"
+            age.isEmpty() -> "This field cannot be empty"
+            !age.all { it.isDigit() } -> "The age must contain only numbers"
             else-> null
         }
     }
     private fun validateHeight(): String?{
         return when{
-            this.height.isEmpty() -> "Este campo no puede estar vacío"
-            !this.height.all { it.isDigit() } -> "La altura debe contener solo números"
+            this.height.isEmpty() -> "This field cannot be empty"
+            !this.height.all { it.isDigit() } -> "The height must contain only numbers"
             else-> null
         }
     }
     private fun validateWeight(): String? {
         return when {
-            this.weight.isEmpty() -> "Este campo no puede estar vacío"
-            !this.weight.all { it.isDigit() } -> "El peso debe contener solo números"
+            this.weight.isEmpty() -> "This field cannot be empty"
+            !this.weight.all { it.isDigit() } -> "The weight must contain only numbers"
             else -> null
         }
     }
@@ -192,41 +192,41 @@ class RegisterViewModel : ViewModel() {
     }
     private fun validateEmail(): String?{
         return when{
-            email.isEmpty() -> "Este campo no puede estar vacío"
+            email.isEmpty() -> "This field cannot be empty"
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> "El formato de correo electrónico no es válido"
             else-> null
         }
     }
     private fun validatePassword(): String?{
         return when{
-            password.isEmpty() -> "Este campo no puede estar vacío"
+            password.isEmpty() -> "This field cannot be empty"
             password.length < 8 -> "La contraseña debe contener al menos 8 caracteres"
             else-> null
         }
     }
     private fun validateConfirmPassword(): String? {
         return when {
-            confirmPassword.isEmpty() -> "Este campo no puede estar vacío"
+            confirmPassword.isEmpty() -> "This field cannot be empty"
             confirmPassword != password -> "Las contraseñas no coinciden"
             else -> null
         }
     }
     private fun validateUsername(): String? {
         return when{
-            username.isEmpty() -> "Este campo no puede estar vacío"
+            username.isEmpty() -> "This field cannot be empty"
             username.length < 8 -> "La contraseña debe contener al menos 8 caracteres"
             else-> null
         }
     }
     private fun validateExperienceLevel(): String? {
         return when {
-            experienceLevel.isEmpty() -> "Este campo no puede estar vacío"
+            experienceLevel.isEmpty() -> "This field cannot be empty"
             else -> null
         }
     }
     private fun validateRoutineType(): String? {
         return when {
-            routineType.isEmpty() -> "Este campo no puede estar vacío"
+            routineType.isEmpty() -> "This field cannot be empty"
             else -> null
         }
     }

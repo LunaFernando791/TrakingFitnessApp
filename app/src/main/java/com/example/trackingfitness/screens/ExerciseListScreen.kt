@@ -127,7 +127,7 @@ fun ExerciseListScreen(
                 Spacer(modifier = Modifier.height(20.dp))
                 BackButton(
                     navController = navController,
-                    ruta = "homeScreen",
+                    ruta = "selectExerciseModeScreen",
                     modifier = Modifier.padding(end = 250.dp)
                 )
                 if (rutineCompleted.value){

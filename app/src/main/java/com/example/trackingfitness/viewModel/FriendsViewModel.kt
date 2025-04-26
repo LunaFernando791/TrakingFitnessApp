@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trackingfitness.conection.RetrofitInstance
 import com.example.trackingfitness.conection.UserService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -49,16 +51,16 @@ data class UserFriends(
 
 class FriendsViewModel : ViewModel() {
     private val apiService: UserService = RetrofitInstance.api
-    private var _user = mutableStateOf(UserFriends(
+    private var _user = MutableStateFlow(UserFriends(
         friendRequestCount = 0,
         friends = emptyMap(),
         friendRequests = emptyMap(),
         availableUsers = emptyMap()
         )
     )
-    val user: State<UserFriends> = _user
+    val user: StateFlow<UserFriends> = _user
 
-    private val _friendProfile = mutableStateOf(ShowUser(
+    private val _friendProfile = MutableStateFlow(ShowUser(
         icon_url = "",
         username = "",
         name = "",
@@ -73,7 +75,7 @@ class FriendsViewModel : ViewModel() {
         userMedals = emptyList()
         )
     )
-    val friendProfile: State<ShowUser> = _friendProfile
+    val friendProfile: StateFlow<ShowUser> = _friendProfile
 
     var success = mutableStateOf("")
 

@@ -31,6 +31,8 @@ drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable mancuerna
 drawable me
+drawable mingames
+drawable minigames2
 drawable playicon
 drawable profileconfigicon
 drawable proximo
@@ -41,6 +43,8 @@ drawable rounded_button_descs
 drawable rounded_button_imagebuttom
 drawable rounded_button_setsreps
 drawable rounded_overlay_setcompleted
+drawable routine
+drawable routine2
 drawable testimage
 drawable usuario
 drawable usuario__1_

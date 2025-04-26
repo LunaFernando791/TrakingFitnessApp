@@ -131,23 +131,8 @@ fun BodyContent(
                     )
                 )
             )
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                ToggleSwitch(
-                    isChecked = darkTheme?: isSystemInDarkTheme(),
-                    onCheckedChange = { isChecked ->
-                        onDarkThemeChange(isChecked)
-                    }
-                )
-                Text(
-                    text = if (darkTheme==true) "Dark mode" else "Light mode",
-                    style = TextStyle(
-                        fontSize = 10.sp,
-                    )
-                )
-            }
         }
+        Spacer(modifier = Modifier.height(10.dp))
         ExperienceBar(
             darkTheme,
             user.userLevel.ifEmpty { "0" },
@@ -201,7 +186,7 @@ fun TopMenu(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Start your routine...",
+                    text = "Start your day...",
                     style = TextStyle(
                         shadow = Shadow(
                             color = Color.Gray,
@@ -210,6 +195,7 @@ fun TopMenu(
                         )
                     ),
                     fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Box(
@@ -220,7 +206,7 @@ fun TopMenu(
                     .width(100.dp)
                     .height(70.dp)
                     .clickable {
-                            navController.navigate("exerciseListScreen")
+                            navController.navigate("selectExerciseModeScreen")
                     },
                     contentAlignment = Alignment.Center) {
                     Icon(

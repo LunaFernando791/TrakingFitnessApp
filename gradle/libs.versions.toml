@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.1"
+agp = "8.9.0"
 androidxJunit = "1.2.1"
 classes = "1.5.2"
 constraintlayoutVersion = "2.2.0-alpha10"

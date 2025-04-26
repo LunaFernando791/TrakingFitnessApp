@@ -32,6 +32,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,7 +68,6 @@ fun FriendsScreen(
 ){
     LockOrientationInThisScreen()
     Surface {
-
         FriendsBodyContent(
             userSessionManager = userSession,
             darkTheme = darkTheme,
@@ -87,6 +87,7 @@ fun FriendsBodyContent(
     LaunchedEffect(Unit) {
         friendsViewModel.showFriend(userSessionManager.getUserSession().token)
     }
+    val userFriends = friendsViewModel.user.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -106,7 +107,6 @@ fun FriendsBodyContent(
                 .background(MaterialTheme.colorScheme.background),
         ) {
             item {
-                val userFriends = friendsViewModel.user
                 Column(
                     modifier = Modifier
                         .imePadding()

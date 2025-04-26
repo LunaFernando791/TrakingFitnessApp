@@ -22,6 +22,8 @@ sealed class AppScreens(val route: String) {
     data object FriendProfileScreen : AppScreens("friendProfileScreen/{username}")
     data object MedalsScreen : AppScreens("medalsScreen")
     data object RankingScreen : AppScreens("rankingScreen")
+    data object SelectExerciseModeScreen : AppScreens("selectExerciseModeScreen")
+    data object MinigamesScreen : AppScreens("minigamesScreen")
 
     data object CameraScreen : AppScreens("cameraScreen/{id}") // Nueva ruta
 //    data object SettingsScreen : AppScreens("settings_screen") // Nueva ruta

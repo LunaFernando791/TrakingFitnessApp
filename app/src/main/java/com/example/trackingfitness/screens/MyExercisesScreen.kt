@@ -70,7 +70,6 @@ fun MyExercisesScreen(
                     ruta = "homeScreen"
                 )
             }
-
             // Cuerpo del contenido con la lista de ejercicios
             ExercisesBodyContent(userSessionManager,
                 darkTheme,navController,

@@ -272,6 +272,16 @@ data class CurrentExerciseResponse(
     val reps: Int,
 )
 
+data class MinigameResponse(
+    val globalRanking: List<GuessUser>,
+    val totalUsers: Int,
+    val minigamesCount: Int,
+)
+data class GuessUser(
+    val telephone: String,
+    val alias: String,
+    val global_score: Int  // Nota: en Kotlin usamos camelCase
+)
 
 interface UserService { // Interfaz para definir las operaciones del servicio.
 
@@ -434,4 +444,9 @@ interface UserService { // Interfaz para definir las operaciones del servicio.
     suspend fun resetPassword(@Body resetPasswordRequest: ResetPasswordRequest): Response<ResetPasswordResponse>
     // Ruta del cambio de contraseña.
 
+    //MiniGames
+    @GET("/api/minigame/global-ranking")
+    suspend fun getRankingMiniGames(
+        @Header("Authorization") token: String,
+    ): Response<MinigameResponse>
 }

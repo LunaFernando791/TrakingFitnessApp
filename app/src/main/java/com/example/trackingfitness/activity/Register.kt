@@ -108,7 +108,7 @@ fun RegisterForm(
                 .align(Alignment.CenterHorizontally)
                 .width(200.dp)
         ) {
-            Text("Continuar")
+            Text("Continue")
         }
         Spacer(modifier = Modifier.height(16.dp))
         if (viewModel.errorRegister) {
@@ -117,7 +117,7 @@ fun RegisterForm(
             viewModel.incrementProgress(0.25f)
             Toast.makeText(
                 LocalContext.current,
-                "Registro exitoso, confirma tu correo para iniciar sesión.",
+                "Register successful, please verify your email and login",
                 Toast.LENGTH_SHORT
             ).show()
             viewModel.resetStates()

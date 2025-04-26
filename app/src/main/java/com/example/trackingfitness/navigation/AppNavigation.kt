@@ -17,6 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.trackingfitness.navigation.AppScreens.MinigamesScreen
+import com.example.trackingfitness.navigation.AppScreens.SelectExerciseModeScreen
 import com.example.trackingfitness.screens.CameraScreen
 import com.example.trackingfitness.screens.ChangePassScreen
 import com.example.trackingfitness.screens.EditEmailScreen
@@ -36,15 +38,18 @@ import com.example.trackingfitness.screens.ExerciseListScreen
 import com.example.trackingfitness.screens.FriendProfileScreen
 import com.example.trackingfitness.screens.FriendsScreen
 import com.example.trackingfitness.screens.MedalScreen
+import com.example.trackingfitness.screens.MiniGamesScreen
 import com.example.trackingfitness.screens.MyExercisesScreen
 import com.example.trackingfitness.screens.ProfileScreen
 import com.example.trackingfitness.screens.RankingScreen
+import com.example.trackingfitness.screens.SelectExerciseModeScreen
 import com.example.trackingfitness.trackingv2.CameraScreenV2
 import com.example.trackingfitness.viewModel.FriendsViewModel
 //import com.example.trackingfitness.tracking.activities.CameraXLivePreviewActivity
 //import com.example.trackingfitness.tracking.activities.SettingsActivity
 import com.example.trackingfitness.viewModel.ImageViewModel
 import com.example.trackingfitness.viewModel.LoginViewModel
+import com.example.trackingfitness.viewModel.MiniGamesViewModel
 import com.example.trackingfitness.viewModel.RecoverPasswordViewModel
 import com.example.trackingfitness.viewModel.RegisterViewModel
 import com.example.trackingfitness.viewModel.UserSessionManager
@@ -61,6 +66,7 @@ fun AppNavigation(
     val recoverPasswordViewModel: RecoverPasswordViewModel = viewModel()
     val imageViewModel: ImageViewModel = viewModel()
     val friendsViewModel: FriendsViewModel = viewModel()
+    val miniGamesViewModel: MiniGamesViewModel = viewModel()
     var startDestination by remember { mutableStateOf(AppScreens.StartScreen.route) }
     val userSessionManager = UserSessionManager(LocalContext.current.applicationContext)
 
@@ -167,6 +173,19 @@ fun AppNavigation(
                 darkTheme = darkTheme,
                 navController = navController,
                 context = context
+            )
+        }
+        composable(SelectExerciseModeScreen.route) {
+            SelectExerciseModeScreen(
+                userSessionManager = userSessionManager,
+                navController = navController
+            )
+        }
+        composable(MinigamesScreen.route) {
+            MiniGamesScreen(
+                userSessionManager = userSessionManager,
+                navController = navController,
+                miniGamesViewModel = miniGamesViewModel
             )
         }
         composable(AppScreens.EditProfileScreen.route) {
