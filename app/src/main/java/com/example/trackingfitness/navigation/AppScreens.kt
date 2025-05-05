@@ -29,6 +29,7 @@ sealed class AppScreens(val route: String) {
 //    data object SettingsScreen : AppScreens("settings_screen") // Nueva ruta
 //    data object CameraXScreen : AppScreens("camera_screen") // Nueva ruta
 
-    data object CameraScreenV2 : AppScreens("cameraScreenV2/{id}")
+//    data object CameraScreenV2 : AppScreens("cameraScreenV2/{id}")
+    data object CameraScreenV2 : AppScreens("cameraScreenV2/{id}?isChallenge={isChallenge}")
 
 }

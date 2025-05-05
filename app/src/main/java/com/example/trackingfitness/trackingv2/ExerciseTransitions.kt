@@ -38,6 +38,7 @@ object ExerciseTransitions {
             "left_end" to "russian-twists-left_end",
             "right_end" to "russian-twists-right_end"
         ),
+        "plank" to mapOf("position" to "plank"),
 
         // FLEXIBILITY
         "cobra-stretch" to mapOf("start" to "cobra_stretch_start", "end" to "cobra_stretch_end"),
@@ -101,6 +102,7 @@ object ExerciseTransitions {
     val isometricExercises = setOf(
         "plank_downward",
         "wall-sit",
-        "cobra-stretch"
+        "cobra-stretch",
+        "plank"
     )
 }

@@ -27,6 +27,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import android.media.MediaPlayer
 import com.example.trackingfitness.conection.MyExercise
+import com.example.trackingfitness.viewModel.MiniGamesViewModel
 
 class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListener {
 
@@ -44,7 +45,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
     private var selectedExercise: String = "wall sit"
     private var lastState: String? = null
     private var currentState: String? = null
-    private var generalTimeMillis: Long = 0
     private val generalHandler = Handler(Looper.getMainLooper())
 
     private var currentModel: String
@@ -72,7 +72,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
     private var isPaused = false
 
     private var startPoseTime = 0L
-    private var generalTimer: Handler? = null
 
     private var isometricStartTime: Long = 0L
     private val isometricHoldDuration = 5000L
@@ -86,8 +85,13 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
     private var finalHandler: Handler? = null
     private var preRoutineHandler: Handler? = null
 
-
     private var mediaPlayer: MediaPlayer? = null
+
+    private var isChallengeMode = false
+    private var lastRepTimestamp: Long = 0L
+    private var outOfPoseTime: Long = 0L
+    private var challengeCountdownHandler: Handler? = null
+    private var challengeRemainingTime: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,6 +116,16 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
         mediaPlayer = MediaPlayer.create(this, R.raw.beep)
 
+        isChallengeMode = intent.getBooleanExtra("IS_CHALLENGE", false)
+        val exerciseId = intent.getIntExtra("EXERCISE_ID",-1)
+
+        if(!isChallengeMode){
+            generalTimerTextView.visibility = View.INVISIBLE
+        }
+
+        Log.d("ChallengeMode", isChallengeMode.toString())
+        Log.d("ExerciseId", exerciseId.toString())
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(android.view.WindowInsets.Type.statusBars())
         } else {
@@ -129,6 +143,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
         initializePoseLandmarker()
         setupUI()
+        startChallengeTimerChecker()
     }
 
 
@@ -147,7 +162,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
                     currentExerciseInfo = currentExercise
 
-//                    Log.d("cuerpo current", currentExercise.toString())
                     if (currentExercise != null) {
                         userSessionManager?.showExercise(token, currentExercise.exercise_id) { exercise ->
                             runOnUiThread {
@@ -242,10 +256,17 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             val btnPauseRoutine = view.findViewById<ImageButton>(R.id.btnPauseRoutine)
             val btnNextExercise = view.findViewById<ImageButton>(R.id.btnNextExercise)
 
-            if(currentSet > maxSets){
+//            if(currentSet > maxSets){
+//                btnNextExercise.isEnabled = true
+//                hideCounters()
+//            }
+            if (!isChallengeMode && currentSet > maxSets) {
                 btnNextExercise.isEnabled = true
                 hideCounters()
+            } else {
+                btnNextExercise.visibility = View.GONE // No se permite avanzar manualmente
             }
+
             btnSwitchCamera.setOnClickListener {
                 cameraHelper.toggleCamera()
                 bottomSheetDialog.dismiss()
@@ -298,15 +319,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             poseLandmarkerHelperListener = this,
             routineStarted = routineStarted
         )
-//        poseLandmarkerHelper = PoseLandmarkerHelper(
-//            context = this,
-//            runningMode = RunningMode.LIVE_STREAM,
-//            currentModel = PoseLandmarkerHelper.MODEL_POSE_LANDMARKER_FULL,
-//            modelFile = modelFile,
-//            labelFile = labelFile,
-//            poseLandmarkerHelperListener = this,
-//
-//        )
     }
 
     private fun detectPose(imageProxy: ImageProxy) {
@@ -364,10 +376,23 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
             showCounters()
 
+//            if (selectedExercise in ExerciseTransitions.isometricExercises) {
+//                handleIsometricExercise(poseClass)
+//            } else {
+//                handleRepetitiveExercise(poseClass)
+//            }
             if (selectedExercise in ExerciseTransitions.isometricExercises) {
-                handleIsometricExercise(poseClass)
+                if (isChallengeMode) {
+                    handleIsometricChallenge(poseClass)
+                } else {
+                    handleIsometricExercise(poseClass)
+                }
             } else {
-                handleRepetitiveExercise(poseClass)
+                if (isChallengeMode) {
+                    handleRepetitiveChallenge(poseClass)
+                } else {
+                    handleRepetitiveExercise(poseClass)
+                }
             }
 
             overlayView.invalidate()
@@ -386,6 +411,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             if (elapsedTime >= 3000) {
                 isResting = false
                 routineStarted = true
+                generalTimerTextView.visibility = View.VISIBLE  // ✅ ahora sí
                 hideOverlayMessage()
                 showCounters()
 
@@ -421,8 +447,9 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             }
 
             if (isValidTransition) {
-                mediaPlayer?.start() // 🔊 Sonido de repetición
+                mediaPlayer?.start()
                 repetitionCount++
+                lastRepTimestamp = System.currentTimeMillis()  // ⏱️ ← aquí marcamos el tiempo
                 repCountTextView.text = "Reps: $repetitionCount/$repsPerSet"
 
                 if (repetitionCount >= repsPerSet) {
@@ -442,6 +469,44 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         }
     }
 
+    private fun handleRepetitiveChallenge(detectedPose: String) {
+        val exerciseFilter = exerciseTransitions[selectedExercise] ?: return
+
+        if (detectedPose !in exerciseFilter.values) return
+
+        lastState = currentState
+        currentState = detectedPose
+
+        val isUnilateral = selectedExercise in unilateralExercises
+        val isValidTransition = if (isUnilateral) {
+            (lastState == exerciseFilter["left_end"] && currentState == exerciseFilter["start"]) ||
+                    (lastState == exerciseFilter["right_end"] && currentState == exerciseFilter["start"])
+        } else {
+            lastState == exerciseFilter["end"] && currentState == exerciseFilter["start"]
+        }
+
+        if (isValidTransition) {
+            generalTimerTextView.text = "⏱️ 07 s"
+            mediaPlayer?.start()
+            repetitionCount++
+            lastRepTimestamp = System.currentTimeMillis()
+            repCountTextView.text = "Reps: $repetitionCount"
+        }
+//        startChallengeCountdown(7000)
+
+
+        // Finalizar si hay inactividad
+        if (lastRepTimestamp != 0L) {
+            val elapsed = System.currentTimeMillis() - lastRepTimestamp
+            if (elapsed > 7000) {
+                routineEnded = true
+                statusTextView.text = "¡Minijuego terminado!"
+                startFinalExerciseTimer()
+                lastRepTimestamp = 0L
+            }
+        }
+    }
+
     private fun handleIsometricExercise(detectedPose: String) {
         val exerciseFilter = ExerciseTransitions.exerciseTransitions[selectedExercise]
         val isometricPose = exerciseFilter?.get("position") ?: selectedExercise
@@ -456,14 +521,13 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             }
 
             val elapsedTime = (System.currentTimeMillis() - isometricStartTime) / 1000
-            isometricTotalTime += 1 // Acumular tiempo total en segundos
+            isometricTotalTime += 1
 
             repCountTextView.visibility = View.VISIBLE
             repCountTextView.text = "Tiempo: $elapsedTime s"
 
-            // **✅ Cuando llegue a 5 segundos, completar el set y pausar el conteo**
             if (elapsedTime >= isometricHoldDuration / 1000) {
-                mediaPlayer?.start() // 🔊 Sonido indicando que el set se completó
+                mediaPlayer?.start()
                 currentSet++
 
                 setCountTextView.text = "Set: $currentSet/$maxSets"
@@ -491,27 +555,129 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         }
     }
 
-    private fun startGeneralTimer() {
-        if (generalTimer != null) return // 🔥 Evita crear múltiples instancias
+//    private fun handleIsometricChallenge(detectedPose: String) {
+//        val exerciseFilter = exerciseTransitions[selectedExercise]
+//        val isometricPose = exerciseFilter?.get("position") ?: selectedExercise
+//
+//        if (!routineStarted || routineEnded || isPaused || isResting) return
+//
+//        if (detectedPose == isometricPose) {
+//            outOfPoseTime = 0L
+//            if (isometricStartTime == 0L) {
+//                isometricStartTime = System.currentTimeMillis()
+//            }
+//
+//            val elapsedTime = (System.currentTimeMillis() - isometricStartTime) / 1000
+//            repCountTextView.text = "Tiempo: $elapsedTime s"
+//
+//        } else {
+////            isometricStartTime = 0L
+//
+//            if (outOfPoseTime == 0L) {
+//                outOfPoseTime = System.currentTimeMillis()
+//            } else {
+//                val elapsed = System.currentTimeMillis() - outOfPoseTime
+//                if (elapsed > 4000) {
+//                    routineEnded = true
+//                    statusTextView.text = "¡Minijuego terminado!"
+//                    startFinalExerciseTimer()
+//                    outOfPoseTime = 0L
+//                }
+//            }
+////            startChallengeCountdown(4000)
+//        }
+//    }
+    private fun handleIsometricChallenge(detectedPose: String) {
+        val exerciseFilter = exerciseTransitions[selectedExercise]
+        val isometricPose = exerciseFilter?.get("position") ?: selectedExercise
 
-        generalTimer = Handler(Looper.getMainLooper())
+        if (!routineStarted || routineEnded || isPaused || isResting) return
 
-        generalTimer?.post(object : Runnable {
-            override fun run() {
-                if (!routineEnded) { // 🔥 Permitir que el cronómetro se reanude correctamente
-                    if (!isPaused) {
-                        generalTimeMillis += 1000
-                        val minutes = (generalTimeMillis / 1000) / 60
-                        val seconds = (generalTimeMillis / 1000) % 60
-                        generalTimerTextView.text = String.format("%02d:%02d", minutes, seconds)
-                    }
-                    generalTimer?.postDelayed(this, 1000) // 🔥 Sigue actualizando el cronómetro
+        if (detectedPose == isometricPose) {
+            outOfPoseTime = 0L
+            if (isometricStartTime == 0L) {
+                isometricStartTime = System.currentTimeMillis()
+
+                generalTimerTextView.text = "⏱️ 04 s"
+            }
+
+            val elapsedTime = ((System.currentTimeMillis() - isometricStartTime) + isometricTotalTime) / 1000
+            repCountTextView.text = "Tiempo: $elapsedTime s"
+
+        } else {
+            // ⚠️ Aquí pausamos el tiempo y acumulamos
+            if (isometricStartTime != 0L) {
+                isometricTotalTime += (System.currentTimeMillis() - isometricStartTime)
+                isometricStartTime = 0L
+
+            }
+
+            if (outOfPoseTime == 0L) {
+                outOfPoseTime = System.currentTimeMillis()
+            } else {
+                val elapsed = System.currentTimeMillis() - outOfPoseTime
+                if (elapsed > 4000) {
+                    routineEnded = true
+                    statusTextView.text = "¡Minijuego terminado!"
+                    startFinalExerciseTimer()
+                    outOfPoseTime = 0L
                 }
+            }
+        }
+    }
+
+    private fun startChallengeTimerChecker() {
+        val checkerHandler = Handler(Looper.getMainLooper())
+
+        checkerHandler.post(object : Runnable {
+            override fun run() {
+                if (isChallengeMode && routineStarted && !routineEnded) {
+                    val now = System.currentTimeMillis()
+
+                    // 🏋️ Reto de repeticiones
+                    if (selectedExercise !in ExerciseTransitions.isometricExercises && lastRepTimestamp != 0L) {
+                        val elapsed = now - lastRepTimestamp
+                        if (elapsed > 7000) {
+                            routineEnded = true
+                            statusTextView.text = "¡Minijuego terminado!"
+                            startFinalExerciseTimer()
+                            lastRepTimestamp = 0L
+                            generalTimerTextView.text = "⏱️ 07 s"
+                            generalTimerTextView.visibility = View.VISIBLE
+                        } else {
+                            val remaining = 7000 - elapsed
+                            generalTimerTextView.text = String.format("⏱️ %02d s", (remaining / 1000))
+                            generalTimerTextView.visibility = View.VISIBLE
+                        }
+                    }
+
+                    // 🧘 Reto isométrico
+                    if (selectedExercise in ExerciseTransitions.isometricExercises && outOfPoseTime != 0L) {
+                        val elapsed = now - outOfPoseTime
+                        if (elapsed > 4000) {
+                            routineEnded = true
+                            statusTextView.text = "¡Minijuego terminado!"
+                            startFinalExerciseTimer()
+                            outOfPoseTime = 0L
+                            generalTimerTextView.text = "00:00"
+                            generalTimerTextView.visibility = View.VISIBLE
+                        } else {
+                            val remaining = 4000 - elapsed
+                            generalTimerTextView.text = String.format("⏱️ %02d s", (remaining / 1000))
+                            generalTimerTextView.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+                // Repetir cada segundo
+                checkerHandler.postDelayed(this, 1000)
             }
         })
     }
 
     private fun startRestPeriod() {
+        if (isChallengeMode) return  // ← omitir descanso
+
         isResting = true
         restHandler?.removeCallbacksAndMessages(null)
         restHandler = Handler(Looper.getMainLooper())
@@ -539,6 +705,28 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         if (finalTimerStarted) return
         finalTimerStarted = true
 
+
+        if (isChallengeMode) {
+//            val score = if (selectedExercise in ExerciseTransitions.isometricExercises) {
+//                (isometricTotalTime / 1000).toInt()
+//            } else {
+//                repetitionCount
+//            }
+//
+//            val token = userSessionManager?.getUserSession()?.token ?: ""
+//            val telephone = "3333333333"
+//            val exerciseId = intent.getIntExtra("EXERCISE_ID", -1)
+//            val alias = "Armando Rodarte"
+//
+//            if (token.isNotEmpty() && telephone.isNotEmpty() && exerciseId != -1) {
+//                val viewModel = MiniGamesViewModel(application)
+//                viewModel.updateMinigameScore(token, telephone, exerciseId, score, alias)
+//            }
+
+            showOverlayMessage("final_reto")
+            return
+        }
+
         finalHandler?.removeCallbacksAndMessages(null)
         finalHandler = Handler(Looper.getMainLooper())
 
@@ -556,16 +744,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         })
     }
 
-//    private fun advanceToNextExercise() {
-//        val token = userSessionManager?.getUserSession()?.token ?: ""
-//        lifecycleScope.launch {
-//            userSessionManager?.updateExerciseState(token)
-//            delay(1500)  // Pequeño delay para que el backend procese la actualización
-//            userSessionManager?.getMyExercises()
-//        }
-//        hideOverlayMessage()
-//        resetExerciseState()
-//    }
     private fun advanceToNextExercise() {
         finalTimerStarted = false
         finalHandler?.removeCallbacksAndMessages(null)
@@ -626,7 +804,9 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
     private fun showCounters() {
         repCountTextView.visibility = View.VISIBLE
-        setCountTextView.visibility = View.VISIBLE
+        if(!isChallengeMode){
+            setCountTextView.visibility = View.VISIBLE
+        }
     }
 
     private fun hideCounters() {
@@ -646,6 +826,8 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         setActual: Int = 0,
         totalSets: Int = 0
     ) {
+//        if (isChallengeMode) return
+
         val overlayLayout = findViewById<LinearLayout>(R.id.stateOverlayLayout)
         val overlayText = findViewById<TextView>(R.id.stateOverlayText)
         val overlayTimer = findViewById<TextView>(R.id.overlayTimer)
@@ -657,7 +839,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
         when (estado) {
             "inicio" -> {
-                overlayText.text = "¡Iniciando rutina!"
+                overlayText.text = if (isChallengeMode) "¡Iniciando reto!" else "¡Iniciando rutina!"
                 overlayTimer.text = tiempoFormateado
                 skipButton.visibility = View.GONE
             }
@@ -684,8 +866,75 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                     advanceToNextExercise()
                 }
             }
-        }
 
+            "final_reto" -> {
+//                var secondsLeft = 7
+                val aliasInput = findViewById<EditText>(R.id.aliasInput)
+                val phoneInput = findViewById<EditText>(R.id.phoneInput)
+                overlayTimer.visibility = View.GONE
+                overlayText.text = "¡Reto finalizado!"
+                skipButton.text = "Registrar datos"
+                skipButton.visibility = View.VISIBLE
+                aliasInput.visibility = View.VISIBLE
+                phoneInput.visibility = View.VISIBLE
+//                skipButton.setOnClickListener {
+//                    val intent = Intent().apply {
+//                        putExtra("navigateTo", "minigamesScreen")
+//                    }
+//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                    setResult(Activity.RESULT_OK, intent)
+//                    finish()
+//                }
+//
+//                // 🕒 Actualiza el texto dinámicamente
+//                val handler = Handler(Looper.getMainLooper())
+//                handler.post(object : Runnable {
+//                    override fun run() {
+//                        overlayText.text = "¡Reto terminado!\nRegresando al menú en\n$secondsLeft segundos"
+//                        if (secondsLeft > 0) {
+//                            secondsLeft--
+//                            handler.postDelayed(this, 1000)
+//                        } else {
+//                            val intent = Intent().apply {
+//                                putExtra("navigateTo", "minigamesScreen")
+//                            }
+//                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                            setResult(Activity.RESULT_OK, intent)
+//                            finish()
+//                        }
+//                    }
+//                })
+                skipButton.setOnClickListener {
+                    val inputAlias = aliasInput.text.toString().trim()
+                    val inputPhone = "+52" + phoneInput.text.toString().trim().removePrefix("+52")
+
+                    if (inputAlias.isEmpty() || inputPhone.isEmpty()) {
+                        Toast.makeText(this@CameraScreenV2, "Por favor, llena ambos campos", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+
+                    val token = userSessionManager?.getUserSession()?.token ?: ""
+                    val exerciseId = intent.getIntExtra("EXERCISE_ID", -1)
+                    val score = if (selectedExercise in ExerciseTransitions.isometricExercises) {
+                        (isometricTotalTime / 1000).toInt()
+                    } else {
+                        repetitionCount
+                    }
+
+                    if (token.isNotEmpty() && exerciseId != -1) {
+                        val viewModel = MiniGamesViewModel(application)
+                        viewModel.updateMinigameScore(token, inputPhone, exerciseId, score, inputAlias)
+                    }
+
+                    val intent = Intent().apply {
+                        putExtra("navigateTo", "minigamesScreen")
+                    }
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
+            }
+        }
         stateOverlay.visibility = View.VISIBLE
     }
 

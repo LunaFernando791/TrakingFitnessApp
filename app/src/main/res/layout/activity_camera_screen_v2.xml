@@ -113,8 +113,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statusText" />
+        app:layout_constraintStart_toEndOf="@+id/poseClassText"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/modelSpinner"
@@ -122,7 +122,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/poseClassText"
         app:layout_constraintTop_toBottomOf="@id/exerciseSpinner" />
 
     <!-- Cronómetro (si lo necesitas) -->
@@ -131,11 +131,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:background="@android:color/black"
+        android:background="@drawable/rounded_button_setsreps"
         android:padding="8dp"
         android:text="00:00"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textSize="34sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/repetitionCount"
         app:layout_constraintEnd_toEndOf="parent"
@@ -175,6 +175,30 @@
             android:gravity="center"
             android:layout_gravity="center">
 
+            <EditText
+                android:id="@+id/aliasInput"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="Alias"
+
+                android:padding="12dp"
+                android:textColor="#000000"
+                android:inputType="textPersonName"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone"/>
+
+            <EditText
+                android:id="@+id/phoneInput"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="Teléfono"
+
+                android:padding="12dp"
+                android:textColor="#000000"
+                android:inputType="phone"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone"/>
+
             <!-- Texto: Set completado -->
             <TextView
                 android:id="@+id/stateOverlayText"
@@ -183,7 +207,9 @@
                 android:textColor="#404040"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:textAlignment="center"/>
 
             <!-- Cronómetro en tiempo real -->
             <TextView

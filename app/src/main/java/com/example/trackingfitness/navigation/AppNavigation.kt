@@ -78,7 +78,13 @@ fun AppNavigation(
             navController.navigate(AppScreens.ExerciseListScreen.route) {
                 popUpTo(AppScreens.PrincipalScreen.route) { inclusive = false }
             }
-        } else {
+        }
+        else if(destination == "minigamesScreen"){
+            navController.navigate(MinigamesScreen.route) {
+                popUpTo(AppScreens.PrincipalScreen.route) { inclusive = false }
+            }
+        }
+        else {
             val isLoggedIn = userSessionManager.isUserLoggedIn()
             startDestination = if (isLoggedIn) AppScreens.PrincipalScreen.route else AppScreens.StartScreen.route
         }
@@ -245,10 +251,15 @@ fun AppNavigation(
 
         composable(
             AppScreens.CameraScreenV2.route,
-            arguments = listOf(navArgument("id") { type = NavType.IntType })
+            arguments = listOf(navArgument("id") { type = NavType.IntType },
+                navArgument("isChallenge") {
+                    type = NavType.BoolType
+                    defaultValue = false
+                })
         ) { backStackEntry ->
             val context = LocalContext.current as Activity
             val idExercise = backStackEntry.arguments?.getInt("id")
+            val isChallenge = backStackEntry.arguments?.getBoolean("isChallenge") ?: false
             val token = userSessionManager.getUserSession().token
 
             if (idExercise != null) {
@@ -256,6 +267,7 @@ fun AppNavigation(
                     val intent = Intent(context, CameraScreenV2::class.java).apply {
                         putExtra("EXERCISE_ID", idExercise)
                         putExtra("USER_TOKEN", token)
+                        putExtra("IS_CHALLENGE", isChallenge) // 💡 nuevo
                     }
                     context.startActivityForResult(intent, 1001)
                 }

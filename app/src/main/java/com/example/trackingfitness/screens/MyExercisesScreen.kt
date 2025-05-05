@@ -227,7 +227,8 @@ fun ExerciseItem(
             onClick = {
 //                navController.navigate("cameraScreen/${myExercise.exercise_id}")
                 if (myExercise.status == "actual")
-                    navController.navigate(AppScreens.CameraScreenV2.route.replace("{id}", myExercise.exercise_id.toString()))
+//                    navController.navigate(AppScreens.CameraScreenV2.route.replace("{id}", myExercise.exercise_id.toString()))
+                    navController.navigate(AppScreens.CameraScreenV2.route.replace("{id}", "-1"))
                 else
                     Toast.makeText(
                         context,

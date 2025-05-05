@@ -9,11 +9,6 @@ object ModelConfig {
         "harmstring", "hip-abductor","shoulders",
       )
 
-//    val models = listOf("back","legs", "biceps",
-//        "glutes",
-//        "hip-abductor","shoulders",
-//        "tricep")
-
     private val modelFiles = mapOf(
         "abs" to "pose_classification_model_abs.tflite",
         "back" to "pose_classification_model_back.tflite",
@@ -49,7 +44,7 @@ object ModelConfig {
         "back" to listOf("dead-row"),
         "biceps" to listOf("bicep-curl", "concentration-curl",),
         "chest" to listOf("push-ups", "archer-push-ups", "shoulder-taps"),
-        "core" to listOf("plank_downward", "russian-twists"),
+        "core" to listOf("plank_downward", "russian-twists", "plank"),
         "flexibility" to listOf("cobra-stretch"),
         "glutes" to listOf("glute-bridge", "hip-thrust", "good-morning"),
         "harmstring" to listOf("nordic-curl", "towel-harmstring"),
