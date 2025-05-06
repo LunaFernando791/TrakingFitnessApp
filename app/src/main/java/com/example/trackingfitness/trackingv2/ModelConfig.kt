@@ -4,9 +4,10 @@ object ModelConfig {
     var currentModel: String = "legs"
 
     val models = listOf("legs", "tricep", "back",
-        "abs", "biceps",
+        "abs", "biceps", "plank",
         "core","flexibility", "glutes",
         "harmstring", "hip-abductor","shoulders",
+        "chest",
       )
 
     private val modelFiles = mapOf(
@@ -15,6 +16,7 @@ object ModelConfig {
         "biceps" to "pose_classification_model_biceps.tflite",
         "chest" to "pose_classification_model_chest.tflite",
         "core" to "pose_classification_model_core.tflite",
+        "plank" to "pose_classification_model_plank.tflite",
         "flexibility" to "pose_classification_model_flexibility.tflite",
         "glutes" to "pose_classification_model_glutes.tflite",
         "harmstring" to "pose_classification_model_harmstring.tflite",
@@ -30,6 +32,7 @@ object ModelConfig {
         "biceps" to "labels_biceps.txt",
         "chest" to "labels_chest.txt",
         "core" to "labels_core.txt",
+        "plank" to "labels_plank.txt",
         "flexibility" to "labels_flexibility.txt",
         "glutes" to "labels_glutes.txt",
         "harmstring" to "labels_harmstring.txt",
@@ -39,13 +42,14 @@ object ModelConfig {
         "tricep" to "labels_tricep.txt",
     )
 
-    private val exercisesByModel = mapOf(
+    val exercisesByModel = mapOf(
         "abs" to listOf("crunches", "leg-raises", "v-ups"),
         "back" to listOf("dead-row"),
         "biceps" to listOf("bicep-curl", "concentration-curl",),
         "chest" to listOf("push-ups", "archer-push-ups", "shoulder-taps"),
-        "core" to listOf("plank_downward", "russian-twists", "plank"),
+        "core" to listOf("plank_downward", "russian-twists"),
         "flexibility" to listOf("cobra-stretch"),
+        "plank" to listOf("plank"),
         "glutes" to listOf("glute-bridge", "hip-thrust", "good-morning"),
         "harmstring" to listOf("nordic-curl", "towel-harmstring"),
         "hip-abductor" to listOf("stand-hip-abductor", "lateral-leg-raises"),

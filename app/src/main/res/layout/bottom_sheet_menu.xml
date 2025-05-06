@@ -87,5 +87,26 @@
                 android:scaleType="centerInside"
                 android:contentDescription="Siguiente ejercicio" />
         </GridLayout>
+
+        <!-- Spinners de modelo y ejercicio -->
+        <Spinner
+            android:id="@+id/modelSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_button_imagebuttom"
+            android:textAlignment="center"
+            android:padding="8dp" />
+
+        <Spinner
+            android:id="@+id/exerciseSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:background="@drawable/rounded_button_imagebuttom"
+            android:textColor="@android:color/white"
+            android:padding="8dp" />
+
     </LinearLayout>
 </ScrollView>

@@ -38,7 +38,6 @@ object ExerciseTransitions {
             "left_end" to "russian-twists-left_end",
             "right_end" to "russian-twists-right_end"
         ),
-        "plank" to mapOf("position" to "plank"),
 
         // FLEXIBILITY
         "cobra-stretch" to mapOf("start" to "cobra_stretch_start", "end" to "cobra_stretch_end"),
@@ -86,7 +85,10 @@ object ExerciseTransitions {
         "reverse-plank-dip" to mapOf("start" to "reverse-plank-dip_start", "end" to "reverse-plank-dip_end"),
         "tricep-kickback" to mapOf("start" to "tricep-kickback_start", "end" to "tricep-kickback_end"),
         "tricep-extension-floor" to mapOf("start" to "tricep_extension_floor_start", "end" to "tricep_extension_floor_end"),
-        "wall-tricep-extension" to mapOf("start" to "wall-tricep-extension_start", "end" to "wall-tricep-extension_end")
+        "wall-tricep-extension" to mapOf("start" to "wall-tricep-extension_start", "end" to "wall-tricep-extension_end"),
+
+        // MINIGAMES
+        "plank" to mapOf("position" to "plank")
     )
 
     val unilateralExercises = setOf(

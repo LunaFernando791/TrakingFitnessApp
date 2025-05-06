@@ -251,7 +251,7 @@ class PoseLandmarkerHelper(
 
         // Umbral dinámico según el modelo activo
         val isChestModel = ModelConfig.currentModel == "chest" || ModelConfig.currentModel == "core"
-        val shoulderThreshold = if (isChestModel) 0.5f else 0.22f
+        val shoulderThreshold = if (isChestModel) 0.8f else 0.22f
 
         val leftShoulder = poseLandmarks.getOrNull(11)
         val rightShoulder = poseLandmarks.getOrNull(12)

@@ -90,8 +90,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
     private var isChallengeMode = false
     private var lastRepTimestamp: Long = 0L
     private var outOfPoseTime: Long = 0L
-    private var challengeCountdownHandler: Handler? = null
-    private var challengeRemainingTime: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,6 +97,9 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         setContentView(R.layout.activity_camera_screen_v2)
 
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        backgroundExecutor = Executors.newSingleThreadExecutor()
+        cameraHelper = CameraHelper(this, backgroundExecutor) { image -> detectPose(image) }
 
         poseClassTextView = findViewById(R.id.poseClassText)
         repCountTextView = findViewById(R.id.repetitionCount)
@@ -120,7 +121,43 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         val exerciseId = intent.getIntExtra("EXERCISE_ID",-1)
 
         if(!isChallengeMode){
+            ModelConfig.currentModel = "legs"
             generalTimerTextView.visibility = View.INVISIBLE
+        }
+
+        if (isChallengeMode && exerciseId != -1) {
+            // ID → Nombre
+            val exerciseMap = mapOf(
+                1 to "push-ups",
+                2 to "wall-sit",
+                3 to "plank"
+            )
+            val exerciseName = exerciseMap[exerciseId]
+
+            exerciseName?.let { name ->
+                selectedExercise = name
+
+                // Mostrar nombre del ejercicio en la interfaz
+                findViewById<TextView>(R.id.exerciseName).text = name.replace("-", " ").replaceFirstChar { it.uppercase() }
+
+                // Buscar modelo correspondiente
+                for ((model, exercises) in ModelConfig.exercisesByModel) {
+                    if (name in exercises) {
+                        ModelConfig.currentModel = model
+                        currentModel = model
+                        break
+                    }
+                }
+
+                // Reiniciar landmarker con modelo correcto
+                resetPoseLandmarker()
+
+//                // Mostrar info
+//                currentExerciseInfo = ExerciseInfo(
+//                    exercise_name = name.replace("-", " ").replaceFirstChar { it.uppercase() },
+//                    description = "Challenge Mode: $name"
+//                )
+            }
         }
 
         Log.d("ChallengeMode", isChallengeMode.toString())
@@ -138,9 +175,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
         userSessionManager = UserSessionManager(applicationContext)
 
-        backgroundExecutor = Executors.newSingleThreadExecutor()
-        cameraHelper = CameraHelper(this, backgroundExecutor) { image -> detectPose(image) }
-
         initializePoseLandmarker()
         setupUI()
         startChallengeTimerChecker()
@@ -150,39 +184,45 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
     private fun setupUI() {
         val token = userSessionManager?.getUserSession()?.token ?: ""
 
-        lifecycleScope.launch {
-            userSessionManager?.getMyExercises()
+        if(!isChallengeMode){
+            lifecycleScope.launch {
+                userSessionManager?.getMyExercises()
 
-            userSessionManager?.myExercises
-                ?.drop(1)         // Ignora la primera emisi贸n (valor inicial vac铆o)
-                ?.collect { myExerciseResponse ->
-                    val exercises = myExerciseResponse?.selectedExercises
+                userSessionManager?.myExercises
+                    ?.drop(1)         // Ignora la primera emisi贸n (valor inicial vac铆o)
+                    ?.collect { myExerciseResponse ->
+                        val exercises = myExerciseResponse?.selectedExercises
 
-                    val currentExercise = exercises?.firstOrNull { it.status == "actual" }
+                        val currentExercise = exercises?.firstOrNull { it.status == "actual" }
 
-                    currentExerciseInfo = currentExercise
+                        currentExerciseInfo = currentExercise
 
-                    if (currentExercise != null) {
-                        userSessionManager?.showExercise(token, currentExercise.exercise_id) { exercise ->
-                            runOnUiThread {
-                                findViewById<TextView>(R.id.exerciseName).text = "${exercise.name}"
-                                repetitionCount = 0
-                                findViewById<TextView>(R.id.repetitionCount).text = "Reps: 0/$repsPerSet"
+                        if (currentExercise != null) {
+                            userSessionManager?.showExercise(token, currentExercise.exercise_id) { exercise ->
+                                runOnUiThread {
+                                    findViewById<TextView>(R.id.exerciseName).text = "${exercise.name}"
+                                    repetitionCount = 0
+                                    findViewById<TextView>(R.id.repetitionCount).text = "Reps: 0/$repsPerSet"
 //                                selectedExercise = exercise.name.lowercase()
-
 //                                resetPoseLandmarker() // 🔥 Forzar actualización del modelo
+                                }
+                                Log.d("CameraScreenV2", "Ejercicio cargado correctamente: ${exercise.name}")
                             }
-                            Log.d("CameraScreenV2", "Ejercicio cargado correctamente: ${exercise.name}")
+                        } else {
+                            Log.d("CameraScreenV2", "No se encontr贸 ejercicio actual.")
+                            navigateToExerciseListScreen()
                         }
-                    } else {
-                        Log.d("CameraScreenV2", "No se encontr贸 ejercicio actual.")
-                        navigateToExerciseListScreen()
                     }
-                }
+            }
+            val defaultExercises = getExercisesForCurrentModel()
+            if (defaultExercises.isNotEmpty()) {
+                selectedExercise = defaultExercises.first()
+                repetitionCount = 0
+                repCountTextView.text = "Reps: 0/$repsPerSet"
+                Log.d("SetupUI", "Ejercicio inicial (por defecto): $selectedExercise")
+            }
         }
 
-        setupExerciseSpinner()
-        setupModelSpinner()
         setupDropdownMenu()
 
         if(selectedExercise in ExerciseTransitions.isometricExercises){
@@ -199,39 +239,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             }
             setResult(Activity.RESULT_OK, intent)
             finish()
-        }
-    }
-
-    private fun setupExerciseSpinner() {
-        val exerciseSpinner: Spinner = findViewById(R.id.exerciseSpinner)
-        val exercises = getExercisesForCurrentModel()
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, exercises)
-        exerciseSpinner.adapter = adapter
-
-        exerciseSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedExercise = exercises[position]
-                repetitionCount = 0
-                findViewById<TextView>(R.id.repetitionCount).text = "Reps: 0/$repsPerSet"
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
-
-    private fun setupModelSpinner() {
-        val modelSpinner: Spinner = findViewById(R.id.modelSpinner)
-        val modelAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, models)
-        modelSpinner.adapter = modelAdapter
-
-        modelSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                currentModel = models[position]
-                resetPoseLandmarker()
-                setupExerciseSpinner()  // Recargar lista de ejercicios al cambiar modelo
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
@@ -256,38 +263,97 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             val btnPauseRoutine = view.findViewById<ImageButton>(R.id.btnPauseRoutine)
             val btnNextExercise = view.findViewById<ImageButton>(R.id.btnNextExercise)
 
-//            if(currentSet > maxSets){
-//                btnNextExercise.isEnabled = true
-//                hideCounters()
-//            }
             if (!isChallengeMode && currentSet > maxSets) {
                 btnNextExercise.isEnabled = true
                 hideCounters()
             } else {
-                btnNextExercise.visibility = View.GONE // No se permite avanzar manualmente
+                btnNextExercise.visibility = View.GONE
             }
 
             btnSwitchCamera.setOnClickListener {
                 cameraHelper.toggleCamera()
                 bottomSheetDialog.dismiss()
             }
+
             btnRotateCamera.setOnClickListener {
                 cameraHelper.rotateCamera(this)
                 bottomSheetDialog.dismiss()
             }
+
             btnPauseRoutine.setOnClickListener {
-                val intent = Intent().apply {
-                    putExtra("navigateTo", "exerciseListScreen")
+                if(!isChallengeMode){
+                    val intent = Intent().apply {
+                        putExtra("navigateTo", "exerciseListScreen")
+                    }
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }else{
+                    val intent = Intent().apply {
+                        putExtra("navigateTo", "minigamesScreen")
+                    }
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
                 }
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                setResult(Activity.RESULT_OK, intent)
-                finish()
                 bottomSheetDialog.dismiss()
             }
+
             btnNextExercise.setOnClickListener {
                 advanceToNextExercise()
                 bottomSheetDialog.dismiss()
             }
+
+            val modelSpinner = view.findViewById<Spinner>(R.id.modelSpinner)
+            val exerciseSpinner = view.findViewById<Spinner>(R.id.exerciseSpinner)
+
+            val modelAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, models)
+            modelSpinner.adapter = modelAdapter
+
+            val currentModelIndex = models.indexOf(currentModel)
+            if (currentModelIndex != -1) modelSpinner.setSelection(currentModelIndex)
+
+            var currentExercises = getExercisesForCurrentModel()
+            val exerciseAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, currentExercises)
+            exerciseSpinner.adapter = exerciseAdapter
+
+            val currentExerciseIndex = currentExercises.indexOf(selectedExercise)
+            if (currentExerciseIndex != -1) exerciseSpinner.setSelection(currentExerciseIndex)
+
+            modelSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedModel = models[position]
+                    if (selectedModel != currentModel) {
+                        currentModel = selectedModel
+                        resetPoseLandmarker()
+                    }
+
+                    currentExercises = getExercisesForCurrentModel()
+                    val updatedExerciseAdapter = ArrayAdapter(this@CameraScreenV2, android.R.layout.simple_spinner_item, currentExercises)
+                    exerciseSpinner.adapter = updatedExerciseAdapter
+
+                    val index = currentExercises.indexOf(selectedExercise)
+                    if (index != -1) {
+                        exerciseSpinner.setSelection(index)
+                    } else {
+                        selectedExercise = currentExercises.firstOrNull() ?: ""
+                        exerciseSpinner.setSelection(0)
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
+            exerciseSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    selectedExercise = currentExercises.getOrNull(position) ?: ""
+                    repetitionCount = 0
+                    repCountTextView.text = "Reps: 0/$repsPerSet"
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
             bottomSheetDialog.show()
         }
     }
@@ -376,11 +442,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
             showCounters()
 
-//            if (selectedExercise in ExerciseTransitions.isometricExercises) {
-//                handleIsometricExercise(poseClass)
-//            } else {
-//                handleRepetitiveExercise(poseClass)
-//            }
             if (selectedExercise in ExerciseTransitions.isometricExercises) {
                 if (isChallengeMode) {
                     handleIsometricChallenge(poseClass)
@@ -411,7 +472,9 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             if (elapsedTime >= 3000) {
                 isResting = false
                 routineStarted = true
-                generalTimerTextView.visibility = View.VISIBLE  // ✅ ahora sí
+                if(isChallengeMode){
+                    generalTimerTextView.visibility = View.VISIBLE  // ✅ ahora sí
+                }
                 hideOverlayMessage()
                 showCounters()
 
@@ -492,10 +555,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             lastRepTimestamp = System.currentTimeMillis()
             repCountTextView.text = "Reps: $repetitionCount"
         }
-//        startChallengeCountdown(7000)
 
-
-        // Finalizar si hay inactividad
         if (lastRepTimestamp != 0L) {
             val elapsed = System.currentTimeMillis() - lastRepTimestamp
             if (elapsed > 7000) {
@@ -555,38 +615,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         }
     }
 
-//    private fun handleIsometricChallenge(detectedPose: String) {
-//        val exerciseFilter = exerciseTransitions[selectedExercise]
-//        val isometricPose = exerciseFilter?.get("position") ?: selectedExercise
-//
-//        if (!routineStarted || routineEnded || isPaused || isResting) return
-//
-//        if (detectedPose == isometricPose) {
-//            outOfPoseTime = 0L
-//            if (isometricStartTime == 0L) {
-//                isometricStartTime = System.currentTimeMillis()
-//            }
-//
-//            val elapsedTime = (System.currentTimeMillis() - isometricStartTime) / 1000
-//            repCountTextView.text = "Tiempo: $elapsedTime s"
-//
-//        } else {
-////            isometricStartTime = 0L
-//
-//            if (outOfPoseTime == 0L) {
-//                outOfPoseTime = System.currentTimeMillis()
-//            } else {
-//                val elapsed = System.currentTimeMillis() - outOfPoseTime
-//                if (elapsed > 4000) {
-//                    routineEnded = true
-//                    statusTextView.text = "¡Minijuego terminado!"
-//                    startFinalExerciseTimer()
-//                    outOfPoseTime = 0L
-//                }
-//            }
-////            startChallengeCountdown(4000)
-//        }
-//    }
     private fun handleIsometricChallenge(detectedPose: String) {
         val exerciseFilter = exerciseTransitions[selectedExercise]
         val isometricPose = exerciseFilter?.get("position") ?: selectedExercise
@@ -605,7 +633,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             repCountTextView.text = "Tiempo: $elapsedTime s"
 
         } else {
-            // ⚠️ Aquí pausamos el tiempo y acumulamos
             if (isometricStartTime != 0L) {
                 isometricTotalTime += (System.currentTimeMillis() - isometricStartTime)
                 isometricStartTime = 0L
@@ -669,7 +696,6 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                     }
                 }
 
-                // Repetir cada segundo
                 checkerHandler.postDelayed(this, 1000)
             }
         })
@@ -705,24 +731,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         if (finalTimerStarted) return
         finalTimerStarted = true
 
-
         if (isChallengeMode) {
-//            val score = if (selectedExercise in ExerciseTransitions.isometricExercises) {
-//                (isometricTotalTime / 1000).toInt()
-//            } else {
-//                repetitionCount
-//            }
-//
-//            val token = userSessionManager?.getUserSession()?.token ?: ""
-//            val telephone = "3333333333"
-//            val exerciseId = intent.getIntExtra("EXERCISE_ID", -1)
-//            val alias = "Armando Rodarte"
-//
-//            if (token.isNotEmpty() && telephone.isNotEmpty() && exerciseId != -1) {
-//                val viewModel = MiniGamesViewModel(application)
-//                viewModel.updateMinigameScore(token, telephone, exerciseId, score, alias)
-//            }
-
             showOverlayMessage("final_reto")
             return
         }
@@ -937,5 +946,4 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         }
         stateOverlay.visibility = View.VISIBLE
     }
-
 }
