@@ -157,6 +157,46 @@
             android:gravity="center"
             android:layout_gravity="center">
 
+
+            <!-- Texto: Set completado -->
+            <TextView
+                android:id="@+id/stateOverlayText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#404040"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:textAlignment="center"/>
+
+            <LinearLayout
+                android:id="@+id/summaryOverlayRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/overlayExerciseName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ejercicio:"
+                    android:textColor="#404040"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="16dp"/>
+
+                <TextView
+                    android:id="@+id/overlayExerciseTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total:"
+                    android:textColor="#404040"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+
             <EditText
                 android:id="@+id/aliasInput"
                 android:layout_width="250dp"
@@ -180,18 +220,6 @@
                 android:inputType="phone"
                 android:layout_marginBottom="12dp"
                 android:visibility="gone"/>
-
-            <!-- Texto: Set completado -->
-            <TextView
-                android:id="@+id/stateOverlayText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#404040"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"
-                android:gravity="center"
-                android:textAlignment="center"/>
 
             <!-- Cronómetro en tiempo real -->
             <TextView

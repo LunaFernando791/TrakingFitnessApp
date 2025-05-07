@@ -344,7 +344,8 @@ class PoseLandmarkerHelper(
         val rightToLeftShoulder = distance2D(rightWrist, leftShoulder)
         val leftToRightShoulder = distance2D(leftWrist, rightShoulder)
 
-        val handsCrossedAndClose = rightToLeftShoulder < 0.075f && leftToRightShoulder < 0.075f
+//        val handsCrossedAndClose = rightToLeftShoulder < 0.075f && leftToRightShoulder < 0.075f
+        val handsCrossedAndClose = rightToLeftShoulder < 0.082f && leftToRightShoulder < 0.082f
 
         val avgShoulderY = (leftShoulder[1] + rightShoulder[1]) / 2
         val handsAtChestLevel = leftWrist[1] < avgShoulderY + 0.2f && rightWrist[1] < avgShoulderY + 0.2f

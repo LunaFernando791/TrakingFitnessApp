@@ -38,17 +38,10 @@ class MainActivity : ComponentActivity() {
                 MyApp()
         }
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
             val destination = data?.getStringExtra("navigateTo")
-//            if (destination == "exerciseListScreen") {
-//                val intent = Intent(this, MainActivity::class.java)
-//                intent.putExtra("navigateTo", "exerciseListScreen") // 🔥 Mandamos la navegación
-//                startActivity(intent)
-//                finish() // 🔥 Evita pantalla en blanco
-//            }
             if (destination == "exerciseListScreen" || destination == "minigamesScreen") {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("navigateTo", destination) // ✅ usamos la variable directamente
