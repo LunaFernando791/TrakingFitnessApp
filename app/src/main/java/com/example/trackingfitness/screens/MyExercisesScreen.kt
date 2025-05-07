@@ -67,7 +67,7 @@ fun MyExercisesScreen(
             ) {
                 BackButton(
                     navController = navController,
-                    ruta = "homeScreen"
+                    ruta = "selectExerciseModeScreen"
                 )
             }
             // Cuerpo del contenido con la lista de ejercicios
