@@ -4,7 +4,7 @@ object ModelConfig {
     var currentModel: String = "legs"
 
     val models = listOf("legs", "tricep", "back",
-        "abs", "biceps", "plank",
+        "abs", "biceps", "plank", "wall-sit",
         "core","flexibility", "glutes",
         "harmstring", "hip-abductor","shoulders",
         "chest",
@@ -17,6 +17,7 @@ object ModelConfig {
         "chest" to "pose_classification_model_chest.tflite",
         "core" to "pose_classification_model_core.tflite",
         "plank" to "pose_classification_model_plank.tflite",
+        "wall-sit" to "pose_classification_model_wall-sit.tflite",
         "flexibility" to "pose_classification_model_flexibility.tflite",
         "glutes" to "pose_classification_model_glutes.tflite",
         "harmstring" to "pose_classification_model_harmstring.tflite",
@@ -33,6 +34,7 @@ object ModelConfig {
         "chest" to "labels_chest.txt",
         "core" to "labels_core.txt",
         "plank" to "labels_plank.txt",
+        "wall-sit" to "labels_wall-sit.txt",
         "flexibility" to "labels_flexibility.txt",
         "glutes" to "labels_glutes.txt",
         "harmstring" to "labels_harmstring.txt",
@@ -50,10 +52,11 @@ object ModelConfig {
         "core" to listOf("plank_downward", "russian-twists"),
         "flexibility" to listOf("cobra-stretch"),
         "plank" to listOf("plank"),
+        "wall-sit" to listOf("wall-sit"),
         "glutes" to listOf("glute-bridge", "hip-thrust", "good-morning"),
         "harmstring" to listOf("nordic-curl", "towel-harmstring"),
         "hip-abductor" to listOf("stand-hip-abductor", "lateral-leg-raises"),
-        "legs" to listOf("squats", "lunges", "deadlifts", "wall-sit"),
+        "legs" to listOf("squats", "lunges", "deadlifts"),
         "shoulders" to listOf("lateral-raise", "pike-pushup", "rear-delt-fly", "snow-angels"),
         "tricep" to listOf("bench-dip","overhead-extension", "reverse-plank-dip", "tricep-kickback", "tricep-extension-floor", "wall-tricep-extension")
     )

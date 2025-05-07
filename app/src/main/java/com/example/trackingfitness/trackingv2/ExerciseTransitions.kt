@@ -71,7 +71,7 @@ object ExerciseTransitions {
             "right_end" to "lunge_right_down"
         ),
         "deadlifts" to mapOf("start" to "start", "end" to "deadlift_end"),
-        "wall-sit" to mapOf("position" to "squats_end"),
+        "wall-sit" to mapOf("position" to "wall-sit"),
 
         // SHOULDERS
         "lateral-raise" to mapOf("start" to "lateral_raise_start", "end" to "lateral_raise_end"),

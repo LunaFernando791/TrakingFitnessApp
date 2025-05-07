@@ -91,6 +91,8 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
     private var lastRepTimestamp: Long = 0L
     private var outOfPoseTime: Long = 0L
 
+    private var isFirstIsometricStart = true
+
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -624,9 +626,13 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         if (detectedPose == isometricPose) {
             outOfPoseTime = 0L
             if (isometricStartTime == 0L) {
-                isometricStartTime = System.currentTimeMillis()
-
-                generalTimerTextView.text = "⏱️ 04 s"
+//                isometricStartTime = System.currentTimeMillis()
+//
+//                generalTimerTextView.text = "⏱️ 04 s"
+                val extraDelay = if (isFirstIsometricStart) 4000L else 0L  // 3 segundos extra si es la primera vez
+                isometricStartTime = System.currentTimeMillis() + extraDelay
+                generalTimerTextView.text = if(isFirstIsometricStart) "⏱️ 04 s" else "⏱️ 08 s"
+                isFirstIsometricStart = false
             }
 
             val elapsedTime = ((System.currentTimeMillis() - isometricStartTime) + isometricTotalTime) / 1000

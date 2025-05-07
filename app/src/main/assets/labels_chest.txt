@@ -1,5 +1,3 @@
-archer-pushup-left_end
-archer-pushup-right_end
 pushups_down
 pushups_up
 wall-pushup_end
