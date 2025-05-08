@@ -237,13 +237,13 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         setupDropdownMenu()
 
         if(selectedExercise in ExerciseTransitions.isometricExercises){
-            repCountTextView.text = "Tiempo: 0s"
+            repCountTextView.text = "Time: 0s"
         }
     }
 
     private fun navigateToExerciseListScreen() {
         runOnUiThread {
-            Toast.makeText(this@CameraScreenV2, "Rutina completada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@CameraScreenV2, "Routine Completed", Toast.LENGTH_SHORT).show()
             val intent = Intent().apply {
                 putExtra("navigateTo", "exerciseListScreen")
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -272,10 +272,10 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
             if (!isChallengeMode && currentExerciseInfo != null) {
                 titleText.text = currentExerciseInfo?.exercise_name ?: displayName
-                descriptionText.text = currentExerciseInfo?.description ?: "Sin descripción disponible"
+                descriptionText.text = currentExerciseInfo?.description ?: "No description"
             } else {
                 titleText.text = displayName
-                descriptionText.text = exerciseDescriptions[selectedExercise] ?: "Sin descripción disponible"
+                descriptionText.text = exerciseDescriptions[selectedExercise] ?: "No description"
             }
 
             val btnSwitchCamera = view.findViewById<ImageButton>(R.id.btnSwitchCamera)
@@ -495,8 +495,10 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             if (elapsedTime >= 3000) {
                 isResting = false
                 routineStarted = true
-                if(isChallengeMode && selectedExercise in ExerciseTransitions.isometricExercises){
+//                if(isChallengeMode && selectedExercise in ExerciseTransitions.isometricExercises){
+                if(isChallengeMode){
                     generalTimerTextView.visibility = View.VISIBLE  // ✅ ahora sí
+                    generalTimerTextView.text = "Get ready!"
                 }
                 hideOverlayMessage()
                 showCounters()
@@ -510,7 +512,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         } else {
             startPoseTime = 0L
             hideOverlayMessage()
-            statusTextView.text = "Mantén 'x_pose' para comenzar"
+            statusTextView.text = "Hold 'x_pose' to start"
 
             preRoutineHandler?.removeCallbacksAndMessages(null)
             preRoutineHandler = null
@@ -544,7 +546,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
                     if (currentSet > maxSets) {
                         routineEnded = true
-                        statusTextView.text = "¡Ejercicio terminado!"
+                        statusTextView.text = "Exercise finished!"
                         startFinalExerciseTimer()
                     } else {
                         setCountTextView.text = "Set: $currentSet/$maxSets"
@@ -582,7 +584,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             val elapsed = System.currentTimeMillis() - lastRepTimestamp
             if (elapsed > 7000) {
                 routineEnded = true
-                statusTextView.text = "¡Minijuego terminado!"
+                statusTextView.text = "Minigame finished!"
                 startFinalExerciseTimer()
                 hideCountersChallenge()
                 lastRepTimestamp = 0L
@@ -607,7 +609,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             isometricTotalTime += 1
 
             repCountTextView.visibility = View.VISIBLE
-            repCountTextView.text = "Tiempo: $elapsedTime s"
+            repCountTextView.text = "Time: $elapsedTime s"
 
             if (elapsedTime >= isometricHoldDuration / 1000) {
                 mediaPlayer?.start()
@@ -619,11 +621,11 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
                 if (currentSet > maxSets) {
                     routineEnded = true
-                    statusTextView.text = "¡Ejercicio terminado!"
+                    statusTextView.text = "Exercise finished!"
                     startFinalExerciseTimer()
                     isometricTotalTime = 0L
                 } else {
-                    repCountTextView.text = "Tiempo: 0 s"
+                    repCountTextView.text = "Time: 0 s"
                     isometricTotalTime = 0L
                     isResting = true
                     startRestPeriod()
@@ -687,7 +689,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             }
 
             val elapsedTime = ((System.currentTimeMillis() - isometricStartTime) + isometricTotalTime) / 1000
-            repCountTextView.text = "Tiempo: $elapsedTime s"
+            repCountTextView.text = "Time: $elapsedTime s"
 
             if (isFirstIsometricStart) {
                 isFirstIsometricStart = false
@@ -710,7 +712,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
                 if (elapsed > outOfPoseThreshold) {
                     routineEnded = true
-                    statusTextView.text = "¡Minijuego terminado!"
+                    statusTextView.text = "Minigame finished!"
                     startFinalExerciseTimer()
                     outOfPoseTime = 0L
                     generalTimerTextView.visibility = View.INVISIBLE
@@ -732,7 +734,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                         val elapsed = now - lastRepTimestamp
                         if (elapsed > 7000) {
                             routineEnded = true
-                            statusTextView.text = "¡Minijuego terminado!"
+                            statusTextView.text = "Minigame finished!"
                             startFinalExerciseTimer()
                             lastRepTimestamp = 0L
                             generalTimerTextView.text = "⏱️ 07 s"
@@ -755,7 +757,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
                         if (elapsed > outOfPoseThreshold) {
                             routineEnded = true
-                            statusTextView.text = "¡Minijuego terminado!"
+                            statusTextView.text = "Minigame finished!"
                             startFinalExerciseTimer()
                             outOfPoseTime = 0L
                             generalTimerTextView.text = "00:00"
@@ -866,7 +868,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
         repCountTextView.text = "Reps: 0/$repsPerSet"
         setCountTextView.text = "Set: $currentSet/$maxSets"
 
-        statusTextView.text = "Mantén 'x_pose' para comenzar"
+        statusTextView.text = "Hold 'x_pose' to start"
         statusTextView.visibility = View.VISIBLE
 
         resetPoseLandmarker()
@@ -947,15 +949,15 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
 
         when (estado) {
             "inicio" -> {
-                overlayText.text = if (isChallengeMode) "¡Iniciando reto!" else "¡Iniciando rutina!"
+                overlayText.text = if (isChallengeMode) "Starting challenge!" else "Starting routine!"
                 overlayTimer.text = tiempoFormateado
                 skipButton.visibility = View.GONE
             }
 
             "descanso" -> {
-                overlayText.text = "¡Set $setActual de $totalSets completado!"
+                overlayText.text = "¡Set $setActual of $totalSets completed!"
                 overlayTimer.text = tiempoFormateado
-                skipButton.text = "Saltar cronómetro"
+                skipButton.text = "Skip timer"
                 skipButton.visibility = View.VISIBLE
                 skipButton.setOnClickListener {
                     restHandler?.removeCallbacksAndMessages(null)
@@ -966,9 +968,9 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             }
 
             "final" -> {
-                overlayText.text = "¡Ejercicio completado!"
+                overlayText.text = "Exercise completed!"
                 overlayTimer.text = tiempoFormateado
-                skipButton.text = "Siguiente ejercicio"
+                skipButton.text = "Next exercise"
                 skipButton.visibility = View.VISIBLE
                 skipButton.setOnClickListener {
                     advanceToNextExercise()
@@ -976,25 +978,24 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
             }
 
             "final_reto" -> {
-//                var secondsLeft = 7
                 val summaryRow = findViewById<LinearLayout>(R.id.summaryOverlayRow)
                 val exerciseNameText = findViewById<TextView>(R.id.overlayExerciseName)
                 val exerciseTotalText = findViewById<TextView>(R.id.overlayExerciseTotal)
 
                 summaryRow.visibility = View.VISIBLE
 
-                exerciseNameText.text = "Ejercicio: ${selectedExercise.replace("-", " ").replaceFirstChar { it.uppercase() }}"
+                exerciseNameText.text = "Exercise: ${selectedExercise.replace("-", " ").replaceFirstChar { it.uppercase() }}"
                 exerciseTotalText.text = if (selectedExercise in ExerciseTransitions.isometricExercises) {
-                    "Total: ${(isometricTotalTime / 1000)} segundos"
+                    "Total: ${(isometricTotalTime / 1000)} seconds"
                 } else {
-                    "Total: $repetitionCount repeticiones"
+                    "Total: $repetitionCount repetitions"
                 }
 
                 val aliasInput = findViewById<EditText>(R.id.aliasInput)
                 val phoneInput = findViewById<EditText>(R.id.phoneInput)
                 overlayTimer.visibility = View.GONE
-                overlayText.text = "¡Reto finalizado!"
-                skipButton.text = "Registrar datos"
+                overlayText.text = "Challenge finished!\n\nPlease enter your data"
+                skipButton.text = "Submit data"
                 skipButton.visibility = View.VISIBLE
                 aliasInput.visibility = View.VISIBLE
                 phoneInput.visibility = View.VISIBLE
@@ -1004,7 +1005,7 @@ class CameraScreenV2 : AppCompatActivity(), PoseLandmarkerHelper.LandmarkerListe
                     val inputPhone = "+52" + phoneInput.text.toString().trim().removePrefix("+52")
 
                     if (inputAlias.isEmpty() || inputPhone.isEmpty()) {
-                        Toast.makeText(this@CameraScreenV2, "Por favor, llena ambos campos", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CameraScreenV2, "Please fill in both fields", Toast.LENGTH_SHORT).show()
                         return@setOnClickListener
                     }
 
